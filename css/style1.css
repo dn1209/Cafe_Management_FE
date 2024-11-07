@@ -1,0 +1,39 @@
+.sidebar h5 {
+    font-weight: bold;
+}
+
+.nav-link {
+    color: #333;
+}
+
+.nav-link.active {
+    color: #fff;
+    background-color: #ff6b6b;
+}
+
+.card {
+    border: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+    font-size: 0.9rem;
+}
+
+.table thead th {
+    font-size: 0.8rem;
+}
+
+.table tbody td {
+    font-size: 0.9rem;
+}
+
+.btn-primary {
+    background-color: #ff6b6b;
+    border: none;
+}
+
+.btn-success {
+    background-color: #4CAF50;
+    border: none;
+}

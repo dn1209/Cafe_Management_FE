@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Màn hình Đăng Nhập</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <h2>Đăng Nhập</h2>
+        <div class="input-group">
+            <label for="storeName">Tên nguoi dung</label>
+            <input type="text" id="username" placeholder="Nhập tên cửa hàng" required>
+        </div>
+
+        <div class="input-group">
+            <label for="username">Tên cua hang</label>
+            <input type="text" id="parentuser" placeholder="Nhập tên người dùng" required>
+        </div>
+
+        <div class="input-group">
+            <label for="password">Mật Khẩu</label>
+            <input type="password" id="password" placeholder="Nhập mật khẩu" required>
+        </div>
+
+        <button class="btn-submit" onclick="login()">Đăng Nhập</button>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
