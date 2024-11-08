@@ -14,6 +14,7 @@
 .card {
     border: none;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
 }
 
 .card-title {
@@ -36,4 +37,128 @@
 .btn-success {
     background-color: #4CAF50;
     border: none;
+}
+
+.card-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 16px;
+}
+
+.card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px) scale(1.05); /* Nổi lên và phóng to một chút */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ */
+}
+
+#product-list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Mỗi hàng 4 sản phẩm */
+    gap: 15px; /* Khoảng cách giữa các sản phẩm */
+}
+
+.product-card {
+    width: 100%; /* Đảm bảo card chiếm toàn bộ cột */
+    height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transition: transform 0.2s;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-card .card {
+    width: 100%;
+    height: 80%; /* Fit cứng chiều cao của thẻ card bên trong */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    
+}
+
+/* style1.css */
+.nav-link {
+    color: #333;
+    padding: 8px 15px;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #e0f7fa;
+}
+
+.active-category {
+    background-color: #007bff !important; /* Màu xanh đậm */
+    color: white !important;
+}
+
+/* Thêm viền cho các mục danh mục */
+.sidebar .nav-item {
+    border: 1px solid #ccc; /* Viền mỏng màu xám */
+    margin-bottom: 10px;     /* Khoảng cách giữa các mục */
+    border-radius: 5px;      /* Bo góc viền */
+    transition: background-color 0.3s ease, border-color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+/* Màu nền khi hover lên danh mục */
+.sidebar .nav-item:hover {
+    background-color: #f8f9fa; /* Màu nền khi hover (màu xám nhạt) */
+    border-color: #007bff;     /* Màu viền khi hover (màu xanh dương) */
+}
+
+/* Màu nền cho mục danh mục đang được chọn (active) */
+.sidebar .nav-item .nav-link.active-category {
+    background-color: #007bff; /* Màu nền khi active (xanh dương) */
+    color: white;               /* Màu chữ khi active (trắng) */
+}
+
+/* Màu chữ cho các mục danh mục chưa được chọn */
+.sidebar .nav-item .nav-link {
+    color: #333;  /* Màu chữ mặc định (đen) */
+    font-weight: 600; /* Đậm chữ */
+    padding: 10px 15px; /* Khoảng cách trong của các mục */
+    display: block;    /* Hiển thị các mục danh mục thành dạng block */
+    text-decoration: none; /* Loại bỏ gạch dưới */
+}
+
+/* Khi hover lên một mục category */
+.sidebar .nav-item .nav-link:hover {
+    color: #007bff;   /* Màu chữ khi hover lên (xanh dương) */
+}
+
+/* Tăng chiều cao của header */
+header nav {
+    padding-top: 15px; /* Tăng không gian phía trên */
+    padding-bottom: 15px; /* Tăng không gian phía dưới */
+}
+
+/* Điều chỉnh kích thước logo */
+header .navbar-brand img {
+    height: 80px;  /* Điều chỉnh chiều cao của logo */
+    width: auto;   /* Đảm bảo tỷ lệ khung hình của logo không bị biến dạng */
+}
+
+/* Nếu bạn muốn toàn bộ thanh điều hướng có chiều cao lớn hơn */
+header nav .navbar-nav .nav-item {
+    padding-top: 10px; /* Thêm khoảng cách trên cho các mục trong navbar */
+    padding-bottom: 10px; /* Thêm khoảng cách dưới cho các mục trong navbar */
+}
+
+.modal-dialog {
+    max-width: 600px; /* Điều chỉnh chiều rộng của modal */
+    margin: auto;
 }
