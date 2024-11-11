@@ -22,11 +22,12 @@
             <!-- Main Menu and Items -->
             <div class="col-md-7">
                 <div class="d-flex justify-content-between align-items-center p-3">
-                    <input type="text" id="search-input" class="form-control" placeholder="Search">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search" oninput="onSearchInputChange()">
                 </div>
                 <div class="row g-3" id="product-list">
                     <!-- Products will be loaded here dynamically -->
                 </div>
+                <div id="pagination" class="pagination-controls"></div>
             </div>
 
             <!-- Order Summary -->
@@ -119,6 +120,7 @@
                 document.getElementById('footer-placeholder').innerHTML = data;
             });
     </script>
+    <script src="js/utils.js"></script>
     <script src="js/fetchProducts.js"></script>
 </body>
 </html>

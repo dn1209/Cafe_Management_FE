@@ -28,18 +28,25 @@ function login() {
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('userName', data.userName);
             localStorage.setItem('email', data.email);
+            localStorage.setItem('loginSuccess', 'true'); // Lưu trạng thái đăng nhập thành công
+            window.location.href = "index.html";
 
-            alert("Đăng nhập thành công!");
-            // Có thể chuyển hướng sang trang khác sau khi đăng nhập thành công
-            window.location.href = "index.html"; // Thay đổi URL phù hợp
+            // Thay đổi URL phù hợp
         } else {
-            alert("Đăng nhập thất bại. Vui lòng thử lại.");
+            showToast("Đăng nhập thất bại. Vui lòng thử lại.");
         }
     })
     .catch(error => {
         console.error('Có lỗi xảy ra:', error);
-        alert("Có lỗi khi kết nối đến API.");
+        showToast("Có lỗi khi kết nối đến API.");
     });
 }
 
+
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('jwtError') === 'true') {
+        showToast("Token đã hết hạn vui lòng đăng nhập lại");
+        localStorage.removeItem('jwtError'); // Xóa trạng thái sau khi hiển thị
+    }
+});
 

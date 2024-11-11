@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách hóa đơn</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/styleBill.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div class="container">
+        <div id="demo-container" style="display: none;"></div>
+
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card p-4">
+                    <h5 class="text-center mb-4">Danh sách hóa đơn</h5>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Mã hóa đơn</th>
+                                <th>Ngày bán</th>
+                                <th>Số lượng</th>
+                                <th>Tổng tiền</th>
+                                <th>Tiền khách trả</th>
+                                <th>Tiền thừa</th>
+                                <th>Ghi chú</th>
+                                <th>Chi tiết</th>
+                            </tr>
+                        </thead>
+                        <tbody id="invoice-table-body">
+                            <!-- Các hóa đơn sẽ được thêm động tại đây bằng JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="pagination" class="pagination-controls"></div>
+
+            </div>
+        </div>
+    </div>
+    <div id="footer-placeholder"></div>
+    <script>
+        // Load header
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+            });
+        
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/bill.js"></script>  <!-- Đảm bảo đường dẫn tới file bill.js là chính xác -->
+</body>
+</html>

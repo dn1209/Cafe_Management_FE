@@ -1,0 +1,119 @@
+body {
+    background-color: #f8f9fa;
+    margin-top: 50px;
+}
+
+.container {
+    max-width: 1700px; /* Giới hạn chiều rộng của container */
+}
+
+.card {
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.table th, .table td {
+    text-align: center;
+}
+
+.modal-content {
+    border-radius: 10px;
+}
+
+.table th {
+    background-color: #A6AEBF;
+    color: white;
+}
+
+.table tbody tr:nth-child(odd) {
+    background-color: #f2f2f2;
+}
+
+.table tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+.modal-header {
+    background-color: #A6AEBF;
+    color: white;
+}
+.modal.fade .modal-dialog {
+    transition: none !important;
+}
+/* Tắt hiệu ứng hover khi rê chuột lên các hàng của bảng */
+.table tbody tr:hover {
+    background-color: #f2f2f2 !important; /* Giữ màu nền mặc định mà không có hiệu ứng */
+}
+
+/* Tắt tất cả các hiệu ứng chuyển tiếp trên các hàng của bảng */
+.table th, .table td {
+    transition: none !important;
+}
+
+/* Tắt tất cả các hiệu ứng animation và transition cho modal */
+.modal.fade .modal-dialog {
+    transition: none !important;
+}
+
+/* Tắt hiệu ứng hover cho các dòng trong bảng */
+.table tbody tr {
+    transition: none !important;
+}
+
+.btn-custom {
+    background-color: #789DBC; /* Màu nền đỏ cam */
+    color: white; /* Màu chữ trắng */
+    border: none; /* Không có viền */
+}
+
+.btn-custom:hover {
+    background-color: #789DBC; /* Màu nền khi hover */
+    color: #FFF; /* Giữ màu chữ trắng khi hover */
+}
+/* Phân trang */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.pagination-controls button {
+    padding: 6px 12px; /* Tăng kích thước nút một chút */
+    border: 1px solid #8A92A5;
+    border-radius: 25px; /* Bo viền tròn */
+    background-color: white;
+    color: #8A92A5;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0 5px;
+}
+
+.pagination-controls button:hover {
+    background-color: #8A92A5;
+    color: white;
+}
+
+.pagination-controls button:disabled {
+    background-color: #f1f1f1;
+    color: #ddd;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
+
+.pagination-controls span {
+    margin: 0 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Trang hiện tại */
+.pagination-controls .active {
+    background-color: #8A92A5;
+    color: white;
+    font-weight: bold;
+    cursor: default;
+}

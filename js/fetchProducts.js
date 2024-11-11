@@ -1,18 +1,43 @@
 let selectedCategoryId = null;
 let searchKeyword = "";
+const token = localStorage.getItem('tokenLogin');
 
-async function fetchProducts() {
-    const token = localStorage.getItem('tokenLogin');
+document.addEventListener('DOMContentLoaded', () => {
+    if (localStorage.getItem('loginSuccess') === 'true') {
+        showToast("Đăng nhập thành công!");
+        localStorage.removeItem('loginSuccess'); // Xóa trạng thái sau khi hiển thị
+    }
+});
+
+function onSearchInputChange() {
+    searchKeyword = document.getElementById('search-input').value.trim();
+    fetchProducts(0);  // Tải lại sản phẩm với trang đầu tiên khi người dùng thay đổi từ khóa tìm kiếm
+}
+
+function checkJwtError(response) {
+    if (response.status === 401) {
+        return response.json().then(data => {
+            if (data.error === "Invalid or missing JWT token") {
+                localStorage.setItem('jwtError', 'true'); // Lưu trạng thái đăng nhập thành công
+                showToast("Phiên đăng nhập của bạn đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
+                window.location.href = "login.html";
+            }
+            return Promise.reject(data); // Trả về lỗi để xử lý tiếp nếu cần
+        });
+    }
+    return response; // Trả về response nếu không phải lỗi 401
+}
+
+async function fetchProducts(page = 0, size = 12) {
     if (!token) {
-        alert("Vui lòng đăng nhập trước khi truy cập trang này.");
+        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
 
     try {
-        let url = "http://localhost:8085/api_products/list";
+        let url = `http://localhost:8085/api_products/list?page=${page}&size=${size}`;
         const queryParams = [];
-
         // Thêm categoryId và keyword vào URL nếu có giá trị
         if (selectedCategoryId) {
             queryParams.push(`categoryId=${encodeURIComponent(selectedCategoryId)}`);
@@ -32,13 +57,16 @@ async function fetchProducts() {
                 "Accept": "application/json"
             }
         });
+        
+        await checkJwtError(response);
+
 
         if (!response.ok) throw new Error("Network response was not ok");
 
         const products = await response.json();
 
         const productList = document.getElementById('product-list');
-        productList.innerHTML = products.length ? products.map(product => `
+        productList.innerHTML = products.content.length ? products.content.map(product => `
             <div class="col-md-3 product-card">
                 <div class="card" data-id="${product.productId}" onclick="addToOrderSummary(${product.productId})">
                     <div class="card-body text-center">
@@ -47,16 +75,34 @@ async function fetchProducts() {
                     </div>
                 </div>
             </div>
-        `).join('') : '<p>No products available</p>';
+        `).join('') : '<p>Không có sản phẩm nào</p>';
 
+        // Hiển thị phân trang
+        renderPagination(products);
     } catch (error) {
         console.error("Có lỗi xảy ra:", error);
     }
 }
 
+function renderPagination(productsPage) {
+    const paginationContainer = document.getElementById('pagination');
+    paginationContainer.innerHTML = `
+        ${productsPage.first ? '' : `<button onclick="fetchProducts(${productsPage.number - 1})">Previous</button>`}
+        <span>Page ${productsPage.number + 1} of ${productsPage.totalPages}</span>
+        ${productsPage.last ? '' : `<button onclick="fetchProducts(${productsPage.number + 1})">Next</button>`}
+    `;
+    
+    // Thêm class "active" cho trang hiện tại
+    const buttons = paginationContainer.querySelectorAll('button');
+    buttons.forEach(button => {
+        if (button.textContent === `${productsPage.number + 1}`) {
+            button.classList.add('active');
+        }
+    });
+}
+
 
 async function fetchCategories() {
-    const token = localStorage.getItem('tokenLogin');
 
     try {
         const response = await fetch("http://localhost:8085/api_category/list", {
@@ -121,25 +167,28 @@ function updateOrderSummary() {
 }
 
 // Hàm thêm sản phẩm vào giỏ hàng
-function addToOrderSummary(productId) {
-    const token = localStorage.getItem('tokenLogin');
-    
+async function addToOrderSummary(productId) {
     if (!token) {
-        alert("Vui lòng đăng nhập trước khi truy cập trang này.");
+        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
 
-    fetch(`http://localhost:8085/api_products/detail/${productId}`, {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-        },
-    })
-    .then(response => response.json())
-    .then(product => {
+    try {
+        const response = await fetch(`http://localhost:8085/api_products/detail/${productId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+        });
+
+        // Kiểm tra nếu có lỗi JWT
+        await checkJwtError(response);
+
+        const product = await response.json();
+
         const orderSummaryTable = document.querySelector('.table tbody');
         let existingRow = Array.from(orderSummaryTable.rows).find(row => 
             row.cells[1].textContent === product.productName
@@ -178,13 +227,12 @@ function addToOrderSummary(productId) {
 
         // Cập nhật tổng tiền và số lượng sau khi thêm sản phẩm
         updateOrderSummary();
-    })
-    .catch(error => {
-        console.error("Error fetching product details:", error);
-        alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ.");
-    });
+        
+    } catch (error) {
+        console.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ:", error);
+        showToast("Có lỗi xảy ra khi thêm sản phẩm vào giỏ.");
+    }
 }
-
 // Hàm xóa sản phẩm khỏi giỏ hàng
 function removeFromOrderSummary(button) {
     const row = button.closest('tr');
@@ -290,17 +338,33 @@ document.getElementById('checkout-btn').addEventListener('click', function () {
     let totalQuantity = 0;
     let totalAmount = 0;
 
+    // Kiểm tra nếu không có sản phẩm trong giỏ hàng
+    if (orderSummaryTable.rows.length === 0) {
+        showToast("Vui lòng chọn sản phẩm để thanh toán.");
+        return; // Kết thúc hàm nếu không có sản phẩm
+    }
+
+
     // Xóa tất cả các dòng trong bảng checkout
     checkoutSummaryTable.innerHTML = '';
 
+    const headerRow = document.createElement('tr');
+    headerRow.innerHTML = `
+        <th>#</th>
+        <th>Tên sản phẩm</th>
+        <th>Số lượng</th>
+        <th>Giá bán</th>
+        <th>Thành tiền</th>
+    `;
+    checkoutSummaryTable.appendChild(headerRow);
+
     // Duyệt qua các dòng trong bảng giỏ hàng và thêm vào bảng checkout
     Array.from(orderSummaryTable.rows).forEach((row, index) => {
-        const productName = row.cells[1].textContent; // Tên sản phẩm
-        const quantity = parseInt(row.cells[2].textContent) || 0; // Số lượng
-        const price = parseInt(row.cells[3].textContent.replace(" VND", "").replace(",", "")) || 0; // Giá
-        const amount = parseInt(row.cells[4].textContent.replace(" VND", "").replace(",", "")) || 0; // Thành tiền
+        const productName = row.cells[1].textContent;
+        const quantity = parseInt(row.cells[2].textContent) || 0;
+        const price = parseInt(row.cells[3].textContent.replace(/\D/g, '')) || 0;
+        const amount = quantity * price;
 
-        // Tính tổng số lượng và tổng tiền
         totalQuantity += quantity;
         totalAmount += amount;
 
@@ -310,19 +374,19 @@ document.getElementById('checkout-btn').addEventListener('click', function () {
             <td>${index + 1}</td>
             <td>${productName}</td>
             <td>${quantity}</td>
-            <td>${price.toLocaleString()} VND</td>
-            <td>${amount.toLocaleString()} VND</td>
+            <td>${price.toLocaleString('vi-VN')} VND</td>
+            <td>${amount.toLocaleString('vi-VN')} VND</td>
         `;
         checkoutSummaryTable.appendChild(newRow);
     });
 
-    // Cập nhật tổng số lượng và tổng tiền
+    // Cập nhật tổng số lượng và tổng tiền với định dạng chính xác
     totalQuantityCheckout.textContent = totalQuantity;
-    totalAmountCheckout.textContent = totalAmount.toLocaleString() + " VND";
+    totalAmountCheckout.textContent = totalAmount.toLocaleString('vi-VN') + " VND";
 
-    // Khởi tạo và hiển thị modal
+    // Hiển thị modal
     const checkoutModal = new bootstrap.Modal(document.getElementById('checkout-modal'));
-    checkoutModal.show(); // Hiển thị modal
+    checkoutModal.show();
 });
 
 // Hàm đóng modal checkout
@@ -331,25 +395,39 @@ function closeCheckoutModal() {
     checkoutModal.hide(); // Dùng hide() để đóng modal của Bootstrap
 }
 
-// Xử lý khi nhấn "Xác nhận thanh toán"
-document.getElementById('confirm-checkout').addEventListener('click', function () {
+// Sự kiện khi người dùng nhập tiền vào ô input
+document.getElementById('amount-paid').addEventListener('input', function (e) {
+    // Lấy giá trị gốc (không định dạng)
+    let inputVal = e.target.value.replace(/\D/g, ''); // Xóa các ký tự không phải số
+
+    // Định dạng giá trị thành dạng có dấu phân cách hàng nghìn (dùng dấu chấm)
+    e.target.value = inputVal.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // Lưu giá trị gốc không có dấu phân cách vào data-raw-value
+    e.target.dataset.rawValue = inputVal;
+});
+
+// Khi nhấn "Xác nhận thanh toán"
+document.getElementById('confirm-checkout').addEventListener('click', async function () {
     const note = document.getElementById('note').value; // Ghi chú
-    const amountPaid = parseInt(document.getElementById('amount-paid').value) || 0; // Tiền thu từ khách
+    // Lấy giá trị thực của tiền thu từ khách (không có dấu phân cách nghìn)
+    const amountPaid = parseInt(document.getElementById('amount-paid').dataset.rawValue) || 0;
 
     // Kiểm tra xem tiền thu có đủ không
-    const totalAmount = parseInt(document.getElementById('total-amount').textContent.replace(" VND", "").replace(",", "")) || 0;
+    const totalAmount = parseInt(document.getElementById('total-amount').textContent.replace(" VND", "").replace(/,/g, "")) || 0;
 
-    if (amountPaid < totalAmount) {
-        alert("Tiền thu từ khách không đủ.");
+    if (amountPaid < totalAmount *1000) {
+        showToast("Tiền thu từ khách không đủ.");
+        console.log(totalAmount *1000)
         return;
     }
 
     // Tạo đối tượng đơn hàng
     const order = {
-        products: [],
-        note: note,
-        amountPaid: amountPaid,
-        totalAmount: totalAmount
+        detailBill: [],
+        notes: note,
+        customerPay: amountPaid,
+        orderStatus: 1
     };
 
     // Lấy thông tin sản phẩm trong giỏ hàng
@@ -357,11 +435,41 @@ document.getElementById('confirm-checkout').addEventListener('click', function (
     Array.from(orderSummaryTable.rows).forEach(row => {
         const productId = row.getAttribute('data-id');
         const quantity = parseInt(row.cells[2].textContent);
-        order.products.push({ productId, quantity });
+        order.detailBill.push({ productId, quantity });
     });
 
     // In ra thông tin đơn hàng (có thể gửi lên server ở đây)
     console.log("Đơn hàng:", JSON.stringify(order, null, 2));
+
+    try {
+        const response = await fetch(`http://localhost:8085/api_bill/add_new`, {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            body: JSON.stringify(order)
+        });
+        await checkJwtError(response);
+
+        // Kiểm tra nếu phản hồi trả về có chứa dòng 'CREATE_BILL_SUCCESS'
+        const data = await response.text();
+
+        if (data === 'CREATE_BILL_SUCCESS') {
+            showToast("Tạo hóa đơn thành công!");
+            orderSummaryTable.innerHTML = ''; // Xóa tất cả các hàng
+
+            // Đặt lại tổng số lượng và tổng tiền về 0
+            document.getElementById('total-quantity').textContent = 0;
+            document.getElementById('total-amount').textContent = '0 VND';
+        } else {
+            showToast("Lỗi khi tạo hóa đơn. Vui lòng thử lại.");
+        }
+    } catch (error) {
+        console.error('Có lỗi xảy ra:', error);
+        showToast("Có lỗi khi kết nối đến API.");
+    }
 
     // Đóng modal và thực hiện các hành động tiếp theo (gửi đơn hàng, v.v.)
     closeCheckoutModal();

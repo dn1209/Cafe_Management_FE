@@ -35,7 +35,12 @@
 }
 
 .btn-success {
-    background-color: #4CAF50;
+    background-color: #A6AEBF;
+    border: none;
+}
+
+.btn-success:hover {  /* Thêm phần này để thay đổi khi di chuột vào */
+    background-color: #8A92A5;  /* Màu sắc khi hover (có thể thay đổi màu này theo ý bạn) */
     border: none;
 }
 
@@ -102,7 +107,7 @@
 }
 
 .active-category {
-    background-color: #007bff !important; /* Màu xanh đậm */
+    background-color: #A6AEBF !important; /* Màu xanh đậm */
     color: white !important;
 }
 
@@ -117,12 +122,12 @@
 /* Màu nền khi hover lên danh mục */
 .sidebar .nav-item:hover {
     background-color: #f8f9fa; /* Màu nền khi hover (màu xám nhạt) */
-    border-color: #007bff;     /* Màu viền khi hover (màu xanh dương) */
+    border-color: #A6AEBF;     /* Màu viền khi hover (màu xanh dương) */
 }
 
 /* Màu nền cho mục danh mục đang được chọn (active) */
 .sidebar .nav-item .nav-link.active-category {
-    background-color: #007bff; /* Màu nền khi active (xanh dương) */
+    background-color: #A6AEBF; /* Màu nền khi active (xanh dương) */
     color: white;               /* Màu chữ khi active (trắng) */
 }
 
@@ -137,7 +142,7 @@
 
 /* Khi hover lên một mục category */
 .sidebar .nav-item .nav-link:hover {
-    color: #007bff;   /* Màu chữ khi hover lên (xanh dương) */
+    color: #A6AEBF;   /* Màu chữ khi hover lên (xanh dương) */
 }
 
 /* Tăng chiều cao của header */
@@ -161,4 +166,111 @@ header nav .navbar-nav .nav-item {
 .modal-dialog {
     max-width: 600px; /* Điều chỉnh chiều rộng của modal */
     margin: auto;
+}
+
+/* Phân trang */
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 20px;
+}
+
+.pagination-controls button {
+    padding: 4px 8px; /* Giảm kích thước nút */
+    border: 1px solid #8A92A5;
+    border-radius: 25px; /* Bo viền tròn hơn */
+    background-color: white;
+    color: #8A92A5;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0 5px;
+}
+
+.pagination-controls button:hover {
+    background-color: #8A92A5;
+    color: white;
+}
+
+.pagination-controls button:disabled {
+    background-color: #f1f1f1;
+    color: #ddd;
+    cursor: not-allowed;
+    border-color: #ddd;
+}
+
+.pagination-controls span {
+    margin: 0 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Trang hiện tại */
+.pagination-controls .active {
+    background-color: #8A92A5;
+    color: white;
+    font-weight: bold;
+    cursor: default;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    margin: 0; /* Loại bỏ margin mặc định */
+    padding: 0; /* Loại bỏ padding mặc định */
+}
+
+.header .navbar-nav .nav-link {
+    font-size: 1.25rem; /* Tăng kích thước chữ */
+    font-weight: bold; /* Đậm hơn để nổi bật */
+    color: #333; /* Đặt màu chữ nếu cần */
+    text-transform: uppercase; /* Viết hoa tất cả chữ */
+}
+
+.header .navbar-nav .nav-link:hover {
+    color: #8A92A5; /* Màu khi di chuột vào */
+}
+
+.header header {
+    margin-top: 0; /* Đảm bảo header không có khoảng cách với phía trên */
+    padding-top: 0;
+}
+
+/* styles.css */
+
+/* Đảm bảo body không có margin và padding mặc định */
+body {
+    margin: 0;
+    padding: 0;
+}
+
+/* Đặt các thuộc tính cho header */
+.pos-header {
+    margin-top: 0; /* Đảm bảo header không có khoảng cách với phía trên */
+    padding-top: 0;
+}
+
+/* Đặt các thuộc tính cho navbar */
+.pos-navbar .navbar-nav .pos-nav-link {
+    font-size: 1.25rem; /* Tăng kích thước chữ */
+    font-weight: bold; /* Đậm hơn để nổi bật */
+    color: #333; /* Đặt màu chữ nếu cần */
+    text-transform: uppercase; /* Viết hoa tất cả chữ */
+}
+
+/* Đặt màu khi hover vào các liên kết */
+.pos-navbar .navbar-nav .pos-nav-link:hover {
+    color: #8A92A5; /* Màu khi di chuột vào */
 }
