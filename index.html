@@ -12,7 +12,7 @@
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Categories -->
-            <div class="col-md-2 bg-light p-3 sidebar">
+            <div class="col-md-2 bg-light p-3 sidebar vh-100">
                 <h5 class="text-center">Tất cả danh mục</h5>
                 <ul class="nav flex-column">
                     <!-- Các danh mục sẽ được thêm vào đây bởi JavaScript -->
@@ -107,11 +107,21 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Load header
+        // Load header
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
+                // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
+                const script = document.createElement("script");
+                script.src = "js/header.js";
+                script.onload = () => {
+                    checkUserRole();  // Gọi sau khi header.js đã được tải
+                    checkLoginStatus(); // Gọi sau khi header.js đã được tải
+                };
+                document.body.appendChild(script);
             });
+    
         
         // Load footer
         fetch('footer.html')

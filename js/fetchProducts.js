@@ -46,7 +46,7 @@ async function fetchProducts(page = 0, size = 12) {
             queryParams.push(`keyword=${encodeURIComponent(searchKeyword)}`);
         }
         if (queryParams.length > 0) {
-            url += `?${queryParams.join("&")}`;
+            url += `&${queryParams.join("&")}`;
         }
 
         const response = await fetch(url, {

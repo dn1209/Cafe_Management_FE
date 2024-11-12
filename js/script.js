@@ -28,7 +28,9 @@ function login() {
             localStorage.setItem('userId', data.userId);
             localStorage.setItem('userName', data.userName);
             localStorage.setItem('email', data.email);
-            localStorage.setItem('loginSuccess', 'true'); // Lưu trạng thái đăng nhập thành công
+            localStorage.setItem('userRole', data.userRole)
+            localStorage.setItem('loginSuccess', 'true');
+            localStorage.setItem('loginStatus','true') // Lưu trạng thái đăng nhập thành công
             window.location.href = "index.html";
 
             // Thay đổi URL phù hợp

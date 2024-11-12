@@ -274,3 +274,37 @@ body {
 .pos-navbar .navbar-nav .pos-nav-link:hover {
     color: #8A92A5; /* Màu khi di chuột vào */
 }
+
+
+/* Tùy chỉnh select box */
+#categoryDropdown {
+    width: 10%; /* Chiếm full chiều rộng */
+    padding: 6px 12px; /* Cải thiện khoảng cách bên trong */
+    font-size: 14px; /* Kích thước font nhỏ hơn */
+    border: 1px solid #ccc; /* Viền nhẹ nhàng */
+    border-radius: 6px; /* Bo góc */
+    background-color: #f9f9f9; /* Màu nền sáng */
+    transition: border-color 0.3s ease, background-color 0.3s ease; /* Hiệu ứng chuyển đổi */
+}
+
+/* Tạo hiệu ứng khi hover hoặc focus */
+#categoryDropdown:hover,
+#categoryDropdown:focus {
+    border-color: #8A92A5; /* Viền đổi màu khi hover hoặc focus */
+    background-color: #e9f2fe; /* Màu nền khi focus */
+}
+
+/* Tùy chỉnh option trong dropdown */
+#categoryDropdown option {
+    font-size: 14px; /* Kích thước font nhỏ */
+    padding: 8px 10px; /* Khoảng cách padding cho các option */
+}
+
+/* Tùy chỉnh label */
+label[for="categoryDropdown"] {
+    font-size: 16px; /* Kích thước chữ của label */
+    font-weight: bold; /* Đậm chữ */
+    color: #333; /* Màu chữ label */
+    margin-bottom: 8px; /* Khoảng cách dưới label */
+    display: block;
+}
