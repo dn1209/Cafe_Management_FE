@@ -1,6 +1,5 @@
 function login() {
     const username = document.getElementById("username").value;
-    const parentuser = document.getElementById("parentuser").value;
     const password = document.getElementById("password").value;
 
     const apiUrl = 'http://localhost:8085/api/login'; // Thay thế với URL API của bạn
@@ -10,7 +9,6 @@ function login() {
 
     const body = JSON.stringify({
         username: username,
-        parentuser: parentuser,
         password: password
     });
     console.log(body);

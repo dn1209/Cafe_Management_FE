@@ -31,15 +31,25 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Người dùng</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <input type="text" class="form-control w-25" placeholder="Tìm kiếm người dùng" id="searchUser">
+                    <button id="addUserButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Thêm sản phẩm</button>
+                </div>
+                <div class="form-group">
+                    <label for="storeDropdown">Chọn danh mục</label>
+                    <select id="storeDropdown" class="form-control">
+                        <option value="">Tất cả Store</option> <!-- Option mặc định khi không chọn category -->
+                    </select>
                 </div>
                 <table class="table">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Họ tên</th>
-                            <th>Email</th>
+                            <th>UserName</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày cập nhật</th>
+                            <th>Store</th>
                             <th>Vai trò</th>
+                            <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -50,9 +60,81 @@
             </div>
         </div>
     </div>
+    <div class="modal" tabindex="-1" id="editUserModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa người dùng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserForm">
+                        <div class="mb-3">
+                            <label for="userName" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="userName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="displayName" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="displayName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roleDropdownEdit" class="form-label">Chức danh</label>
+                            <select class="form-control" id="roleDropdownEdit" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storeDropdownEdit" class="form-label">Store</label>
+                            <select class="form-control" id="storeDropdownEdit" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="statusDropdownEdit" class="form-label">Trạng thái</label>
+                            <select class="form-control" id="statusDropdownEdit" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
+                        
+                        
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="saveUserButton">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal" tabindex="-1" id="editUserPasswordModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Sửa mật khẩu người dùng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editUserPasswordForm">
+                        <div class="mb-3">
+                            <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+                            <input type="text" class="form-control" id="oldPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                            <input type="text" class="form-control" id="newPassword" required>
+                        </div>
+                    
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="button" class="btn btn-primary" id="saveUserPasswordButton">Lưu thay đổi</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Footer -->
-    <div id="footer-placeholder"></div>
     <script>
         // Load header
         // Load header
@@ -71,12 +153,7 @@
             });
     
         
-        // Load footer
-        fetch('footer.html')
-            .then(response => response.text())
-            .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
-            });
+        
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/admin-users.js"></script>

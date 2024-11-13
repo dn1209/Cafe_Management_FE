@@ -61,7 +61,6 @@ async function fetchProducts(page = 0, size = 10) {
                         <td>${product.productName}</td>
                         <td>${categoryName}</td>
                         <td>${product.prdSellPrice.toLocaleString()} VND</td>
-                        <td>${product.prdOriginalPrice.toLocaleString()} VND</td>
                         <td>
                             <button class="btn btn-warning" onclick="editProduct(${product.productId})">Sửa</button>
                             <button class="btn btn-danger" onclick="deleteProduct(${product.productId})">Xóa</button>
@@ -144,7 +143,6 @@ function openEditProductModal(productId) {
         // Điền thông tin sản phẩm vào các trường trong form
         document.getElementById('productName').value = product.productName;
         document.getElementById('productSellPrice').value = product.prdSellPrice;
-        document.getElementById('productOriginalPrice').value = product.prdOriginalPrice;
 
         // Điền các danh mục vào dropdown trong modal
         const categoryDropdownEdit = document.getElementById('categoryDropdownEdit');
@@ -199,18 +197,16 @@ document.getElementById('saveProductButton').addEventListener('click', async () 
 
     // Lấy giá trị thực tế (không có dấu .)
     const productSellPrice = parseFloat(document.getElementById('productSellPrice').value.replace(/\./g, ""));
-    const productOriginalPrice = parseFloat(document.getElementById('productOriginalPrice').value.replace(/\./g, ""));
 
     // Kiểm tra nếu các trường không hợp lệ
-    if (!productName || !categoryId || isNaN(productSellPrice) || isNaN(productOriginalPrice)) {
-        alert("Vui lòng nhập đầy đủ thông tin sản phẩm, bao gồm tên sản phẩm, danh mục, giá bán và giá gốc.");
+    if (!productName || !categoryId || isNaN(productSellPrice)) {
+        showToast("Vui lòng nhập đầy đủ thông tin sản phẩm, bao gồm tên sản phẩm, danh mục, giá bán và giá gốc.");
         return;
     }
     const updatedProduct = {
         prdName: productName,
         categoryId: parseInt(categoryId), // Chuyển categoryId thành số
         prdSellPrice: productSellPrice,
-        prdOriginPrice: productOriginalPrice
     };
 
     try {
@@ -271,7 +267,6 @@ async function deleteProduct(productId) {
 function openAddProductModal() {
     document.getElementById('productName').value = '';
     document.getElementById('productSellPrice').value = '';
-    document.getElementById('productOriginalPrice').value = '';
     const categoryDropdownAdd = document.getElementById('categorySelect');
     categoryDropdownAdd.innerHTML = '<option value="">Chọn danh mục...</option>'; // Option mặc định
 
@@ -300,14 +295,12 @@ addProductForm.addEventListener('submit',async function(event) {
     const productName = addProductForm.querySelector('#productName').value;
     const categorySelect = addProductForm.querySelector('#categorySelect').value;
     const productSellPrice = addProductForm.querySelector('#productSellPrice').value;
-    const productOriginalPrice = addProductForm.querySelector('#productOriginalPrice').value;
 
     console.log("Product Name:", productName);
     console.log("Category ID:", categorySelect);
     console.log("Product Sell Price:", productSellPrice);
-    console.log("Product Original Price:", productOriginalPrice);
 
-    if (!productName || !categorySelect || !productSellPrice || !productOriginalPrice) {
+    if (!productName || !categorySelect || !productSellPrice) {
         alert("Vui lòng điền đầy đủ thông tin!");
         return;
     }
@@ -321,7 +314,6 @@ addProductForm.addEventListener('submit',async function(event) {
     // Dữ liệu sẽ được gửi lên API
     const productData = {
         prdName: productName, // Chuỗi
-        prdOriginPrice: String(productOriginalPrice), // Số
         prdSellPrice: String(productSellPrice), // Số
         categoryId: parsedCategoriId, // Chuỗi
     };

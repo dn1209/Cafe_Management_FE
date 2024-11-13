@@ -51,7 +51,6 @@
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Giá bán</th>
-                            <th>Giá gốc</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -88,10 +87,7 @@
                             <label for="productSellPrice" class="form-label">Giá bán</label>
                             <input type="text" class="form-control" id="productSellPrice" required oninput="formatPriceInput(this)">
                         </div>
-                        <div class="mb-3">
-                            <label for="productOriginalPrice" class="form-label">Giá gốc</label>
-                            <input type="text" class="form-control" id="productOriginalPrice" required oninput="formatPriceInput(this)">
-                        </div>
+                        
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -125,10 +121,6 @@
                         <div class="mb-3">
                             <label for="productSellPrice" class="form-label">Giá bán</label>
                             <input type="number" class="form-control" id="productSellPrice" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productOriginalPrice" class="form-label">Giá gốc</label>
-                            <input type="number" class="form-control" id="productOriginalPrice" required>
                         </div>
                         
                         <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
