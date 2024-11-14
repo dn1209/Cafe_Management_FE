@@ -16,6 +16,9 @@
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        <a class="nav-link" href="admin-revenue.html">Quản lý doanh thu</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
                     </li>
                     <li class="nav-item">
@@ -23,6 +26,9 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
                     </li>
                 </ul>
             </div>
@@ -35,12 +41,21 @@
                     <input type="text" class="form-control w-25" placeholder="Tìm kiếm sản phẩm" id="searchProduct">
                 </div>
                 <!-- Dropdown chọn danh mục -->
-                <div class="form-group">
-                    <label for="categoryDropdown">Chọn danh mục</label>
-                    <select id="categoryDropdown" class="form-control">
-                        <option value="">Tất cả sản phẩm</option> <!-- Option mặc định khi không chọn category -->
-                        <!-- Các danh mục sẽ được tải động ở đây -->
-                    </select>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="storeDropdown">Chọn cửa hàng</label>
+                        <select id="storeDropdown" class="form-control">
+                            <option value="">Tất cả cửa hàng</option>
+                            <!-- Các cửa hàng sẽ được tải động ở đây -->
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="categoryDropdown">Chọn danh mục</label>
+                        <select id="categoryDropdown" class="form-control">
+                            <option value="">Tất cả danh mục</option>
+                            <!-- Các danh mục sẽ được tải động ở đây -->
+                        </select>
+                    </div>
                 </div>
                 <table class="table">
                    
@@ -51,6 +66,8 @@
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Giá bán</th>
+                            <th>Cửa hàng</th>
+                            <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -77,16 +94,18 @@
                             <label for="productName" class="form-label">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" required>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="productSellPrice" class="form-label">Giá bán</label>
+                            <input type="text" class="form-control" id="productSellPrice" required oninput="formatPriceInput(this)">
+                        </div>
                         <div class="mb-3">
                             <label for="categoryDropdownEdit" class="form-label">Danh mục</label>
                             <select class="form-control" id="categoryDropdownEdit" required>
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="productSellPrice" class="form-label">Giá bán</label>
-                            <input type="text" class="form-control" id="productSellPrice" required oninput="formatPriceInput(this)">
-                        </div>
+                        
                         
                     </form>
                 </div>
@@ -112,16 +131,24 @@
                             <label for="productName" class="form-label">Tên sản phẩm</label>
                             <input type="text" class="form-control" id="productName" required>
                         </div>
+                        
+                        <div class="mb-3">
+                            <label for="productSellPrice" class="form-label">Giá bán</label>
+                            <input type="number" class="form-control" id="productSellPrice" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storeSelect" class="form-label">Cửa hàng</label>
+                            <select class="form-control" id="storeSelect" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
                         <div class="mb-3">
                             <label for="categorySelect" class="form-label">Danh mục</label>
                             <select class="form-control" id="categorySelect" required>
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="productSellPrice" class="form-label">Giá bán</label>
-                            <input type="number" class="form-control" id="productSellPrice" required>
-                        </div>
+                        
                         
                         <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
                     </form>

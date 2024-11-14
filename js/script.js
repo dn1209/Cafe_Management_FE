@@ -41,6 +41,20 @@ function login() {
         showToast("Có lỗi khi kết nối đến API.");
     });
 }
+document.addEventListener('DOMContentLoaded', () => {
+    // Gắn sự kiện keydown cho cả hai input: username và password
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+
+    [usernameInput, passwordInput].forEach(input => {
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Ngăn chặn submit mặc định của form
+                login(); // Gọi hàm login khi nhấn Enter
+            }
+        });
+    });
+});
 
 
 document.addEventListener('DOMContentLoaded', () => {

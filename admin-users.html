@@ -16,6 +16,9 @@
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
+                        <a class="nav-link" href="admin-revenue.html">Quản lý doanh thu</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
                     </li>
                     <li class="nav-item">
@@ -24,6 +27,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
+                    </li>
                 </ul>
             </div>
 
@@ -31,7 +37,7 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Người dùng</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addUserButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Thêm sản phẩm</button>
+                    <button id="addUserButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Thêm người dùng</button>
                 </div>
                 <div class="form-group">
                     <label for="storeDropdown">Chọn danh mục</label>
@@ -60,6 +66,46 @@
             </div>
         </div>
     </div>
+     <!-- Modal Thêm Danh mục -->
+     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addUserModalLabel">Thêm Người dùng Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addUserForm">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="username" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Mật khẩu</label>
+                            <input type="text" class="form-control" id="password" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="displayName" class="form-label">Họ và tên</label>
+                            <input type="text" class="form-control" id="displayName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="storeDropdownAdd" class="form-label">Store</label>
+                            <select class="form-control" id="storeDropdownAdd" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="roleDropdownAdd" class="form-label">Chức danh</label>
+                            <select class="form-control" id="roleDropdownAdd" required>
+                                <!-- Các danh mục sẽ được điền vào đây -->
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm danh mục</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal" tabindex="-1" id="editUserModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -74,8 +120,8 @@
                             <input type="text" class="form-control" id="userName" required>
                         </div>
                         <div class="mb-3">
-                            <label for="displayName" class="form-label">Họ và Tên</label>
-                            <input type="text" class="form-control" id="displayName" required>
+                            <label for="displayNameEdit" class="form-label">Họ và Tên</label>
+                            <input type="text" class="form-control" id="displayNameEdit" required>
                         </div>
                         <div class="mb-3">
                             <label for="roleDropdownEdit" class="form-label">Chức danh</label>

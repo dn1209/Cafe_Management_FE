@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý Doanh thu - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style1.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 bg-light p-3 sidebar vh-100">
+                <h5 class="text-center">Admin Dashboard</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-users.html">Quản lý người dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-revenue.html">Quản lý doanh thu</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 p-3">
+                <h3>Quản lý Doanh thu</h3>
+                <div class="d-flex justify-content-between mb-3">
+                    <button id="refreshRevenueButton" class="btn btn-primary">Làm mới</button>
+                </div>
+
+                <!-- Bảng thống kê doanh thu -->
+                <h4>Doanh thu hàng ngày</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Doanh Thu (VND)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyRevenueTable">
+                        <!-- Dữ liệu sẽ được thêm động -->
+                    </tbody>
+                </table>
+
+                <!-- Biểu đồ doanh thu hàng tháng -->
+                <h4 class="mt-5">Biểu đồ Doanh Thu Theo Tháng</h4>
+                <canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        // Load header
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                const script = document.createElement("script");
+                script.src = "js/header.js";
+                script.onload = () => {
+                    checkUserRole();
+                    checkLoginStatus();
+                };
+                document.body.appendChild(script);
+            });
+        
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+
+        // Dữ liệu doanh thu hàng ngày mẫu
+        const dailyRevenueData = [
+            { date: "2024-11-01", revenue: 5000000 },
+            { date: "2024-11-02", revenue: 7000000 },
+            { date: "2024-11-03", revenue: 8500000 },
+            { date: "2024-11-04", revenue: 6000000 },
+            { date: "2024-11-05", revenue: 9000000 }
+        ];
+
+        // Hiển thị bảng doanh thu hàng ngày
+        const dailyRevenueTable = document.getElementById('dailyRevenueTable');
+        dailyRevenueData.forEach(entry => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${entry.date}</td>
+                <td>${entry.revenue.toLocaleString()} VND</td>
+            `;
+            dailyRevenueTable.appendChild(row);
+        });
+
+        // Dữ liệu doanh thu hàng tháng mẫu
+        const monthlyRevenueData = {
+            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
+            datasets: [{
+                label: 'Doanh Thu (VND)',
+                data: [45000000, 54000000, 62000000, 48000000, 51000000, 67000000, 53000000, 69000000, 73000000, 81000000, 87000000, 92000000],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Cấu hình biểu đồ doanh thu hàng tháng
+        const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: monthlyRevenueData,
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value.toLocaleString() + ' VND';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

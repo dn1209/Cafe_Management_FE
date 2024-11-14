@@ -278,7 +278,7 @@ body {
 
 /* Tùy chỉnh select box */
 #categoryDropdown {
-    width: 10%; /* Chiếm full chiều rộng */
+    width: 20%; /* Chiếm full chiều rộng */
     padding: 6px 12px; /* Cải thiện khoảng cách bên trong */
     font-size: 14px; /* Kích thước font nhỏ hơn */
     border: 1px solid #ccc; /* Viền nhẹ nhàng */
@@ -310,7 +310,7 @@ label[for="categoryDropdown"] {
 }
 
 #storeDropdown {
-    width: 10%; /* Chiếm full chiều rộng */
+    width: 20%; /* Chiếm full chiều rộng */
     padding: 6px 12px; /* Cải thiện khoảng cách bên trong */
     font-size: 14px; /* Kích thước font nhỏ hơn */
     border: 1px solid #ccc; /* Viền nhẹ nhàng */
@@ -339,4 +339,12 @@ label[for="storeDropdown"] {
     color: #333; /* Màu chữ label */
     margin-bottom: 8px; /* Khoảng cách dưới label */
     display: block;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px; /* Khoảng cách giữa các dropdown */
+}
+.form-group {
+    flex: 1; /* Chia đều chiều rộng */
 }

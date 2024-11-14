@@ -1,16 +1,33 @@
 const token = localStorage.getItem('tokenLogin');
 let selectedStoreId = '';
  let stores = {};
+
+
+ document.getElementById('storeDropdown').addEventListener('change', function () {
+    selectedStoreId = this.value;
+    // fetchProducts(0); // Tải lại sản phẩm khi thay đổi danh mục
+    loadCategories();
+});
 // Hàm tải danh mục
 async function loadCategories() {
     try {
-        const response = await fetch('http://localhost:8085/api_category/list', {
+        let url = `http://localhost:8085/api_category/list`;
+        const queryParams = [];
+        if (selectedStoreId) {
+            queryParams.push(`storeId=${encodeURIComponent(selectedStoreId)}`);
+        }
+        if (queryParams.length > 0) {
+            url += `?${queryParams.join("&")}`;
+        }
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             }
         });
+        await checkJwtError(response);
+
         const data = await response.json();
         const categoryList = document.getElementById('categoryList');
         categoryList.innerHTML = '';  // Xóa danh sách hiện tại
@@ -22,13 +39,20 @@ async function loadCategories() {
         }
 
         data.forEach((category, index) => {
+            const storeName = stores[category.storeId] || 'Không xác định';
+            const buttonHtml = category.status === 0
+                ? `<button class="btn btn-danger" onclick="deleteCategory(${category.categoryId})">Active</button>`
+                : `<button class="btn btn-warning" onclick="deleteCategory(${category.categoryId})">Unactive</button>`;
             const row = document.createElement('tr');
             row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${category.categoryName}</td>
+                <td>${storeName}</td>
+                <td>${category.status === 1 ? "Hoạt động" : "Không hoạt động"}</td>
+
                 <td>
                     <button class="btn btn-warning" onclick="editCategory(${category.categoryId}, '${category.categoryName}')">Sửa</button>
-                    <button class="btn btn-danger" onclick="deleteCategory(${category.categoryId})">Xóa</button>
+                    ${buttonHtml}
                 </td>
             `;
             categoryList.appendChild(row);
@@ -63,6 +87,10 @@ document.getElementById('addCategoryForm').addEventListener('submit', async func
     event.preventDefault(); 
     const categoryName = document.getElementById('categoryName').value;
     const storeDropdownAdd = document.getElementById('storeDropdownAdd').value;
+    const CategoryData = {
+        categoryName: categoryName,
+        storeId : parseInt(storeDropdownAdd)
+    };
     try {
         const response = await fetch('http://localhost:8085/api_category/add_new', {
             method: 'POST',
@@ -70,7 +98,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', async func
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ categoryName })
+            body: JSON.stringify(CategoryData)
         });
 
         if (response.ok) {
@@ -78,6 +106,7 @@ document.getElementById('addCategoryForm').addEventListener('submit', async func
             document.getElementById('addCategoryForm').reset(); // Xóa dữ liệu trong form
             const addCategoryModal = bootstrap.Modal.getInstance(document.getElementById('addCategoryModal'));
             addCategoryModal.hide(); // Đóng modal sau khi thêm
+            document.querySelector('.modal-backdrop')?.remove();
             loadCategories(); // Cập nhật danh sách danh mục
         } else {
             showToast('Có lỗi vui lòng thử lại');
@@ -132,25 +161,23 @@ async function updateCategory(categoryId) {
 
 // Hàm xóa danh mục
 async function deleteCategory(categoryId) {
-    if (confirm('Bạn có chắc muốn xóa danh mục này?')) {
-        try {
-            const response = await fetch(`http://localhost:8085/api_category/delete/${categoryId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            });
-
-            if (response.ok) {
-                showToast('Danh mục đã được xóa thành công');
-                loadCategories(); // Reload danh mục sau khi xóa
-            } else {
-                showToast('Không thể xóa danh mục');
+    try {
+        const response = await fetch(`http://localhost:8085/api_category/delete/${categoryId}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
             }
-        } catch (err) {
-            console.error('Error deleting category:', err);
+        });
+
+        if (response.ok) {
+            showToast('Danh mục đã được cập nhật thành công');
+            loadCategories(); // Reload danh mục sau khi xóa
+        } else {
+            showToast('Không thể xóa danh mục');
         }
+    } catch (err) {
+        console.error('Error deleting category:', err);
     }
 }
 async function fetchStore() {
@@ -169,7 +196,10 @@ async function fetchStore() {
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
-        stores = data.reduce((acc, store) => {
+
+        const activeStores = data.filter(store => store.storeStatus === 1);
+
+        stores = activeStores.reduce((acc, store) => {
             acc[store.storeId] = store.storeName;
             return acc;
         }, {});
@@ -178,7 +208,7 @@ async function fetchStore() {
         
         // Kiểm tra xem categoryDropdown có được điền đúng không
         const storeDropdown = document.getElementById('storeDropdown');
-        storeDropdown.innerHTML = `<option value="">Tất cả sản phẩm</option>`; // Thêm option mặc định
+        storeDropdown.innerHTML = `<option value="">Tất cả store</option>`; // Thêm option mặc định
 
         // Thêm các option vào dropdown
         for (let storeId in stores) {
@@ -191,6 +221,14 @@ async function fetchStore() {
     } catch (error) {
         console.error("Có lỗi khi tải danh mục:", error);
     }
+}
+function closeModal() {
+    const modalElement = document.getElementById('addCategoryForm');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modalInstance.hide();
+
+    // Xóa backdrop nếu còn tồn đọng
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
 }
 
 // Tải danh mục khi trang được tải

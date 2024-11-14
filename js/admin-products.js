@@ -1,7 +1,9 @@
 let token = localStorage.getItem('tokenLogin'); // Giả sử token đã được lưu trong localStorage
 let selectedCategoryId = ''; // Biến lưu chọn category
+let selectedStoreId = ''; 
 let searchKeyword = '';
 let categories = {};
+let stores = {};
 let currentProductId = null;
 
 // Hàm xử lý thay đổi lựa chọn danh mục
@@ -10,6 +12,21 @@ document.getElementById('categoryDropdown').addEventListener('change', function 
     fetchProducts(0); // Tải lại sản phẩm khi thay đổi danh mục
 });
 
+// Hàm xử lý thay đổi lựa chọn cửa hàng
+document.getElementById('storeDropdown').addEventListener('change', function () {
+    selectedStoreId = this.value;
+
+    // Khi thay đổi store, xóa categoryId
+    selectedCategoryId = '';
+    
+    // Cập nhật lại category dropdown nếu cần
+    updateCategoryDropdown(selectedStoreId);
+
+    // Tải lại sản phẩm theo storeId
+    fetchProducts(0);
+});
+
+// Hàm lấy sản phẩm từ API
 // Hàm lấy sản phẩm từ API
 async function fetchProducts(page = 0, size = 10) {
     if (!token) {
@@ -26,10 +43,15 @@ async function fetchProducts(page = 0, size = 10) {
         if (selectedCategoryId) {
             queryParams.push(`categoryId=${encodeURIComponent(selectedCategoryId)}`);
         }
+        // Thêm tham số store nếu có
+        if (selectedStoreId) {
+            queryParams.push(`storeId=${encodeURIComponent(selectedStoreId)}`);
+        }
         // Thêm tham số keyword nếu có
         if (searchKeyword) {
             queryParams.push(`keyword=${encodeURIComponent(searchKeyword)}`);
         }
+
         if (queryParams.length > 0) {
             url += `&${queryParams.join("&")}`;
         }
@@ -53,7 +75,12 @@ async function fetchProducts(page = 0, size = 10) {
         const productList = document.getElementById('productList');
         if (products.content.length) {
             productList.innerHTML = products.content.map(product => {
-                const categoryName = categories[product.categoryId] || 'Không xác định'; // Tra cứu categoryName từ categories
+                const category = categories[product.categoryId];
+                const categoryName = category ? category.categoryName : 'Không xác định'; // Lấy categoryName từ category
+                const storeName = stores[product.storeId] || 'Không xác định';
+                const buttonHtml = product.prdStatus === 0
+                ? `<button class="btn btn-danger" onclick="deleteProduct(${product.productId})">Active</button>`
+                : `<button class="btn btn-warning" onclick="deleteProduct(${product.productId})">Unactive</button>`;
                 return `
                     <tr>
                         <td>${product.productId}</td>
@@ -61,15 +88,18 @@ async function fetchProducts(page = 0, size = 10) {
                         <td>${product.productName}</td>
                         <td>${categoryName}</td>
                         <td>${product.prdSellPrice.toLocaleString()} VND</td>
+                        <td>${storeName}</td>
+                        <td>${product.prdStatus === 1 ? "Hoạt động" : "Không hoạt động"}</td>
+
                         <td>
                             <button class="btn btn-warning" onclick="editProduct(${product.productId})">Sửa</button>
-                            <button class="btn btn-danger" onclick="deleteProduct(${product.productId})">Xóa</button>
+                            ${buttonHtml}
                         </td>
                     </tr>
                 `;
             }).join('');
         } else {
-            productList.innerHTML = '<tr><td colspan="5" class="text-center">Không có sản phẩm nào</td></tr>';
+            productList.innerHTML = '<tr><td colspan="8" class="text-center">Không có sản phẩm nào</td></tr>';
         }
 
         renderPagination(products);
@@ -111,24 +141,16 @@ async function fetchCategories() {
 
         const data = await response.json();
         categories = data.reduce((acc, category) => {
-            acc[category.categoryId] = category.categoryName;
+            acc[category.categoryId] = {
+                categoryName: category.categoryName,
+                storeId: category.storeId
+            };
             return acc;
         }, {});
 
         console.log(categories); // Kiểm tra xem categories đã chứa dữ liệu chưa
         
-        // Kiểm tra xem categoryDropdown có được điền đúng không
-        const categoryDropdown = document.getElementById('categoryDropdown');
-        categoryDropdown.innerHTML = `<option value="">Tất cả sản phẩm</option>`; // Thêm option mặc định
-
-        // Thêm các option vào dropdown
-        for (let categoryId in categories) {
-            const option = document.createElement('option');
-            option.value = categoryId;
-            option.textContent = categories[categoryId];
-            categoryDropdown.appendChild(option);
-        }
-
+    
     } catch (error) {
         console.error("Có lỗi khi tải danh mục:", error);
     }
@@ -147,12 +169,16 @@ function openEditProductModal(productId) {
         // Điền các danh mục vào dropdown trong modal
         const categoryDropdownEdit = document.getElementById('categoryDropdownEdit');
         categoryDropdownEdit.innerHTML = ''; // Xóa các option cũ
-        for (let categoryId in categories) {
+        const filteredCategories = Object.keys(categories).filter(categoryId => categories[categoryId].storeId === product.storeId);
+
+        // Nếu có danh mục hợp lệ, thêm vào dropdown
+        filteredCategories.forEach(categoryId => {
+            const category = categories[categoryId];
             const option = document.createElement('option');
             option.value = categoryId;
-            option.textContent = categories[categoryId];
+            option.textContent = category.categoryName;
             categoryDropdownEdit.appendChild(option);
-        }
+        });
 
         // Chọn danh mục hiện tại của sản phẩm
         categoryDropdownEdit.value = product.categoryId;
@@ -236,8 +262,7 @@ document.getElementById('saveProductButton').addEventListener('click', async () 
 // Hàm xóa sản phẩm
 async function deleteProduct(productId) {
     // Xác nhận hành động xóa
-    const isConfirmed = confirm("Bạn có chắc chắn muốn xóa sản phẩm này?");
-    if (!isConfirmed) return;
+    
 
     try {
         // Gửi request xóa sản phẩm đến API
@@ -252,7 +277,7 @@ async function deleteProduct(productId) {
         await checkJwtError(response); // Kiểm tra lỗi JWT nếu có
 
         if (!response.ok) throw new Error("Không thể xóa sản phẩm");
-        showToast("xóa sản phẩm thành công");
+        showToast("cập nhật sản phẩm thành công");
         // Sau khi xóa thành công, tải lại danh sách sản phẩm
         fetchProducts(0); // Tải lại sản phẩm sau khi xóa
     } catch (error) {
@@ -268,24 +293,75 @@ function openAddProductModal() {
     document.getElementById('productName').value = '';
     document.getElementById('productSellPrice').value = '';
     const categoryDropdownAdd = document.getElementById('categorySelect');
-    categoryDropdownAdd.innerHTML = '<option value="">Chọn danh mục...</option>'; // Option mặc định
+    const storeDropdownAdd = document.getElementById('storeSelect');
 
-    // Điền danh mục vào dropdown (đảm bảo `categories` đã có giá trị)
-    if (typeof categories === 'object' && categories !== null) {
-        for (let categoryId in categories) {
+    // Xóa các options cũ trong dropdown
+    storeDropdownAdd.innerHTML = '<option value="">Chọn cửa hàng...</option>';
+    categoryDropdownAdd.innerHTML = '<option value="">Chọn danh mục...</option>';
+
+    // Điền danh sách cửa hàng vào storeSelect
+    if (typeof stores === 'object' && stores !== null) {
+        for (let storeId in stores) {
             const option = document.createElement('option');
-            option.value = categoryId;
-            option.textContent = categories[categoryId];
-            categoryDropdownAdd.appendChild(option);
+            option.value = storeId;
+            option.textContent = stores[storeId];
+            storeDropdownAdd.appendChild(option);
         }
     } else {
-        console.error("Categories is not defined or is not an object.");
+        console.error("Stores is not defined or is not an object.");
     }
+
+    // Thêm sự kiện change cho dropdown cửa hàng
+    storeDropdownAdd.addEventListener('change', function () {
+        const selectedStoreId = storeDropdownAdd.value;
+        updateCategoryDropdown(selectedStoreId);
+    });
 
     // Hiển thị modal
     const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
     modal.show();
 }
+
+// Hàm cập nhật danh sách danh mục theo storeId đã chọn
+function updateCategoryDropdown(storeId) {
+    const categoryDropdownAdd = document.getElementById('categorySelect');
+    categoryDropdownAdd.innerHTML = '<option value="">Chọn danh mục...</option>'; // Option mặc định
+
+    // Lọc và thêm danh mục tương ứng với storeId đã chọn vào dropdown
+    if (typeof categories === 'object' && categories !== null) {
+        for (let categoryId in categories) {
+            const category = categories[categoryId];
+            if (category.storeId == storeId) { // So sánh storeId của category với storeId đã chọn
+                const option = document.createElement('option');
+                option.value = categoryId;
+                option.textContent = category.categoryName;
+                categoryDropdownAdd.appendChild(option);
+            }
+        }
+    } else {
+        console.error("Categories is not defined or is not an object.");
+    }
+}
+function updateCategoryDropdownDisplay(selectedStoreId) {
+    const categoryDropdown = document.getElementById('categoryDropdown');
+    categoryDropdown.innerHTML = `<option value="">Tất cả danh mục</option>`;
+
+    // Lọc categories theo storeId đã chọn
+    for (let categoryId in categories) {
+        if (!selectedStoreId || categories[categoryId].storeId === parseInt(selectedStoreId)) {
+            const option = document.createElement('option');
+            option.value = categoryId;
+            option.textContent = categories[categoryId].categoryName;
+            categoryDropdown.appendChild(option);
+        }
+    }
+}
+
+// Event listener cho storeDropdown
+document.getElementById('storeDropdown').addEventListener('change', function () {
+    const selectedStoreId = this.value;
+    updateCategoryDropdownDisplay(selectedStoreId);
+});
 
 const addProductForm = document.getElementById('addProductForm');
 addProductForm.addEventListener('submit',async function(event) {
@@ -295,6 +371,7 @@ addProductForm.addEventListener('submit',async function(event) {
     const productName = addProductForm.querySelector('#productName').value;
     const categorySelect = addProductForm.querySelector('#categorySelect').value;
     const productSellPrice = addProductForm.querySelector('#productSellPrice').value;
+    const storeSelect = addProductForm.querySelector('#storeSelect').value;
 
     console.log("Product Name:", productName);
     console.log("Category ID:", categorySelect);
@@ -306,7 +383,7 @@ addProductForm.addEventListener('submit',async function(event) {
     }
     
     // Chuyển các giá trị giá thành số
-    
+    const parseStoreId = parseInt(storeSelect);
     const parsedCategoriId = parseFloat(categorySelect);
     
    
@@ -315,7 +392,8 @@ addProductForm.addEventListener('submit',async function(event) {
     const productData = {
         prdName: productName, // Chuỗi
         prdSellPrice: String(productSellPrice), // Số
-        categoryId: parsedCategoriId, // Chuỗi
+        categoryId: parsedCategoriId,
+        storeId: parseStoreId // Chuỗi
     };
     
     console.log(productData);
@@ -357,6 +435,50 @@ function closeModal() {
     document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
 }
 
+async function fetchStore() {
+    try {
+        const response = await fetch('http://localhost:8085/api_store/list', {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            }
+        });
+        
+        await checkJwtError(response);
+
+        if (!response.ok) throw new Error("Network response was not ok");
+
+        const data = await response.json();
+
+        const activeStores = data.filter(store => store.storeStatus === 1);
+
+        
+        stores = activeStores.reduce((acc, store) => {
+            acc[store.storeId] = store.storeName;
+            return acc;
+        }, {});
+
+        const storeDropdown = document.getElementById('storeDropdown');
+        storeDropdown.innerHTML = `<option value="">Tất cả cửa hàng</option>`;
+        
+        activeStores.forEach(store => {
+            const option = document.createElement('option');
+            option.value = store.storeId;
+            option.textContent = store.storeName;
+            storeDropdown.appendChild(option);
+        });
+
+        console.log(stores); // Kiểm tra xem categories đã chứa dữ liệu chưa
+        
+       
+
+    } catch (error) {
+        console.error("Có lỗi khi tải danh mục:", error);
+    }
+}
+
 // Hàm xử lý thêm sản phẩm mới
 
 
@@ -372,6 +494,7 @@ function editProduct(productId) {
 // Gọi fetchCategories khi trang được tải
 document.addEventListener('DOMContentLoaded', () => {
     fetchCategories().then(() => {
-        fetchProducts();
+        fetchStore().then(() => {fetchProducts();})
+        
     });
 });

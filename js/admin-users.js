@@ -54,11 +54,10 @@
                             <td>${user.updatedAt}</td>
                             <td>${storeName}</td>
                             <td>${user.userRole === 0 ? "Admin" : "User"}</td>
-                            <td>${user.userStatus === 0 ? "Hoạt động" : "Không hoạt động"}</td>
+                            <td>${user.userStatus === 1 ? "Hoạt động" : "Không hoạt động"}</td>
                             <td>
                                 <button class="btn btn-warning" onclick="editUser(${user.userId})">Sửa</button>
                                 <button class="btn btn-warning" onclick="editPasswordUser(${user.userId})">Đổi mật khẩu</button>
-                                <button class="btn btn-danger" onclick="deleteUser(${user.userId})">Xóa</button>
                             </td>
                         </tr>
                 `;
@@ -89,7 +88,10 @@ async function fetchStore() {
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
-        stores = data.reduce((acc, store) => {
+
+        const activeStores = data.filter(store => store.storeStatus === 1);
+
+        stores = activeStores.reduce((acc, store) => {
             acc[store.storeId] = store.storeName;
             return acc;
         }, {});
@@ -122,7 +124,7 @@ function openEditUserModal(userId) {
     fetchUserDetails(userId).then(user => {
         // Điền thông tin sản phẩm vào các trường trong form
         document.getElementById('userName').value = user.userName;
-        document.getElementById('displayName').value = user.displayName;
+        document.getElementById('displayNameEdit').value = user.displayName;
 
         // Điền các danh mục vào dropdown trong modal
         const storeDropdownEdit = document.getElementById('storeDropdownEdit');
@@ -155,7 +157,7 @@ function openEditUserModal(userId) {
 
         const statusDropdownEdit = document.getElementById('statusDropdownEdit');
         statusDropdownEdit.innerHTML = ''; // Xóa các option cũ
-        const status = { 0: "HOẠT ĐỘNG", 1: "DỪNG HOẠT ĐỘNG" };
+        const status = { 1: "HOẠT ĐỘNG", 0: "DỪNG HOẠT ĐỘNG" };
 
         for (let statusId in status) {
             const option = document.createElement('option');
@@ -244,7 +246,7 @@ async function fetchUserDetails(userId) {
 
 document.getElementById('saveUserButton').addEventListener('click', async () => {
     const userName = document.getElementById('userName').value;
-    const displayName = document.getElementById('displayName').value;
+    const displayName = document.getElementById('displayNameEdit').value;
     const userStatus = parseInt(document.getElementById('statusDropdownEdit').value);
     const userRole = parseInt(document.getElementById('roleDropdownEdit').value);
     const storeId = parseInt(document.getElementById('storeDropdownEdit').value);
@@ -286,6 +288,100 @@ document.getElementById('saveUserButton').addEventListener('click', async () => 
         console.error("Có lỗi xảy ra khi lưu thay đổi:", error);
     }
 });
+
+function openAddUserModal() {
+    document.getElementById('username').value = '';
+    document.getElementById('password').value = '';
+    document.getElementById('displayName').value = '';
+    const storeDropdownAdd = document.getElementById('storeDropdownAdd');
+    const roleDropdownAdd = document.getElementById('roleDropdownAdd');
+
+    storeDropdownAdd.innerHTML = '<option value="">Chọn store...</option>'; // Option mặc định
+
+    // Điền danh mục vào dropdown (đảm bảo `categories` đã có giá trị)
+    if (typeof stores === 'object' && stores !== null) {
+        for (let storeId in stores) {
+            const option = document.createElement('option');
+            option.value = storeId;
+            option.textContent = stores[storeId];
+            storeDropdownAdd.appendChild(option);
+        }
+    } else {
+        console.error("Categories is not defined or is not an object.");
+    }
+    
+
+    roleDropdownAdd.innerHTML = ''; // Xóa các option cũ
+        const roles = { 0: "ADMIN", 1: "USER" };
+
+        for (let roleId in roles) {
+            const option = document.createElement('option');
+            option.value = roleId;
+            option.textContent = roles[roleId];
+            roleDropdownAdd.appendChild(option);
+        }
+
+        roleDropdownAdd.value = "1";
+
+    // Đặt trạng thái mặc định là "HOẠT ĐỘNG"
+    // Hiển thị modal
+    const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+    modal.show();
+}
+
+document.getElementById('addUserForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); 
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const displayName = document.getElementById('displayName').value;
+    const storeDropdownAdd = document.getElementById('storeDropdownAdd').value;
+    const roleDropdownAdd = document.getElementById('roleDropdownAdd').value;
+
+    const userData = {
+        username: username,
+        password:password,
+        displayName: displayName,
+        userRole: parseInt(roleDropdownAdd),
+        storeId : parseInt(storeDropdownAdd)
+    };
+    try {
+        const response = await fetch('http://localhost:8085/api/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(userData)
+        });
+
+        if (response.ok) {
+            showToast('Người dùng đã được thêm mới');
+            document.getElementById('addUserForm').reset(); // Xóa dữ liệu trong form
+            const addUserModal = bootstrap.Modal.getInstance(document.getElementById('addUserModal'));
+            addUserModal.hide(); // Đóng modal sau khi thêm
+            document.querySelector('.modal-backdrop')?.remove();
+            loadUsers(); // Cập nhật danh sách danh mục
+        } else {
+            showToast('Có lỗi vui lòng thử lại');
+        }
+    } catch (err) {
+        console.error('Error adding category:', err);
+        Swal.fire('Lỗi', 'Đã xảy ra lỗi khi thêm danh mục.', 'error');
+    }
+});
+
+
+function closeModal() {
+    const modalElement = document.getElementById('addUserForm');
+    const modalInstance = bootstrap.Modal.getInstance(modalElement) || new bootstrap.Modal(modalElement);
+    modalInstance.hide();
+
+    // Xóa backdrop nếu còn tồn đọng
+    document.querySelectorAll('.modal-backdrop').forEach((backdrop) => backdrop.remove());
+}
+
+
+document.getElementById('addUserButton').addEventListener('click', openAddUserModal);
 
 
 function editPasswordUser(userId) {
