@@ -35,26 +35,28 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Doanh thu</h3>
                 <div class="d-flex justify-content-between mb-3">
+                    <label for="datePicker">Chọn ngày:</label>
+                    <input type="date" id="datePicker" />
                     <button id="refreshRevenueButton" class="btn btn-primary">Làm mới</button>
                 </div>
 
                 <!-- Bảng thống kê doanh thu -->
-                <h4>Doanh thu hàng ngày</h4>
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Ngày</th>
-                            <th>Doanh Thu (VND)</th>
-                        </tr>
-                    </thead>
-                    <tbody id="dailyRevenueTable">
-                        <!-- Dữ liệu sẽ được thêm động -->
-                    </tbody>
-                </table>
+                <h4>Doanh thu trong tuần</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Ngày</th>
+                                <th>Doanh Thu (VND)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dailyRevenueTable">
+                            <!-- Dữ liệu sẽ được thêm động -->
+                        </tbody>
+                    </table>
 
-                <!-- Biểu đồ doanh thu hàng tháng -->
-                <h4 class="mt-5">Biểu đồ Doanh Thu Theo Tháng</h4>
-                <canvas id="monthlyRevenueChart" width="400" height="200"></canvas>
+                    <!-- Biểu đồ doanh thu hàng tháng -->
+                    <h4 class="mt-5">Biểu đồ Doanh Thu Theo Tháng</h4>
+                    <canvas id="monthlyRevenueChart" width="250" height="125"></canvas> <!-- Đặt chiều rộng và chiều cao nhỏ hơn -->
             </div>
         </div>
     </div>
@@ -83,60 +85,8 @@
             .then(data => {
                 document.getElementById('footer-placeholder').innerHTML = data;
             });
-
-        // Dữ liệu doanh thu hàng ngày mẫu
-        const dailyRevenueData = [
-            { date: "2024-11-01", revenue: 5000000 },
-            { date: "2024-11-02", revenue: 7000000 },
-            { date: "2024-11-03", revenue: 8500000 },
-            { date: "2024-11-04", revenue: 6000000 },
-            { date: "2024-11-05", revenue: 9000000 }
-        ];
-
-        // Hiển thị bảng doanh thu hàng ngày
-        const dailyRevenueTable = document.getElementById('dailyRevenueTable');
-        dailyRevenueData.forEach(entry => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${entry.date}</td>
-                <td>${entry.revenue.toLocaleString()} VND</td>
-            `;
-            dailyRevenueTable.appendChild(row);
-        });
-
-        // Dữ liệu doanh thu hàng tháng mẫu
-        const monthlyRevenueData = {
-            labels: ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"],
-            datasets: [{
-                label: 'Doanh Thu (VND)',
-                data: [45000000, 54000000, 62000000, 48000000, 51000000, 67000000, 53000000, 69000000, 73000000, 81000000, 87000000, 92000000],
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1
-            }]
-        };
-
-        // Cấu hình biểu đồ doanh thu hàng tháng
-        const ctx = document.getElementById('monthlyRevenueChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'bar',
-            data: monthlyRevenueData,
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return value.toLocaleString() + ' VND';
-                            }
-                        }
-                    }
-                }
-            }
-        });
     </script>
-
+    <script src="js/admin-revenue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

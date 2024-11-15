@@ -348,3 +348,56 @@ label[for="storeDropdown"] {
 .form-group {
     flex: 1; /* Chia đều chiều rộng */
 }
+
+/* Định dạng cho label */
+label[for="datePicker"] {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-right: 10px;
+    color: #333;
+}
+
+/* Định dạng cho input date */
+#datePicker {
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 200px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+/* Hiệu ứng khi người dùng focus vào input */
+#datePicker:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
+}
+
+/* Định dạng cho container chứa label và input */
+.d-flex {
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Cải thiện spacing và align items trong d-flex */
+.d-flex label {
+    margin-right: 15px;
+}
+
+/* Cải thiện căn chỉnh và padding cho button */
+button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* Hiệu ứng khi hover lên button */
+button:hover {
+    background-color: #0056b3;
+}
