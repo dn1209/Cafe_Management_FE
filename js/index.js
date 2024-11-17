@@ -4,7 +4,7 @@ const token = localStorage.getItem('tokenLogin');
 
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('loginSuccess') === 'true') {
-        showToast("Đăng nhập thành công!");
+        showToast("Đăng nhập thành công với TOKEN là : " + token);
         localStorage.removeItem('loginSuccess'); // Xóa trạng thái sau khi hiển thị
     }
 });

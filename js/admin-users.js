@@ -50,6 +50,7 @@
                         <td>${user.userId}</td>
                             <td>${user.displayName}</td>
                             <td>${user.userName}</td>
+                            <td>${user.userPhone}</td>
                             <td>${user.createdAt}</td>
                             <td>${user.updatedAt}</td>
                             <td>${storeName}</td>
@@ -125,7 +126,7 @@ function openEditUserModal(userId) {
         // Điền thông tin sản phẩm vào các trường trong form
         document.getElementById('userName').value = user.userName;
         document.getElementById('displayNameEdit').value = user.displayName;
-
+        document.getElementById('userPhoneEdit').value = user.userPhone;
         // Điền các danh mục vào dropdown trong modal
         const storeDropdownEdit = document.getElementById('storeDropdownEdit');
         storeDropdownEdit.innerHTML = ''; // Xóa các option cũ
@@ -250,9 +251,10 @@ document.getElementById('saveUserButton').addEventListener('click', async () => 
     const userStatus = parseInt(document.getElementById('statusDropdownEdit').value);
     const userRole = parseInt(document.getElementById('roleDropdownEdit').value);
     const storeId = parseInt(document.getElementById('storeDropdownEdit').value);
+    const userPhone = document.getElementById('userPhoneEdit').value;
     // Lấy giá trị thực tế (không có dấu .)
     // Kiểm tra nếu các trường không hợp lệ
-    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || isNaN(storeId)) {
+    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || isNaN(storeId) || !userPhone ) {
         showToast("Vui lòng nhập đầy đủ thông tin");
         return;
     }
@@ -261,7 +263,8 @@ document.getElementById('saveUserButton').addEventListener('click', async () => 
         storeId: parseInt(storeId), // Chuyển categoryId thành số
         userStatus: parseInt(userStatus),
         userRole: parseInt(userRole),
-        displayName: displayName
+        displayName: displayName,
+        userPhone: userPhone
     };
     console.log(updatedUser);
 
@@ -293,6 +296,8 @@ function openAddUserModal() {
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
     document.getElementById('displayName').value = '';
+    document.getElementById('userPhone').value = '';
+
     const storeDropdownAdd = document.getElementById('storeDropdownAdd');
     const roleDropdownAdd = document.getElementById('roleDropdownAdd');
 
@@ -336,14 +341,19 @@ document.getElementById('addUserForm').addEventListener('submit', async function
     const displayName = document.getElementById('displayName').value;
     const storeDropdownAdd = document.getElementById('storeDropdownAdd').value;
     const roleDropdownAdd = document.getElementById('roleDropdownAdd').value;
-
+    const userPhone = document.getElementById('userPhone').value;
     const userData = {
         username: username,
         password:password,
         displayName: displayName,
         userRole: parseInt(roleDropdownAdd),
-        storeId : parseInt(storeDropdownAdd)
+        storeId : parseInt(storeDropdownAdd),
+        userPhone: userPhone
     };
+    if (!username || !password || !displayName || !roleDropdownAdd || !storeDropdownAdd || !userPhone ) {
+        showToast("Vui lòng nhập đầy đủ thông tin");
+        return;
+    }
     try {
         const response = await fetch('http://localhost:8085/api/register', {
             method: 'POST',

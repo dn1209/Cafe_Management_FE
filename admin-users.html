@@ -51,6 +51,7 @@
                             <th>#</th>
                             <th>Họ tên</th>
                             <th>UserName</th>
+                            <th>Số điện thoại</th>
                             <th>Ngày tạo</th>
                             <th>Ngày cập nhật</th>
                             <th>Store</th>
@@ -89,6 +90,10 @@
                             <input type="text" class="form-control" id="displayName" required>
                         </div>
                         <div class="mb-3">
+                            <label for="userPhone" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="userPhone" required>
+                        </div>
+                        <div class="mb-3">
                             <label for="storeDropdownAdd" class="form-label">Store</label>
                             <select class="form-control" id="storeDropdownAdd" required>
                                 <!-- Các danh mục sẽ được điền vào đây -->
@@ -100,7 +105,7 @@
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Thêm danh mục</button>
+                        <button type="submit" class="btn btn-primary">Thêm người dùng</button>
                     </form>
                 </div>
             </div>
@@ -122,6 +127,10 @@
                         <div class="mb-3">
                             <label for="displayNameEdit" class="form-label">Họ và Tên</label>
                             <input type="text" class="form-control" id="displayNameEdit" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="userPhoneEdit" class="form-label">Số điện thoại</label>
+                            <input type="text" class="form-control" id="userPhoneEdit" required>
                         </div>
                         <div class="mb-3">
                             <label for="roleDropdownEdit" class="form-label">Chức danh</label>

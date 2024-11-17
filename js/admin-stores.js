@@ -174,7 +174,7 @@ document.getElementById('addStoreForm').addEventListener('submit', async functio
     const storeData = {
         storeName: storeName,
         storeAddress: storeAddress,
-        storeId : parseInt(statusDropdownAdd)
+        storeStatus : parseInt(statusDropdownAdd)
     };
     try {
         const response = await fetch('http://localhost:8085/api_store/register', {

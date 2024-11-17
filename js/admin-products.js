@@ -416,6 +416,7 @@ addProductForm.addEventListener('submit',async function(event) {
             const modal = bootstrap.Modal.getInstance(document.getElementById('addProductModal'));
             modal.hide();   
             document.querySelector('.modal-backdrop')?.remove(); // Xóa lớp nền mờ nếu có
+            fetchProducts(0);
          // reloadProductsList();  // Nếu có hàm reload danh sách sản phẩm
         } else {
             showToast('Lỗi khi thêm sản phẩm: ' );
