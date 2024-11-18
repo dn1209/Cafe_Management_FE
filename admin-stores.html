@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý Danh mục - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Quản lý Cửa hàng - Admin</title>
     <link rel="stylesheet" href="css/style1.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -28,7 +30,7 @@
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
+                        <a class="nav-link active" href="admin-stores.html">Quản lý cửa hàng</a>
                     </li>
                 </ul>
             </div>
@@ -37,38 +39,38 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Cửa hàng</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addStoreButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addStoreModal">Thêm cửa hàng</button>
+                    <button id="addStoreButton" class="btn btn-primary">Thêm cửa hàng</button>
                 </div>
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Tên cửa hàng</th>
                             <th>Địa chỉ</th>
-                            <th>Ngày tạo cửa hàng</th>
-                            <th>Ngày cập nhật lần cuối</th>
+                            <th>Ngày tạo</th>
+                            <th>Ngày cập nhật</th>
                             <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="storeList">
-                        <!-- Các danh mục sẽ được tải vào đây động -->
+                        <!-- Danh sách cửa hàng sẽ được tải động -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
 
-    <!-- Modal Thêm Danh mục -->
+    <!-- Modal Thêm Cửa hàng -->
     <div class="modal fade" id="addStoreModal" tabindex="-1" aria-labelledby="addStoreModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addStoreModalLabel">Thêm Cửa Hàng Mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()" aria-label="Close"></button>
+                    <h5 id="addStoreModalLabel" class="modal-title">Thêm Cửa Hàng Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="addStoreForm">
+                <form id="addStoreForm">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label for="storeName" class="form-label">Tên cửa hàng</label>
                             <input type="text" class="form-control" id="storeName" required>
@@ -80,28 +82,31 @@
                         <div class="mb-3">
                             <label for="statusDropdownAdd" class="form-label">Trạng thái</label>
                             <select class="form-control" id="statusDropdownAdd" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Trạng thái sẽ được thêm động -->
                             </select>
                         </div>
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Thêm cửa hàng</button>
-                    </form>
-                </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal Sửa Danh mục -->
+    <!-- Modal Sửa Cửa hàng -->
     <div class="modal fade" id="editStoreModal" tabindex="-1" aria-labelledby="editStoreModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editStoreModalLabel">Sửa Danh Mục</h5>
+                    <h5 id="editStoreModalLabel" class="modal-title">Sửa Cửa Hàng</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="editStoreForm">
+                <form id="editStoreForm">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="editStoreName" class="form-label">Tên cửa hàng mới</label>
+                            <label for="editStoreName" class="form-label">Tên cửa hàng</label>
                             <input type="text" class="form-control" id="editStoreName" required>
                         </div>
                         <div class="mb-3">
@@ -109,38 +114,44 @@
                             <input type="text" class="form-control" id="editStoreAddress" required>
                         </div>
                         <div class="mb-3">
-                            <label for="statusDropdownEdit" class="form-label">Store</label>
+                            <label for="statusDropdownEdit" class="form-label">Trạng thái</label>
                             <select class="form-control" id="statusDropdownEdit" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Trạng thái sẽ được thêm động -->
                             </select>
                         </div>
+                    </div>
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-primary" id="saveStoreButton">Lưu thay đổi</button>
-                    </form>
-                </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS và các script cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Các script của bạn -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin-stores.js"></script>
     <script>
-        // Load header
         // Load header
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
                 const script = document.createElement("script");
                 script.src = "js/header.js";
                 script.onload = () => {
-                    checkUserRole();  // Gọi sau khi header.js đã được tải
-                    checkLoginStatus(); // Gọi sau khi header.js đã được tải
+                    checkUserRole();
+                    checkLoginStatus();
                 };
                 document.body.appendChild(script);
             });
-    
-        
+
         // Load footer
         fetch('footer.html')
             .then(response => response.text())
@@ -148,10 +159,5 @@
                 document.getElementById('footer-placeholder').innerHTML = data;
             });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/admin-stores.js"></script>
-    <script src="js/utils.js"></script>
-
-
 </body>
 </html>

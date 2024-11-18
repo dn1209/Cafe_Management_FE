@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Sản phẩm - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style1.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -19,7 +21,7 @@
                         <a class="nav-link" href="admin-revenue.html">Quản lý doanh thu</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
+                        <a class="nav-link active" href="admin-products.html">Quản lý sản phẩm</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin-users.html">Quản lý người dùng</a>
@@ -37,19 +39,18 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Sản phẩm</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addProductButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">Thêm sản phẩm</button>
-                    <input type="text" class="form-control w-25" placeholder="Tìm kiếm sản phẩm" id="searchProduct">
+                    <button id="addProductButton" class="btn btn-primary">Thêm sản phẩm</button>
                 </div>
-                <!-- Dropdown chọn danh mục -->
-                <div class="form-row">
-                    <div class="form-group col-md-6">
+                <!-- Dropdown chọn danh mục và cửa hàng -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
                         <label for="storeDropdown">Chọn cửa hàng</label>
                         <select id="storeDropdown" class="form-control">
                             <option value="">Tất cả cửa hàng</option>
                             <!-- Các cửa hàng sẽ được tải động ở đây -->
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
+                    <div class="col-md-6">
                         <label for="categoryDropdown">Chọn danh mục</label>
                         <select id="categoryDropdown" class="form-control">
                             <option value="">Tất cả danh mục</option>
@@ -57,8 +58,7 @@
                         </select>
                     </div>
                 </div>
-                <table class="table">
-                   
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
@@ -81,23 +81,24 @@
             </div>
         </div>
     </div>
-    <div class="modal" tabindex="-1" id="editProductModal">
+
+    <!-- Modal Sửa Sản phẩm -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sửa sản phẩm</h5>
+                    <h5 id="editProductModalLabel" class="modal-title">Sửa Sản Phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="editProductForm">
+                <form id="editProductForm">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="productName" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productName" required>
+                            <label for="productNameEdit" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="productNameEdit" required>
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="productSellPrice" class="form-label">Giá bán</label>
-                            <input type="text" class="form-control" id="productSellPrice" required oninput="formatPriceInput(this)">
+                            <label for="productSellPriceEdit" class="form-label">Giá bán</label>
+                            <input type="number" class="form-control" id="productSellPriceEdit" required>
                         </div>
                         <div class="mb-3">
                             <label for="categoryDropdownEdit" class="form-label">Danh mục</label>
@@ -105,41 +106,38 @@
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
-                        
-                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="saveProductButton">Lưu thay đổi</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary" id="saveProductButton">Lưu thay đổi</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
+
     <!-- Modal Thêm Sản phẩm -->
-    <!-- Modal thêm sản phẩm -->
     <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addProductModalLabel">Thêm Sản Phẩm Mới</h5>
-                    <button type="button" class="btn-close" onclick="closeModal()" aria-label="Close"></button>
+                    <h5 id="addProductModalLabel" class="modal-title">Thêm Sản Phẩm Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="addProductForm">
+                <form id="addProductForm">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="productName" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productName" required>
+                            <label for="productNameAdd" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="productNameAdd" required>
                         </div>
-                        
                         <div class="mb-3">
-                            <label for="productSellPrice" class="form-label">Giá bán</label>
-                            <input type="number" class="form-control" id="productSellPrice" required>
+                            <label for="productSellPriceAdd" class="form-label">Giá bán</label>
+                            <input type="number" class="form-control" id="productSellPriceAdd" required>
                         </div>
                         <div class="mb-3">
                             <label for="storeSelect" class="form-label">Cửa hàng</label>
                             <select class="form-control" id="storeSelect" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các cửa hàng sẽ được điền vào đây -->
                             </select>
                         </div>
                         <div class="mb-3">
@@ -148,37 +146,38 @@
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
-                        
-                        
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
-                    </form>
-                </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- Footer Placeholder -->
+
+    <!-- Bootstrap JS và các script cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Các script của bạn -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin-products.js"></script>
     <script>
-        // Load header
         // Load header
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
                 const script = document.createElement("script");
                 script.src = "js/header.js";
                 script.onload = () => {
-                    checkUserRole();  // Gọi sau khi header.js đã được tải
-                    checkLoginStatus(); // Gọi sau khi header.js đã được tải
+                    checkUserRole();
+                    checkLoginStatus();
                 };
                 document.body.appendChild(script);
             });
-    
-        
-        
+
     </script>
-    <script src="js/admin-products.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

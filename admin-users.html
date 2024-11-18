@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Người dùng - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style1.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
@@ -22,7 +24,7 @@
                         <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin-users.html">Quản lý người dùng</a>
+                        <a class="nav-link active" href="admin-users.html">Quản lý người dùng</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
@@ -37,53 +39,54 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Người dùng</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addUserButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addUserModal">Thêm người dùng</button>
+                    <button id="addUserButton" class="btn btn-primary">Thêm người dùng</button>
                 </div>
-                <div class="form-group">
-                    <label for="storeDropdown">Chọn danh mục</label>
+                <div class="form-group mb-3">
+                    <label for="storeDropdown">Chọn cửa hàng</label>
                     <select id="storeDropdown" class="form-control">
-                        <option value="">Tất cả Store</option> <!-- Option mặc định khi không chọn category -->
+                        <!-- Các tùy chọn sẽ được thêm động -->
                     </select>
                 </div>
-                <table class="table">
+                <table class="table table-bordered">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Họ tên</th>
-                            <th>UserName</th>
+                            <th>Tên đăng nhập</th>
                             <th>Số điện thoại</th>
                             <th>Ngày tạo</th>
                             <th>Ngày cập nhật</th>
-                            <th>Store</th>
+                            <th>Cửa hàng</th>
                             <th>Vai trò</th>
                             <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody id="userList">
-                        <!-- Các người dùng sẽ được tải vào đây động -->
+                        <!-- Danh sách người dùng sẽ được tải động -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
-     <!-- Modal Thêm Danh mục -->
-     <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
+
+    <!-- Modal Thêm Người dùng -->
+    <div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addUserModalLabel">Thêm Người dùng Mới</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="closeModal()" aria-label="Close"></button>
+                    <h5 id="addUserModalLabel" class="modal-title">Thêm Người Dùng Mới</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="addUserForm">
+                <form id="addUserForm">
+                    <div class="modal-body">
                         <div class="mb-3">
                             <label for="username" class="form-label">Tên đăng nhập</label>
                             <input type="text" class="form-control" id="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Mật khẩu</label>
-                            <input type="text" class="form-control" id="password" required>
+                            <input type="password" class="form-control" id="password" required>
                         </div>
                         <div class="mb-3">
                             <label for="displayName" class="form-label">Họ và tên</label>
@@ -94,35 +97,40 @@
                             <input type="text" class="form-control" id="userPhone" required>
                         </div>
                         <div class="mb-3">
-                            <label for="storeDropdownAdd" class="form-label">Store</label>
+                            <label for="storeDropdownAdd" class="form-label">Cửa hàng</label>
                             <select class="form-control" id="storeDropdownAdd" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các cửa hàng sẽ được điền vào đây -->
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="roleDropdownAdd" class="form-label">Chức danh</label>
+                            <label for="roleDropdownAdd" class="form-label">Vai trò</label>
                             <select class="form-control" id="roleDropdownAdd" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các vai trò sẽ được điền vào đây -->
                             </select>
                         </div>
+                    </div>
+                    <div class="modal-footer">
                         <button type="submit" class="btn btn-primary">Thêm người dùng</button>
-                    </form>
-                </div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-    <div class="modal" tabindex="-1" id="editUserModal">
+
+    <!-- Modal Sửa Người dùng -->
+    <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Sửa người dùng</h5>
+                    <h5 id="editUserModalLabel" class="modal-title">Sửa Người Dùng</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id="editUserForm">
+                <form id="editUserForm">
+                    <div class="modal-body">
                         <div class="mb-3">
-                            <label for="userName" class="form-label">Tên đăng nhập</label>
-                            <input type="text" class="form-control" id="userName" required>
+                            <label for="userNameEdit" class="form-label">Tên đăng nhập</label>
+                            <input type="text" class="form-control" id="userNameEdit" required>
                         </div>
                         <div class="mb-3">
                             <label for="displayNameEdit" class="form-label">Họ và Tên</label>
@@ -133,86 +141,90 @@
                             <input type="text" class="form-control" id="userPhoneEdit" required>
                         </div>
                         <div class="mb-3">
-                            <label for="roleDropdownEdit" class="form-label">Chức danh</label>
+                            <label for="roleDropdownEdit" class="form-label">Vai trò</label>
                             <select class="form-control" id="roleDropdownEdit" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các vai trò sẽ được điền vào đây -->
                             </select>
                         </div>
                         <div class="mb-3">
-                            <label for="storeDropdownEdit" class="form-label">Store</label>
+                            <label for="storeDropdownEdit" class="form-label">Cửa hàng</label>
                             <select class="form-control" id="storeDropdownEdit" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các cửa hàng sẽ được điền vào đây -->
                             </select>
                         </div>
                         <div class="mb-3">
                             <label for="statusDropdownEdit" class="form-label">Trạng thái</label>
                             <select class="form-control" id="statusDropdownEdit" required>
-                                <!-- Các danh mục sẽ được điền vào đây -->
+                                <!-- Các trạng thái sẽ được điền vào đây -->
                             </select>
                         </div>
-                        
-                        
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="saveUserButton">Lưu thay đổi</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="modal" tabindex="-1" id="editUserPasswordModal">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Sửa mật khẩu người dùng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="editUserPasswordForm">
-                        <div class="mb-3">
-                            <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
-                            <input type="text" class="form-control" id="oldPassword" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="newPassword" class="form-label">Mật khẩu mới</label>
-                            <input type="text" class="form-control" id="newPassword" required>
-                        </div>
-                    
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="button" class="btn btn-primary" id="saveUserPasswordButton">Lưu thay đổi</button>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary" id="saveUserButton">Lưu thay đổi</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Modal Đổi Mật khẩu Người dùng -->
+    <div class="modal fade" id="editUserPasswordModal" tabindex="-1" aria-labelledby="editUserPasswordModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="editUserPasswordModalLabel" class="modal-title">Đổi Mật Khẩu Người Dùng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="editUserPasswordForm">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="oldPassword" class="form-label">Mật khẩu cũ</label>
+                            <input type="password" class="form-control" id="oldPassword" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="newPassword" class="form-label">Mật khẩu mới</label>
+                            <input type="password" class="form-control" id="newPassword" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="button" class="btn btn-primary" id="saveUserPasswordButton">Lưu thay đổi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS và các script cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Các script của bạn -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin-users.js"></script>
     <script>
-        // Load header
         // Load header
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
-                // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
                 const script = document.createElement("script");
                 script.src = "js/header.js";
                 script.onload = () => {
-                    checkUserRole();  // Gọi sau khi header.js đã được tải
-                    checkLoginStatus(); // Gọi sau khi header.js đã được tải
+                    checkUserRole();
+                    checkLoginStatus();
                 };
                 document.body.appendChild(script);
             });
-    
-        
-        
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/admin-users.js"></script>
-    <script src="js/utils.js"></script>
 
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
 </body>
 </html>

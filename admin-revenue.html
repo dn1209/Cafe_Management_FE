@@ -1,21 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý Doanh thu - Admin</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/style1.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Header Placeholder -->
     <div id="header-placeholder"></div>
+
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar -->
             <div class="col-md-2 bg-light p-3 sidebar vh-100">
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin-revenue.html">Quản lý doanh thu</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
                     </li>
@@ -26,7 +32,7 @@
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="admin-revenue.html">Quản lý doanh thu</a>
+                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
                     </li>
                 </ul>
             </div>
@@ -35,35 +41,42 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Doanh thu</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <label for="datePicker">Chọn ngày:</label>
-                    <input type="date" id="datePicker" />
+                    <div class="input-group">
+                        <label for="datePicker" class="input-group-text">Chọn ngày:</label>
+                        <input type="date" id="datePicker" class="form-control" />
+                    </div>
                     <button id="refreshRevenueButton" class="btn btn-primary">Làm mới</button>
                 </div>
 
                 <!-- Bảng thống kê doanh thu -->
-                <h4>Doanh thu trong tuần</h4>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Ngày</th>
-                                <th>Doanh Thu (VND)</th>
-                            </tr>
-                        </thead>
-                        <tbody id="dailyRevenueTable">
-                            <!-- Dữ liệu sẽ được thêm động -->
-                        </tbody>
-                    </table>
+                <h4>Doanh thu hàng ngày</h4>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Ngày</th>
+                            <th>Doanh Thu (VND)</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dailyRevenueTable">
+                        <!-- Dữ liệu sẽ được thêm động -->
+                    </tbody>
+                </table>
 
-                    <!-- Biểu đồ doanh thu hàng tháng -->
-                    <h4 class="mt-5">Biểu đồ Doanh Thu Theo Tháng</h4>
-                    <canvas id="monthlyRevenueChart" width="250" height="125"></canvas> <!-- Đặt chiều rộng và chiều cao nhỏ hơn -->
+                <!-- Biểu đồ doanh thu hàng tháng -->
+                <h4 class="mt-5">Biểu đồ Doanh Thu Theo Tháng</h4>
+                <canvas id="monthlyRevenueChart" width="800" height="400"></canvas>
             </div>
         </div>
     </div>
 
-    <!-- Footer -->
+    <!-- Footer Placeholder -->
     <div id="footer-placeholder"></div>
 
+    <!-- Bootstrap JS và các script cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Các script của bạn -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin-revenue.js"></script>
     <script>
         // Load header
         fetch('header.html')
@@ -78,7 +91,7 @@
                 };
                 document.body.appendChild(script);
             });
-        
+
         // Load footer
         fetch('footer.html')
             .then(response => response.text())
@@ -86,7 +99,5 @@
                 document.getElementById('footer-placeholder').innerHTML = data;
             });
     </script>
-    <script src="js/admin-revenue.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
