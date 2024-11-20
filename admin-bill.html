@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý Hóa đơn - Admin</title>
+    <link rel="stylesheet" href="css/style1.css">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header Placeholder -->
+    <div id="header-placeholder"></div>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 bg-light p-3 sidebar vh-100">
+                <h5 class="text-center">Admin Dashboard</h5>
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="admin-bill.html">Quản lý hóa đơn</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-users.html">Quản lý người dùng</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 p-3">
+                <h3>Quản lý Hóa đơn</h3>
+                <div class="d-flex justify-content-between mb-3">
+                    <button id="refreshBillButton" class="btn btn-primary">Làm mới danh sách</button>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="storeDropdown">Chọn cửa hàng</label>
+                    <select id="storeDropdown" class="form-control">
+                        <!-- Các tùy chọn sẽ được thêm động -->
+                    </select>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Mã hóa đơn</th>
+                            <th>Ngày bán</th>
+                            <th>Số lượng</th>
+                            <th>Người bán</th>
+                            <th>Tổng tiền</th>
+                            <th>Ghi chú</th>
+                            <th>Chi tiết</th>
+                        </tr>
+                    </thead>
+                    <tbody id="billList">
+                        <!-- Danh sách hóa đơn sẽ được tải động -->
+                    </tbody>
+                </table>
+                <div id="pagination" class="pagination-controls"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Chi tiết Hóa đơn -->
+    <div class="modal fade" id="billDetailModal" tabindex="-1" aria-labelledby="billDetailModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="billDetailModalLabel" class="modal-title">Chi tiết hóa đơn</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Tên sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Giá</th>
+                                <th>Thành tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody id="billDetailList">
+                            <!-- Chi tiết hóa đơn sẽ được thêm động -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Placeholder -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Bootstrap JS và các script cần thiết -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Các script của bạn -->
+    <script src="js/utils.js"></script>
+    <script src="js/admin-bill.js"></script>
+    <script>
+        // Load header
+        fetch('header.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('header-placeholder').innerHTML = data;
+                const script = document.createElement("script");
+                script.src = "js/header.js";
+                script.onload = () => {
+                    checkUserRole();
+                    checkLoginStatus();
+                };
+                document.body.appendChild(script);
+            });
+
+        // Load footer
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                document.getElementById('footer-placeholder').innerHTML = data;
+            });
+    </script>
+</body>
+</html>

@@ -42,7 +42,7 @@ async function fetchBills(pageNumber = 0) {
     }
 
     try {
-        const url = `http://localhost:8085/api_bill/list?page=${pageNumber}&size=10`;
+        const url = `http://localhost:8085/api_bill/list_for_user?page=${pageNumber}&size=10`;
 
         const response = await fetch(url, {
             method: "GET",
@@ -80,8 +80,6 @@ function renderBills(bills) {
             <td>${bill.totalQuantity}</td>
             <td>${bill.saleName}</td>
             <td>${bill.totalPrice.toLocaleString()} VND</td>
-            <td>${bill.customerPay.toLocaleString()} VND</td>
-            <td>${bill.changeAmount.toLocaleString()} VND</td>
             <td>${bill.notes || 'Không có ghi chú'}</td>
             <td>
                 <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#invoice-detail-modal-${bill.billId}">
@@ -162,8 +160,6 @@ function renderBillForDemo(bill) {
                             <p><strong>Người bán:</strong> ${userName}</p>
                             <p><strong>Tổng số lượng:</strong> ${bill.totalQuantity}</p>
                             <p><strong>Tổng tiền:</strong> ${bill.totalPrice.toLocaleString()} VND</p>
-                            <p><strong>Khách hàng thanh toán:</strong> ${bill.customerPay.toLocaleString()} VND</p>
-                            <p><strong>Số tiền trả lại:</strong> ${bill.changeAmount.toLocaleString()} VND</p>
                             <p><strong>Ghi chú:</strong> ${bill.notes || 'Không có ghi chú'}</p>
                             
                             <h3>Chi tiết hóa đơn:</h3>

@@ -7,7 +7,7 @@ function checkUserRole() {
         const navbar = document.querySelector('.navbar-nav');
         const adminTab = document.createElement('li');
         adminTab.classList.add('nav-item');
-        adminTab.innerHTML = `<a class="pos-nav-link nav-link" href="admin-products.html">ADMIN DASHBOARD</a>`;
+        adminTab.innerHTML = `<a class="pos-nav-link nav-link" href="admin-revenue.html">ADMIN DASHBOARD</a>`;
         navbar.appendChild(adminTab);
     }
 }

@@ -5,23 +5,99 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Màn hình Đăng Nhập</title>
     <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* CSS cơ bản cho modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 30%;
+            text-align: center;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .button-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .btn-submit {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
 
     <div class="login-container">
         <h2>Đăng Nhập</h2>
         <div class="input-group">
-            <label for="username">Tên nguoi dung</label>
-            <input type="text" id="username" placeholder="Nhập tên cửa hàng" required>
+            <label for="username">Tên người dùng</label>
+            <input type="text" id="username" placeholder="Nhập tên người dùng" required>
         </div>
 
         <div class="input-group">
-            <label for="password">Mật Khẩu</label>
+            <label for="password">Mật khẩu</label>
             <input type="password" id="password" placeholder="Nhập mật khẩu" required>
         </div>
 
-        <button class="btn-submit" onclick="login()">Đăng Nhập</button>
+        <div class="button-group">
+            <button class="btn-submit" onclick="login()">Đăng Nhập</button>
+            <button class="btn-submit" id="register-button" style="display: none; margin-left: 10px;" onclick="openRegisterModal()">Đăng Ký</button>
+        </div>
     </div>
+
+    <!-- Modal Đăng ký -->
+    <div id="register-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeRegisterModal()">&times;</span>
+            <h2>Đăng ký</h2>
+            <div class="input-group">
+                <label for="register-username">Tên người dùng</label>
+                <input type="text" id="register-username" placeholder="Nhập tên người dùng" required>
+            </div>
+            <div class="input-group">
+                <label for="register-password">Mật khẩu</label>
+                <input type="password" id="register-password" placeholder="Nhập mật khẩu" required>
+            </div>
+            <button class="btn-submit" onclick="registerAdmin()">Đăng Ký</button>
+        </div>
+    </div>
+
     <script src="js/utils.js"></script>
     <script src="js/script.js"></script>
 </body>

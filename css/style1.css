@@ -361,9 +361,9 @@ label[for="datePicker"] {
 #datePicker {
     padding: 10px;
     font-size: 1rem;
+    margin-right: 800px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 200px;
     outline: none;
     transition: border-color 0.3s ease;
 }

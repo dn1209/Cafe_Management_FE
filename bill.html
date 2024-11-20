@@ -27,8 +27,6 @@
                                 <th>Số lượng</th>
                                 <th>Người bán</th>
                                 <th>Tổng tiền</th>
-                                <th>Tiền khách trả</th>
-                                <th>Tiền thừa</th>
                                 <th>Ghi chú</th>
                                 <th>Chi tiết</th>
                             </tr>
@@ -50,6 +48,14 @@
             .then(response => response.text())
             .then(data => {
                 document.getElementById('header-placeholder').innerHTML = data;
+                // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
+                const script = document.createElement("script");
+                script.src = "js/header.js";
+                script.onload = () => {
+                    checkUserRole();  // Gọi sau khi header.js đã được tải
+                    checkLoginStatus(); // Gọi sau khi header.js đã được tải
+                };
+                document.body.appendChild(script);
             });
         
         // Load footer

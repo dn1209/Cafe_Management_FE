@@ -11,8 +11,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Lấy dữ liệu doanh thu hàng tháng ngay khi trang tải xong
     await fetchMonthlyRevenue();
 
-    // Gọi API doanh thu mặc định nếu không có ngày chọn
-    await fetchDailyRevenue();
+    // Gọi API doanh thu với ngày hiện tại mặc định
+    await fetchDailyRevenue(getCurrentDate());
 
     // Lắng nghe sự kiện thay đổi ngày từ datepicker
     const dateInput = document.getElementById('datePicker');
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
 
     // Hàm lấy doanh thu hàng ngày từ API
-    async function fetchDailyRevenue(dateParam = '') {
+    async function fetchDailyRevenue(dateParam) {
         try {
             let url = 'http://localhost:8085/api_bill/revenue';
             if (dateParam) {
@@ -123,5 +123,14 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error(error);
             alert(error.message);
         }
+    }
+
+    // Hàm lấy ngày hiện tại theo định dạng yyyy-MM-dd (cùng định dạng mà datepicker sử dụng)
+    function getCurrentDate() {
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const day = String(today.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
     }
 });

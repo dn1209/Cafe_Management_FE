@@ -395,38 +395,18 @@ function closeCheckoutModal() {
     checkoutModal.hide(); // Dùng hide() để đóng modal của Bootstrap
 }
 
-// Sự kiện khi người dùng nhập tiền vào ô input
-document.getElementById('amount-paid').addEventListener('input', function (e) {
-    // Lấy giá trị gốc (không định dạng)
-    let inputVal = e.target.value.replace(/\D/g, ''); // Xóa các ký tự không phải số
-
-    // Định dạng giá trị thành dạng có dấu phân cách hàng nghìn (dùng dấu chấm)
-    e.target.value = inputVal.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-    // Lưu giá trị gốc không có dấu phân cách vào data-raw-value
-    e.target.dataset.rawValue = inputVal;
-});
-
 // Khi nhấn "Xác nhận thanh toán"
 document.getElementById('confirm-checkout').addEventListener('click', async function () {
     const note = document.getElementById('note').value; // Ghi chú
     // Lấy giá trị thực của tiền thu từ khách (không có dấu phân cách nghìn)
-    const amountPaid = parseInt(document.getElementById('amount-paid').dataset.rawValue) || 0;
 
     // Kiểm tra xem tiền thu có đủ không
     const totalAmount = parseInt(document.getElementById('total-amount').textContent.replace(" VND", "").replace(/,/g, "")) || 0;
-
-    if (amountPaid < totalAmount *1000) {
-        showToast("Tiền thu từ khách không đủ.");
-        console.log(totalAmount *1000)
-        return;
-    }
 
     // Tạo đối tượng đơn hàng
     const order = {
         detailBill: [],
         notes: note,
-        customerPay: amountPaid,
         orderStatus: 1
     };
 
