@@ -18,7 +18,17 @@
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link active" href="admin-bill.html">Quản lý hóa đơn</a>
+                        <a class="nav-link" data-bs-toggle="collapse" href="#revenueDropdown" role="button" aria-expanded="false" aria-controls="revenueDropdown">
+                            Quản lý doanh thu
+                        </a>
+                        <ul class="collapse list-unstyled ps-3" id="revenueDropdown">
+                            <li class="nav-item">
+                                <a class="nav-link" href="admin-bill.html">Quản lý hóa đơn</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="admin-revenue.html">Thống kê doanh thu</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="admin-products.html">Quản lý sản phẩm</a>

@@ -59,3 +59,26 @@ function checkJwtError(response) {
 
 // Gọi hàm injectToastStyles() một lần để thêm các style vào đầu tài liệu
 injectToastStyles();
+
+document.addEventListener('DOMContentLoaded', () => {
+    const revenueDropdown = document.getElementById('revenueDropdown');
+    const revenueLink = document.querySelector('a[href="#revenueDropdown"]');
+    const currentUrl = window.location.pathname;
+
+    // Ưu tiên mở menu nếu URL liên quan đến doanh thu
+    if (currentUrl.includes('admin-bill.html') || currentUrl.includes('admin-revenue-statistics.html')) {
+        revenueDropdown.classList.add('show');
+        revenueLink.setAttribute('aria-expanded', 'true');
+        localStorage.setItem('revenueDropdownOpen', 'true');
+    } else if (localStorage.getItem('revenueDropdownOpen') === 'true') {
+        // Mở menu nếu trạng thái lưu là mở
+        revenueDropdown.classList.add('show');
+        revenueLink.setAttribute('aria-expanded', 'true');
+    }
+
+    // Lưu trạng thái khi người dùng nhấn vào menu
+    revenueLink.addEventListener('click', () => {
+        const isOpen = revenueDropdown.classList.contains('show');
+        localStorage.setItem('revenueDropdownOpen', !isOpen);
+    });
+});

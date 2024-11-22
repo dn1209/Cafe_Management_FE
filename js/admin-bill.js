@@ -38,7 +38,7 @@ async function fetchBills(pageNumber = 0, storeId = null) {
         renderPagination(data);
     } catch (error) {
         console.error("Error fetching bills:", error);
-        alert("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
+        showToast("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
     }
 }
 
@@ -89,17 +89,20 @@ async function loadStores() {
         const stores = await response.json();
 
         const storeDropdown = document.getElementById('storeDropdown');
-        storeDropdown.innerHTML = stores.map(store => `
-            <option value="${store.storeId}">${store.storeName}</option>
-        `).join('');
+        
+        // Thêm tùy chọn mặc định "Tất cả cửa hàng"
+        storeDropdown.innerHTML = `
+            <option value="all">Tất cả cửa hàng</option>
+            ${stores.map(store => `
+                <option value="${store.storeId}">${store.storeName}</option>
+            `).join('')}
+        `;
 
-        // Tự động tải hóa đơn cho cửa hàng đầu tiên
-        if (stores.length > 0) {
-            fetchBills(0, stores[0].storeId);
-        }
+        // Tự động tải hóa đơn cho "Tất cả cửa hàng" ban đầu
+        fetchBills(0, null);
     } catch (error) {
         console.error("Error loading stores:", error);
-        alert("Không thể tải danh sách cửa hàng. Vui lòng thử lại.");
+        showToast("Không thể tải danh sách cửa hàng. Vui lòng thử lại.");
     }
 }
 
@@ -143,7 +146,7 @@ async function fetchBillDetails(billId) {
         renderBillDetails(details);
     } catch (error) {
         console.error("Error fetching bill details:", error);
-        alert("Không thể tải chi tiết hóa đơn. Vui lòng thử lại.");
+        showToast("Không thể tải chi tiết hóa đơn. Vui lòng thử lại.");
     }
 }
 
@@ -165,12 +168,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const storeDropdown = document.getElementById('storeDropdown');
     storeDropdown.addEventListener('change', () => {
         const selectedStoreId = storeDropdown.value;
-        fetchBills(0, selectedStoreId); // Gọi lại API với storeId mới
+        if (selectedStoreId === "all") {
+            fetchBills(0, null); // Gọi API mà không truyền storeId
+        } else {
+            fetchBills(0, selectedStoreId); // Gọi API với storeId đã chọn
+        }
     });
 
     document.getElementById('refreshBillButton').addEventListener('click', () => {
         const selectedStoreId = storeDropdown.value;
-        fetchBills(0, selectedStoreId); // Làm mới hóa đơn với storeId đã chọn
+        if (selectedStoreId === "all") {
+            fetchBills(0, null); // Làm mới hóa đơn mà không truyền storeId
+        } else {
+            fetchBills(0, selectedStoreId); // Làm mới hóa đơn với storeId đã chọn
+        }
     });
 });
 
@@ -179,3 +190,4 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchBills(0);
     document.getElementById('refreshBillButton').addEventListener('click', () => fetchBills(0));
 });
+
