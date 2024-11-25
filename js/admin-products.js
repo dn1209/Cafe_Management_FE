@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
     const token = localStorage.getItem('tokenLogin');
     if (!token) {
-        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
+        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const storeId = parseInt(document.getElementById('storeSelect').value);
 
         if (!productName || isNaN(categoryId) || isNaN(productSellPrice) || isNaN(storeId)) {
-            showToast("Vui lòng điền đầy đủ thông tin!");
+            toastrError("Lỗi", "Vui lòng điền đầy đủ thông tin!");
             return;
         }
 
@@ -307,15 +307,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             await checkJwtError(response);
 
             if (response.ok) {
-                showToast('Sản phẩm đã được thêm thành công!');
+                toastrSuccess('Thành công', 'Sản phẩm đã được thêm thành công!');
                 bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
                 await fetchProducts(0);
             } else {
-                showToast('Lỗi khi thêm sản phẩm.');
+                toastrError('Lỗi', 'Lỗi khi thêm sản phẩm.');
             }
         } catch (error) {
             console.error('Có lỗi xảy ra:', error);
-            showToast('Đã xảy ra lỗi. Vui lòng thử lại!');
+            toastrError('Lỗi', 'Đã xảy ra lỗi. Vui lòng thử lại!');
         }
     }
 
@@ -356,7 +356,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const productSellPrice = parseFloat(document.getElementById('productSellPriceEdit').value.replace(/\./g, ""));
 
         if (!productName || isNaN(categoryId) || isNaN(productSellPrice)) {
-            showToast("Vui lòng nhập đầy đủ thông tin sản phẩm.");
+            toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin sản phẩm.");
             return;
         }
 
@@ -379,15 +379,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             await checkJwtError(response);
 
             if (response.ok) {
-                showToast("Cập nhật sản phẩm thành công");
+                toastrSuccess("Thành công", "Cập nhật sản phẩm thành công");
                 bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
                 await fetchProducts(0);
             } else {
-                showToast("Lỗi khi cập nhật sản phẩm.");
+                toastrError("Lỗi", "Lỗi khi cập nhật sản phẩm.");
             }
         } catch (error) {
             console.error("Có lỗi xảy ra khi lưu thay đổi:", error);
-            showToast("Có lỗi xảy ra khi lưu thay đổi.");
+            toastrError("Lỗi", "Có lỗi xảy ra khi lưu thay đổi.");
         }
     }
 
@@ -404,14 +404,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             await checkJwtError(response);
 
             if (response.ok) {
-                showToast("Cập nhật trạng thái sản phẩm thành công");
+                toastrSuccess("Thành công", "Cập nhật trạng thái sản phẩm thành công");
                 await fetchProducts(0);
             } else {
-                showToast("Lỗi khi cập nhật trạng thái sản phẩm.");
+                toastrError("Lỗi", "Lỗi khi cập nhật trạng thái sản phẩm.");
             }
         } catch (error) {
             console.error("Có lỗi xảy ra khi cập nhật trạng thái sản phẩm:", error);
-            showToast("Có lỗi xảy ra khi cập nhật trạng thái sản phẩm.");
+            toastrError("Lỗi", "Có lỗi xảy ra khi cập nhật trạng thái sản phẩm.");
         }
     }
 

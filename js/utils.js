@@ -1,46 +1,36 @@
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'toast-message';
-    toast.textContent = message;
-    
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-        toast.classList.add('show');
-    }, 100);
-    
-    setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-            document.body.removeChild(toast);
-        }, 300);
-    }, 3000);
+toastr.options = {
+    closeButton: true,
+    debug: false,
+    newestOnTop: true,
+    progressBar: true,
+    positionClass: "toast-top-right",
+    preventDuplicates: true,
+    showDuration: 300,
+    hideDuration: 1000,
+    timeOut: 3000,
+    extendedTimeOut: 1000,
+    showEasing: "swing",
+    hideEasing: "linear",
+    showMethod: "fadeIn",
+    hideMethod: "fadeOut",
+    tapToDismiss: false,
+    target: "body"
 }
 
-function injectToastStyles() {
-    const style = document.createElement('style');
-    style.textContent = `
-        .toast-message {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            min-width: 250px;
-            padding: 15px;
-            border-radius: 5px;
-            background-color: #ffcc00;
-            color: #333;
-            font-size: 14px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            z-index: 2000; /* Đảm bảo cao hơn modal */
-            opacity: 0;
-            transition: opacity 0.3s ease, top 0.3s ease;
-        }
-        .toast-message.show {
-            opacity: 1;
-            top: 20px;
-        }
-    `;
-    document.head.appendChild(style);
+function toastrSuccess(title, message) {
+    toastr.success(message, title);
+}
+
+function toastrError(title, message) {
+    toastr.error(message, title);
+}
+
+function toastrInfo(title, message) {
+    toastr.info(message, title);
+}
+
+function toastrWarning(title, message) {
+    toastr.warning(message, title);
 }
 
 function checkJwtError(response) {
@@ -48,7 +38,7 @@ function checkJwtError(response) {
         return response.json().then(data => {
             if (data.error === "Invalid or missing JWT token") {
                 localStorage.setItem('jwtError', 'true'); // Lưu trạng thái đăng nhập thành công
-                showToast("Phiên đăng nhập của bạn đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
+                toastrError("Lỗi", "Phiên đăng nhập của bạn đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
                 window.location.href = "login.html";
             }
             return Promise.reject(data); // Trả về lỗi để xử lý tiếp nếu cần
@@ -57,8 +47,8 @@ function checkJwtError(response) {
     return response; // Trả về response nếu không phải lỗi 401
 }
 
-// Gọi hàm injectToastStyles() một lần để thêm các style vào đầu tài liệu
-injectToastStyles();
+const collapseElementList = document.querySelectorAll('.collapse')
+const collapseList = [...collapseElementList].map(collapseEl => new bootstrap.Collapse(collapseEl));
 
 document.addEventListener('DOMContentLoaded', () => {
     const revenueDropdown = document.getElementById('revenueDropdown');
@@ -70,15 +60,17 @@ document.addEventListener('DOMContentLoaded', () => {
         revenueDropdown.classList.add('show');
         revenueLink.setAttribute('aria-expanded', 'true');
         localStorage.setItem('revenueDropdownOpen', 'true');
-    } else if (localStorage.getItem('revenueDropdownOpen') === 'true') {
-        // Mở menu nếu trạng thái lưu là mở
-        revenueDropdown.classList.add('show');
-        revenueLink.setAttribute('aria-expanded', 'true');
     }
+    // else if (localStorage.getItem('revenueDropdownOpen') === 'true') {
+    //     // Mở menu nếu trạng thái lưu là mở
+    //     revenueDropdown.classList.add('show');
+    //     revenueLink.setAttribute('aria-expanded', 'true');
+    // }
 
     // Lưu trạng thái khi người dùng nhấn vào menu
     revenueLink.addEventListener('click', () => {
-        const isOpen = revenueDropdown.classList.contains('show');
-        localStorage.setItem('revenueDropdownOpen', !isOpen);
+        const isOpen = revenueDropdown.classList.contains('collapsing');
+        console.log(isOpen);
+        // localStorage.setItem('revenueDropdownOpen', !isOpen);
     });
 });

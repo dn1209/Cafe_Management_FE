@@ -38,7 +38,7 @@ async function fetchBills(pageNumber = 0, storeId = null) {
         renderPagination(data);
     } catch (error) {
         console.error("Error fetching bills:", error);
-        showToast("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
+        toastrError("Lỗi", "Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
     }
 }
 
@@ -102,7 +102,7 @@ async function loadStores() {
         fetchBills(0, null);
     } catch (error) {
         console.error("Error loading stores:", error);
-        showToast("Không thể tải danh sách cửa hàng. Vui lòng thử lại.");
+        toastrError("Lỗi", "Không thể tải danh sách cửa hàng. Vui lòng thử lại.");
     }
 }
 
@@ -146,7 +146,7 @@ async function fetchBillDetails(billId) {
         renderBillDetails(details);
     } catch (error) {
         console.error("Error fetching bill details:", error);
-        showToast("Không thể tải chi tiết hóa đơn. Vui lòng thử lại.");
+        toastrError("Lỗi", "Không thể tải chi tiết hóa đơn. Vui lòng thử lại.");
     }
 }
 

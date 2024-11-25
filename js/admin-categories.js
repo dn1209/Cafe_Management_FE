@@ -96,7 +96,7 @@ async function loadCategories() {
         });
     } catch (err) {
         console.error('Có lỗi khi tải danh mục:', err);
-        showToast('Có lỗi xảy ra khi tải danh mục.');
+        toastrError('Lỗi', 'Có lỗi xảy ra khi tải danh mục.');
     }
 }
 
@@ -133,12 +133,12 @@ async function addCategory(event) {
         });
 
         if (response.ok) {
-            showToast('Danh mục đã được thêm mới');
+            toastrSuccess('Thành công', 'Danh mục đã được thêm mới');
             document.getElementById('addCategoryForm').reset();
             bootstrap.Modal.getInstance(document.getElementById('addCategoryModal')).hide();
             await loadCategories();
         } else {
-            showToast('Có lỗi vui lòng thử lại');
+            toastrError('Lỗi', 'Có lỗi vui lòng thử lại');
         }
     } catch (err) {
         console.error('Có lỗi khi thêm danh mục:', err);
@@ -180,11 +180,11 @@ async function submitEditCategory(event) {
         });
 
         if (response.ok) {
-            showToast('Danh mục đã được cập nhật');
+            toastrSuccess('Thành công', 'Danh mục đã được cập nhật');
             bootstrap.Modal.getInstance(document.getElementById('editCategoryModal')).hide();
             await loadCategories();
         } else {
-            showToast('Không thể cập nhật danh mục');
+            toastrError('Lỗi', 'Không thể cập nhật danh mục');
         }
     } catch (err) {
         console.error('Có lỗi khi cập nhật danh mục:', err);
@@ -205,10 +205,10 @@ async function toggleCategoryStatus(categoryId) {
         });
 
         if (response.ok) {
-            showToast('Trạng thái danh mục đã được cập nhật');
+            toastrSuccess('Thành công', 'Trạng thái danh mục đã được cập nhật');
             await loadCategories();
         } else {
-            showToast('Không thể cập nhật trạng thái danh mục');
+            toastrError('Lỗi', 'Không thể cập nhật trạng thái danh mục');
         }
     } catch (err) {
         console.error('Có lỗi khi cập nhật trạng thái danh mục:', err);

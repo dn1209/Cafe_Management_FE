@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Kiểm tra token
     if (!token) {
-        showToast('Vui lòng đăng nhập trước khi truy cập trang này.');
+        toastrError('Lỗi', 'Vui lòng đăng nhập trước khi truy cập trang này.');
         window.location.href = 'login.html';
         return;
     }
@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
         } catch (error) {
             console.error(error);
-            showToast(error.message);
+            toastrError('Lỗi', error.message);
         }
     }
 
@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", async () => {
             });
         } catch (error) {
             console.error(error);
-            showToast(error.message);
+            toastrError('Lỗi', error.message);
         }
     }
 

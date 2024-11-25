@@ -4,7 +4,7 @@ const token = localStorage.getItem('tokenLogin');
 
 document.addEventListener('DOMContentLoaded', () => {
     if (localStorage.getItem('loginSuccess') === 'true') {
-        showToast("Đăng nhập thành công với TOKEN là : " + token);
+        toastrSuccess("Thành công", `Đăng nhập thành công với TOKEN là : ${token}`);
         localStorage.removeItem('loginSuccess'); // Xóa trạng thái sau khi hiển thị
     }
 });
@@ -19,7 +19,7 @@ function checkJwtError(response) {
         return response.json().then(data => {
             if (data.error === "Invalid or missing JWT token") {
                 localStorage.setItem('jwtError', 'true'); // Lưu trạng thái đăng nhập thành công
-                showToast("Phiên đăng nhập của bạn đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
+                toastrError("Lỗi", "Phiên đăng nhập của bạn đã hết hạn hoặc không hợp lệ. Vui lòng đăng nhập lại.");
                 window.location.href = "login.html";
             }
             return Promise.reject(data); // Trả về lỗi để xử lý tiếp nếu cần
@@ -30,7 +30,7 @@ function checkJwtError(response) {
 
 async function fetchProducts(page = 0, size = 12) {
     if (!token) {
-        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
+        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
@@ -169,7 +169,7 @@ function updateOrderSummary() {
 // Hàm thêm sản phẩm vào giỏ hàng
 async function addToOrderSummary(productId) {
     if (!token) {
-        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
+        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
@@ -230,7 +230,7 @@ async function addToOrderSummary(productId) {
         
     } catch (error) {
         console.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ:", error);
-        showToast("Có lỗi xảy ra khi thêm sản phẩm vào giỏ.");
+        toastrError("Lỗi", "Có lỗi xảy ra khi thêm sản phẩm vào giỏ.");
     }
 }
 // Hàm xóa sản phẩm khỏi giỏ hàng
@@ -340,7 +340,7 @@ document.getElementById('checkout-btn').addEventListener('click', function () {
 
     // Kiểm tra nếu không có sản phẩm trong giỏ hàng
     if (orderSummaryTable.rows.length === 0) {
-        showToast("Vui lòng chọn sản phẩm để thanh toán.");
+        toastrWarning("Cảnh báo", "Vui lòng chọn sản phẩm để thanh toán.");
         return; // Kết thúc hàm nếu không có sản phẩm
     }
 
@@ -437,18 +437,18 @@ document.getElementById('confirm-checkout').addEventListener('click', async func
         const data = await response.text();
 
         if (data === 'CREATE_BILL_SUCCESS') {
-            showToast("Tạo hóa đơn thành công!");
+            toastrSuccess("Thành công", "Tạo hóa đơn thành công!");
             orderSummaryTable.innerHTML = ''; // Xóa tất cả các hàng
 
             // Đặt lại tổng số lượng và tổng tiền về 0
             document.getElementById('total-quantity').textContent = 0;
             document.getElementById('total-amount').textContent = '0 VND';
         } else {
-            showToast("Lỗi khi tạo hóa đơn. Vui lòng thử lại.");
+            toastrError("Lỗi", "Lỗi khi tạo hóa đơn. Vui lòng thử lại.");
         }
     } catch (error) {
         console.error('Có lỗi xảy ra:', error);
-        showToast("Có lỗi khi kết nối đến API.");
+        toastrError("Lỗi", "Có lỗi khi kết nối đến API.");
     }
 
     // Đóng modal và thực hiện các hành động tiếp theo (gửi đơn hàng, v.v.)

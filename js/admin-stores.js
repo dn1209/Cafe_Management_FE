@@ -107,7 +107,7 @@ async function saveStoreChanges() {
     const storeStatus = parseInt(document.getElementById('statusDropdownEdit').value);
 
     if (!storeName || !storeAddress || isNaN(storeStatus)) {
-        showToast('Vui lòng nhập đầy đủ thông tin');
+        toastrError('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
         return;
     }
 
@@ -127,7 +127,7 @@ async function saveStoreChanges() {
 
         if (!response.ok) throw new Error('Lỗi khi cập nhật cửa hàng');
 
-        showToast('Cập nhật cửa hàng thành công');
+        toastrSuccess('Thành công', 'Cập nhật cửa hàng thành công');
 
         const modal = bootstrap.Modal.getInstance(document.getElementById('editStoreModal'));
         modal.hide();
@@ -165,7 +165,7 @@ async function addStore(event) {
     const storeStatus = parseInt(document.getElementById('statusDropdownAdd').value);
 
     if (!storeName || !storeAddress || isNaN(storeStatus)) {
-        showToast('Vui lòng nhập đầy đủ thông tin');
+        toastrError('Lỗi', 'Vui lòng nhập đầy đủ thông tin');
         return;
     }
 
@@ -185,7 +185,7 @@ async function addStore(event) {
 
         if (!response.ok) throw new Error('Lỗi khi thêm cửa hàng');
 
-        showToast('Cửa hàng đã được thêm mới');
+        toastrSuccess('Thành công', 'Cửa hàng đã được thêm mới');
         document.getElementById('addStoreForm').reset();
         bootstrap.Modal.getInstance(document.getElementById('addStoreModal')).hide();
         await loadStores();
@@ -212,10 +212,15 @@ async function toggleStoreStatus(storeId) {
 
         if (!response.ok) throw new Error('Không thể cập nhật trạng thái cửa hàng');
 
-        showToast('Trạng thái cửa hàng đã được cập nhật');
+        toastrSuccess('Thành công', 'Trạng thái cửa hàng đã được cập nhật');
         await loadStores();
     } catch (error) {
         console.error('Có lỗi xảy ra khi cập nhật trạng thái cửa hàng:', error);
-        alert('Có lỗi xảy ra khi cập nhật trạng thái cửa hàng. Vui lòng thử lại.');
+        // alert('Có lỗi xảy ra khi cập nhật trạng thái cửa hàng. Vui lòng thử lại.');
+        Swal.fire({
+            title: 'Lỗi',
+            icon: 'error',
+            text: 'Có lỗi xảy ra khi cập nhật trạng thái cửa hàng. Vui lòng thử lại.'
+        })
     }
 }

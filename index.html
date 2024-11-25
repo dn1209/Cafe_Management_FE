@@ -1,12 +1,41 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cafe POS Interface</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Latest compiled JavaScript -->
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.1/dist/sweetalert2.all.min.js"
+        crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.1/dist/sweetalert2.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
     <link rel="stylesheet" href="css/style1.css">
+
+    <script type="text/javascript">
+        (() => {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v6.5.2/css/all.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
 </head>
+
 <body>
     <div id="header-placeholder"></div>
     <div class="container-fluid">
@@ -22,7 +51,8 @@
             <!-- Main Menu and Items -->
             <div class="col-md-7">
                 <div class="d-flex justify-content-between align-items-center p-3">
-                    <input type="text" id="search-input" class="form-control" placeholder="Search" oninput="onSearchInputChange()">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search"
+                        oninput="onSearchInputChange()">
                 </div>
                 <div class="row g-3" id="product-list">
                     <!-- Products will be loaded here dynamically -->
@@ -77,17 +107,18 @@
                             <!-- Các sản phẩm sẽ được thêm vào đây khi checkout -->
                         </tbody>
                     </table>
-    
+
                     <!-- Tổng số lượng và tổng tiền -->
                     <div class="d-flex justify-content-between">
                         <div><strong>Số lượng:</strong> <span id="total-quantity-checkout">0</span></div>
                         <div><strong>Tổng tiền:</strong> <span id="total-amount-checkout">0</span></div>
                     </div>
-    
+
                     <!-- Thêm trường ghi chú (note) và số tiền khách hàng đưa -->
                     <div class="mt-3">
                         <label for="note" class="form-label">Ghi chú:</label>
-                        <textarea id="note" class="form-control" rows="3" placeholder="Nhập ghi chú (nếu có)"></textarea>
+                        <textarea id="note" class="form-control" rows="3"
+                            placeholder="Nhập ghi chú (nếu có)"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -99,7 +130,6 @@
     </div>
     <div id="footer-placeholder"></div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         // Load header
         // Load header
@@ -116,8 +146,8 @@
                 };
                 document.body.appendChild(script);
             });
-    
-        
+
+
         // Load footer
         fetch('footer.html')
             .then(response => response.text())
@@ -128,4 +158,5 @@
     <script src="js/utils.js"></script>
     <script src="js/index.js"></script>
 </body>
+
 </html>

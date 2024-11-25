@@ -26,7 +26,10 @@ function login() {
 
     const apiUrl = 'http://localhost:8085/api/login'; // Thay URL API của bạn
     const headers = {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': '*',
+        'Access-Control-Allow-Headers': '*'
     };
 
     const body = JSON.stringify({
@@ -39,7 +42,10 @@ function login() {
         headers: headers,
         body: body
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log(response);
+        return response.json();
+    })
     .then(data => {
         if (data.tokenLogin) {
             // Lưu các thông tin cần thiết vào localStorage
@@ -52,12 +58,13 @@ function login() {
             localStorage.setItem('loginStatus', 'true'); // Lưu trạng thái đăng nhập thành công
             window.location.href = "index.html";
         } else {
-            showToast("Đăng nhập thất bại. Vui lòng thử lại.");
+            toastrError("Lỗi", "Đăng nhập thất bại. Vui lòng thử lại.");
+
         }
     })
     .catch(error => {
         console.error('Có lỗi xảy ra:', error);
-        showToast("Có lỗi khi kết nối đến API.");
+        toastrError("Lỗi", "Có lỗi khi kết nối đến API.");
     });
 }
 
@@ -101,16 +108,16 @@ function registerAdmin() {
     .then(data => {
         // Kiểm tra nếu phản hồi có userId
         if (data.userId) {
-            showToast("Đăng ký thành công!");
+            toastrSuccess("Thành công", "Đăng ký thành công!");
             closeRegisterModal();
             checkRegisterStatus(); // Cập nhật trạng thái sau khi đăng ký
         } else {
-            showToast("Đăng ký thất bại. Vui lòng thử lại.");
+            toastrError("Lỗi", "Đăng ký thất bại. Vui lòng thử lại.");
         }
     })
     .catch(error => {
         console.error('Lỗi khi đăng ký:', error);
-        showToast("Có lỗi khi kết nối đến API.");
+        toastrError("Lỗi", "Có lỗi khi kết nối đến API.");
     });
 }
 

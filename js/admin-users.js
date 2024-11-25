@@ -5,7 +5,7 @@ let currentUserId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
     if (!token) {
-        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
+        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
@@ -213,7 +213,7 @@ async function saveUserChanges() {
     const userPhone = document.getElementById('userPhoneEdit').value;
 
     if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || isNaN(storeId) || !userPhone ) {
-        showToast("Vui lòng nhập đầy đủ thông tin");
+        toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
 
@@ -239,7 +239,7 @@ async function saveUserChanges() {
         await checkJwtError(response);
 
         if (!response.ok) throw new Error("Lỗi khi cập nhật người dùng");
-        showToast("Cập nhật người dùng thành công");
+        toastrSuccess("Thành công", "Cập nhật người dùng thành công");
 
         bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
         await loadUsers();
@@ -253,7 +253,7 @@ async function saveUserPassword() {
     const newPassword = document.getElementById('newPassword').value;
 
     if (!oldPassword || !newPassword ) {
-        showToast("Vui lòng nhập đầy đủ thông tin");
+        toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
 
@@ -275,7 +275,7 @@ async function saveUserPassword() {
         await checkJwtError(response);
 
         if (!response.ok) throw new Error("Lỗi khi cập nhật mật khẩu");
-        showToast("Cập nhật mật khẩu thành công");
+        toastrSuccess("Thành công", "Cập nhật mật khẩu thành công");
 
         bootstrap.Modal.getInstance(document.getElementById('editUserPasswordModal')).hide();
         await loadUsers();
@@ -328,7 +328,7 @@ async function addUser(event) {
     const userPhone = document.getElementById('userPhone').value;
 
     if (!username || !password || !displayName || isNaN(userRole) || isNaN(storeId) || !userPhone ) {
-        showToast("Vui lòng nhập đầy đủ thông tin");
+        toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
 
@@ -354,12 +354,12 @@ async function addUser(event) {
         await checkJwtError(response);
 
         if (response.ok) {
-            showToast('Người dùng đã được thêm mới');
+            toastrSuccess("Thành công", "Người dùng đã được thêm mới.");
             document.getElementById('addUserForm').reset();
             bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
             await loadUsers();
         } else {
-            showToast('Có lỗi vui lòng thử lại');
+            toastrError("Lỗi", "Có lỗi vui lòng thử lại.");
         }
     } catch (err) {
         console.error('Có lỗi khi thêm người dùng:', err);

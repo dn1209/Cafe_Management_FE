@@ -36,7 +36,7 @@ function renderPagination(pageResponse) {
 async function fetchBills(pageNumber = 0) {
     const token = localStorage.getItem('tokenLogin');
     if (!token) {
-        showToast("Vui lòng đăng nhập trước khi truy cập trang này.");
+        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
         window.location.href = "login.html";
         return;
     }
@@ -65,7 +65,7 @@ async function fetchBills(pageNumber = 0) {
 
     } catch (error) {
         console.error("Có lỗi xảy ra:", error);
-        showToast("Lỗi khi tải hóa đơn, vui lòng thử lại.");
+        toastrError("Lỗi", "Lỗi khi tải hóa đơn, vui lòng thử lại.");
     }
 }
 
