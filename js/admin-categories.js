@@ -1,59 +1,17 @@
 const token = localStorage.getItem('tokenLogin');
-let selectedStoreId = '';
-let stores = {};
 let currentEditCategoryId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await fetchStores();
     await loadCategories();
-
-    document.getElementById('storeDropdown').addEventListener('change', async () => {
-        selectedStoreId = document.getElementById('storeDropdown').value;
-        await loadCategories();
-    });
 
     document.getElementById('addCategoryButton').addEventListener('click', openAddCategoryModal);
     document.getElementById('addCategoryForm').addEventListener('submit', addCategory);
     document.getElementById('editCategoryForm').addEventListener('submit', submitEditCategory);
 });
 
-async function fetchStores() {
-    try {
-        const response = await fetch('http://localhost:8085/api_store/list', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-
-        await checkJwtError(response);
-        if (!response.ok) throw new Error('Network response was not ok');
-
-        const data = await response.json();
-
-        stores = data
-            .filter(store => store.storeStatus === 1)
-            .reduce((acc, store) => ({ ...acc, [store.storeId]: store.storeName }), {});
-
-        const storeDropdown = document.getElementById('storeDropdown');
-        storeDropdown.innerHTML = `<option value="">Tất cả cửa hàng</option>`;
-
-        Object.entries(stores).forEach(([storeId, storeName]) => {
-            const option = document.createElement('option');
-            option.value = storeId;
-            option.textContent = storeName;
-            storeDropdown.appendChild(option);
-        });
-    } catch (error) {
-        console.error('Có lỗi khi tải danh sách cửa hàng:', error);
-    }
-}
-
 async function loadCategories() {
     try {
         let url = 'http://localhost:8085/api_category/list';
-        if (selectedStoreId) url += `?storeId=${encodeURIComponent(selectedStoreId)}`;
 
         const response = await fetch(url, {
             method: 'GET',
@@ -76,7 +34,6 @@ async function loadCategories() {
         }
 
         data.forEach((category, index) => {
-            const storeName = stores[category.storeId] || 'Không xác định';
             const statusButton = category.status === 1
                 ? `<button class="btn btn-danger" onclick="toggleCategoryStatus(${category.categoryId})">Vô hiệu hóa</button>`
                 : `<button class="btn btn-success" onclick="toggleCategoryStatus(${category.categoryId})">Kích hoạt</button>`;
@@ -85,7 +42,6 @@ async function loadCategories() {
             row.innerHTML = `
                 <td>${index + 1}</td>
                 <td>${category.categoryName}</td>
-                <td>${storeName}</td>
                 <td>${category.status === 1 ? 'Hoạt động' : 'Không hoạt động'}</td>
                 <td>
                     <button class="btn btn-warning me-2" onclick="editCategory(${category.categoryId}, '${category.categoryName}', ${category.storeId})">Sửa</button>
@@ -102,16 +58,6 @@ async function loadCategories() {
 
 function openAddCategoryModal() {
     document.getElementById('categoryName').value = '';
-    const storeDropdownAdd = document.getElementById('storeDropdownAdd');
-    storeDropdownAdd.innerHTML = '<option value="">Chọn cửa hàng...</option>';
-
-    Object.entries(stores).forEach(([storeId, storeName]) => {
-        const option = document.createElement('option');
-        option.value = storeId;
-        option.textContent = storeName;
-        storeDropdownAdd.appendChild(option);
-    });
-
     const modal = new bootstrap.Modal(document.getElementById('addCategoryModal'));
     modal.show();
 }
@@ -119,8 +65,7 @@ function openAddCategoryModal() {
 async function addCategory(event) {
     event.preventDefault();
     const categoryName = document.getElementById('categoryName').value;
-    const storeId = parseInt(document.getElementById('storeDropdownAdd').value);
-    const categoryData = { categoryName, storeId };
+    const categoryData = { categoryName };
 
     try {
         const response = await fetch('http://localhost:8085/api_category/add_new', {
@@ -131,6 +76,7 @@ async function addCategory(event) {
             },
             body: JSON.stringify(categoryData)
         });
+        await checkJwtError(response);
 
         if (response.ok) {
             toastrSuccess('Thành công', 'Danh mục đã được thêm mới');
@@ -146,19 +92,9 @@ async function addCategory(event) {
     }
 }
 
-function editCategory(categoryId, categoryName, storeId) {
+function editCategory(categoryId, categoryName) {
     currentEditCategoryId = categoryId;
     document.getElementById('editCategoryName').value = categoryName;
-    const storeDropdownEdit = document.getElementById('storeDropdownEdit');
-    storeDropdownEdit.innerHTML = '<option value="">Chọn cửa hàng...</option>';
-
-    Object.entries(stores).forEach(([id, name]) => {
-        const option = document.createElement('option');
-        option.value = id;
-        option.textContent = name;
-        if (id == storeId) option.selected = true;
-        storeDropdownEdit.appendChild(option);
-    });
 
     const modal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
     modal.show();
@@ -167,8 +103,7 @@ function editCategory(categoryId, categoryName, storeId) {
 async function submitEditCategory(event) {
     event.preventDefault();
     const categoryName = document.getElementById('editCategoryName').value;
-    const storeId = parseInt(document.getElementById('storeDropdownEdit').value);
-
+    const categoryData = { categoryName };
     try {
         const response = await fetch(`http://localhost:8085/api_category/update/${currentEditCategoryId}`, {
             method: 'PUT',
@@ -176,8 +111,9 @@ async function submitEditCategory(event) {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
             },
-            body: categoryName
+            body: JSON.stringify(categoryData)
         });
+        await checkJwtError(response);
 
         if (response.ok) {
             toastrSuccess('Thành công', 'Danh mục đã được cập nhật');
@@ -203,6 +139,7 @@ async function toggleCategoryStatus(categoryId) {
                 'Content-Type': 'application/json'
             }
         });
+        await checkJwtError(response);
 
         if (response.ok) {
             toastrSuccess('Thành công', 'Trạng thái danh mục đã được cập nhật');

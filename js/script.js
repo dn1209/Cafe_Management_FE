@@ -33,7 +33,7 @@ function login() {
     };
 
     const body = JSON.stringify({
-        username: username,
+        userName: username,
         password: password
     });
 
@@ -47,13 +47,12 @@ function login() {
         return response.json();
     })
     .then(data => {
-        if (data.tokenLogin) {
+        if (data.token) {
             // Lưu các thông tin cần thiết vào localStorage
-            localStorage.setItem('tokenLogin', data.tokenLogin);
-            localStorage.setItem('userId', data.userId);
-            localStorage.setItem('userName', data.userName);
-            localStorage.setItem('email', data.email);
-            localStorage.setItem('userRole', data.userRole);
+            localStorage.setItem('tokenLogin', data.token);
+            localStorage.setItem('userId', data.id);
+            localStorage.setItem('userName', data.username);
+            localStorage.setItem('userRole', data.role);
             localStorage.setItem('loginSuccess', 'true');
             localStorage.setItem('loginStatus', 'true'); // Lưu trạng thái đăng nhập thành công
             window.location.href = "index.html";

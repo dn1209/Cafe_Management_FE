@@ -57,9 +57,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
-                    </li>
+
                 </ul>
             </div>
 
@@ -69,12 +67,7 @@
                 <div class="d-flex justify-content-between mb-3">
                     <button id="addUserButton" class="btn btn-primary">Thêm người dùng</button>
                 </div>
-                <div class="form-group mb-3">
-                    <label for="storeDropdown">Chọn cửa hàng</label>
-                    <select id="storeDropdown" class="form-control">
-                        <!-- Các tùy chọn sẽ được thêm động -->
-                    </select>
-                </div>
+                
                 <table class="table table-bordered">
                     <thead>
                         <tr>
@@ -84,7 +77,6 @@
                             <th>Số điện thoại</th>
                             <th>Ngày tạo</th>
                             <th>Ngày cập nhật</th>
-                            <th>Cửa hàng</th>
                             <th>Vai trò</th>
                             <th>Trạng thái</th>
                             <th>Thao tác</th>
@@ -124,12 +116,7 @@
                             <label for="userPhone" class="form-label">Số điện thoại</label>
                             <input type="text" class="form-control" id="userPhone" required>
                         </div>
-                        <div class="mb-3">
-                            <label for="storeDropdownAdd" class="form-label">Cửa hàng</label>
-                            <select class="form-control" id="storeDropdownAdd" required>
-                                <!-- Các cửa hàng sẽ được điền vào đây -->
-                            </select>
-                        </div>
+                    
                         <div class="mb-3">
                             <label for="roleDropdownAdd" class="form-label">Vai trò</label>
                             <select class="form-control" id="roleDropdownAdd" required>
@@ -174,12 +161,7 @@
                                 <!-- Các vai trò sẽ được điền vào đây -->
                             </select>
                         </div>
-                        <div class="mb-3">
-                            <label for="storeDropdownEdit" class="form-label">Cửa hàng</label>
-                            <select class="form-control" id="storeDropdownEdit" required>
-                                <!-- Các cửa hàng sẽ được điền vào đây -->
-                            </select>
-                        </div>
+                        
                         <div class="mb-3">
                             <label for="statusDropdownEdit" class="form-label">Trạng thái</label>
                             <select class="form-control" id="statusDropdownEdit" required>

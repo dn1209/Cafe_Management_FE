@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "Content-Type": "application/json"
                 }
             });
+            await checkJwtError(response);
 
             if (!response.ok) {
                 throw new Error('Lỗi khi tải dữ liệu doanh thu hàng ngày');
@@ -80,6 +81,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                     "Content-Type": "application/json"
                 }
             });
+            await checkJwtError(response);
 
             if (!response.ok) {
                 throw new Error('Lỗi khi tải dữ liệu doanh thu hàng tháng');

@@ -1,6 +1,4 @@
 const token = localStorage.getItem('tokenLogin');
-let selectedStoreId = '';
-let stores = {};
 let currentUserId = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -10,13 +8,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         return;
     }
 
-    await fetchStores();
     await loadUsers();
-
-    document.getElementById('storeDropdown').addEventListener('change', async function () {
-        selectedStoreId = this.value;
-        await loadUsers();
-    });
 
     document.getElementById('addUserButton').addEventListener('click', openAddUserModal);
     document.getElementById('addUserForm').addEventListener('submit', addUser);
@@ -40,21 +32,7 @@ async function fetchStores() {
 
         const data = await response.json();
 
-        stores = data.filter(store => store.storeStatus === 1)
-                     .reduce((acc, store) => {
-                         acc[store.storeId] = store.storeName;
-                         return acc;
-                     }, {});
-
-        const storeDropdown = document.getElementById('storeDropdown');
-        storeDropdown.innerHTML = `<option value="">Tất cả cửa hàng</option>`;
-
-        for (let storeId in stores) {
-            const option = document.createElement('option');
-            option.value = storeId;
-            option.textContent = stores[storeId];
-            storeDropdown.appendChild(option);
-        }
+       
     } catch (error) {
         console.error("Có lỗi khi tải danh sách cửa hàng:", error);
     }
@@ -63,9 +41,7 @@ async function fetchStores() {
 async function loadUsers() {
     try {
         let url = `http://localhost:8085/api/list`;
-        if (selectedStoreId) {
-            url += `?storeId=${encodeURIComponent(selectedStoreId)}`;
-        }
+        
 
         const response = await fetch(url, {
             method: "GET",
@@ -84,7 +60,6 @@ async function loadUsers() {
 
         if (users.length) {
             userList.innerHTML = users.map(user => {
-                const storeName = stores[user.storeId] || 'Không xác định';
                 return `
                     <tr>
                         <td>${user.userId}</td>
@@ -93,7 +68,6 @@ async function loadUsers() {
                         <td>${user.userPhone}</td>
                         <td>${user.createdAt}</td>
                         <td>${user.updatedAt}</td>
-                        <td>${storeName}</td>
                         <td>${user.userRole === 0 ? "Admin" : "User"}</td>
                         <td>${user.userStatus === 1 ? "Hoạt động" : "Không hoạt động"}</td>
                         <td>
@@ -137,17 +111,7 @@ async function editUser(userId) {
         document.getElementById('displayNameEdit').value = user.displayName;
         document.getElementById('userPhoneEdit').value = user.userPhone;
 
-        const storeDropdownEdit = document.getElementById('storeDropdownEdit');
-        storeDropdownEdit.innerHTML = '';
-
-        for (let storeId in stores) {
-            const option = document.createElement('option');
-            option.value = storeId;
-            option.textContent = stores[storeId];
-            storeDropdownEdit.appendChild(option);
-        }
-
-        storeDropdownEdit.value = user.storeId;
+        
 
         const roleDropdownEdit = document.getElementById('roleDropdownEdit');
         roleDropdownEdit.innerHTML = '';
@@ -209,17 +173,15 @@ async function saveUserChanges() {
     const displayName = document.getElementById('displayNameEdit').value;
     const userStatus = parseInt(document.getElementById('statusDropdownEdit').value);
     const userRole = parseInt(document.getElementById('roleDropdownEdit').value);
-    const storeId = parseInt(document.getElementById('storeDropdownEdit').value);
     const userPhone = document.getElementById('userPhoneEdit').value;
 
-    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || isNaN(storeId) || !userPhone ) {
+    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || !userPhone ) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
 
     const updatedUser = {
         userName,
-        storeId,
         userStatus,
         userRole,
         displayName,
@@ -290,17 +252,9 @@ function openAddUserModal() {
     document.getElementById('displayName').value = '';
     document.getElementById('userPhone').value = '';
 
-    const storeDropdownAdd = document.getElementById('storeDropdownAdd');
     const roleDropdownAdd = document.getElementById('roleDropdownAdd');
 
-    storeDropdownAdd.innerHTML = '<option value="">Chọn cửa hàng...</option>';
-
-    for (let storeId in stores) {
-        const option = document.createElement('option');
-        option.value = storeId;
-        option.textContent = stores[storeId];
-        storeDropdownAdd.appendChild(option);
-    }
+    
 
     roleDropdownAdd.innerHTML = '';
     const roles = { 0: "ADMIN", 1: "USER" };
@@ -320,24 +274,22 @@ function openAddUserModal() {
 
 async function addUser(event) {
     event.preventDefault(); 
-    const username = document.getElementById('username').value;
+    const userName = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const displayName = document.getElementById('displayName').value;
-    const storeId = parseInt(document.getElementById('storeDropdownAdd').value);
     const userRole = parseInt(document.getElementById('roleDropdownAdd').value);
     const userPhone = document.getElementById('userPhone').value;
 
-    if (!username || !password || !displayName || isNaN(userRole) || isNaN(storeId) || !userPhone ) {
+    if (!username || !password || !displayName || isNaN(userRole)  || !userPhone ) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
 
     const userData = {
-        username,
+        userName,
         password,
         displayName,
         userRole,
-        storeId,
         userPhone
     };
 

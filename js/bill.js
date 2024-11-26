@@ -42,7 +42,7 @@ async function fetchBills(pageNumber = 0) {
     }
 
     try {
-        const url = `http://localhost:8085/api_bill/list_for_user?page=${pageNumber}&size=10`;
+        const url = `http://localhost:8085/api_bill/list?page=${pageNumber}&size=10`;
 
         const response = await fetch(url, {
             method: "GET",
@@ -157,7 +157,7 @@ function renderBillForDemo(bill) {
                             <h1 style="text-align: center;">CAFE POS</h1>
                             <h2 style="text-align: center;">HÓA ĐƠN #${bill.billId}</h2>
                             <p><strong>Ngày bán:</strong> ${bill.sellDate}</p>
-                            <p><strong>Người bán:</strong> ${userName}</p>
+                            <p><strong>Người bán:</strong> ${bill.saleName}</p>
                             <p><strong>Tổng số lượng:</strong> ${bill.totalQuantity}</p>
                             <p><strong>Tổng tiền:</strong> ${bill.totalPrice.toLocaleString()} VND</p>
                             <p><strong>Ghi chú:</strong> ${bill.notes || 'Không có ghi chú'}</p>

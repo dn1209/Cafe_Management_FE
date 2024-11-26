@@ -36,7 +36,7 @@ async function fetchProducts(page = 0, size = 12) {
     }
 
     try {
-        let url = `http://localhost:8085/api_products/list_for_user?page=${page}&size=${size}`;
+        let url = `http://localhost:8085/api_products/list-for-user?page=${page}&size=${size}`;
         const queryParams = [];
         // Thêm categoryId và keyword vào URL nếu có giá trị
         if (selectedCategoryId) {
@@ -105,7 +105,7 @@ function renderPagination(productsPage) {
 async function fetchCategories() {
 
     try {
-        const response = await fetch("http://localhost:8085/api_category/list_for_user", {
+        const response = await fetch("http://localhost:8085/api_category/list-for-user", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

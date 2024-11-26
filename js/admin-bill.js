@@ -15,6 +15,7 @@ async function fetchBills(pageNumber = 0, storeId = null) {
                 "Accept": "application/json"
             }
         });
+        await checkJwtError(response);
 
         if (!response.ok) throw new Error("Failed to fetch bills");
 
@@ -72,40 +73,6 @@ function renderPagination(pageResponse) {
     paginationContainer.appendChild(nextButton);
 }
 
-async function loadStores() {
-    try {
-        const url = `http://localhost:8085/api_store/list`;
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        });
-
-        if (!response.ok) throw new Error("Failed to fetch stores");
-
-        const stores = await response.json();
-
-        const storeDropdown = document.getElementById('storeDropdown');
-        
-        // Thêm tùy chọn mặc định "Tất cả cửa hàng"
-        storeDropdown.innerHTML = `
-            <option value="all">Tất cả cửa hàng</option>
-            ${stores.map(store => `
-                <option value="${store.storeId}">${store.storeName}</option>
-            `).join('')}
-        `;
-
-        // Tự động tải hóa đơn cho "Tất cả cửa hàng" ban đầu
-        fetchBills(0, null);
-    } catch (error) {
-        console.error("Error loading stores:", error);
-        toastrError("Lỗi", "Không thể tải danh sách cửa hàng. Vui lòng thử lại.");
-    }
-}
-
 // Hàm hiển thị danh sách hóa đơn
 function renderBills(bills) {
     const billList = document.getElementById('billList');
@@ -119,36 +86,58 @@ function renderBills(bills) {
             <td>${bill.totalPrice.toLocaleString()} VND</td>
             <td>${bill.notes || 'Không có ghi chú'}</td>
             <td>
-                <button class="btn btn-primary" onclick="fetchBillDetails(${bill.billId})" data-bs-toggle="modal" data-bs-target="#billDetailModal">
-                    Xem chi tiết
+                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#invoice-detail-modal-${bill.billId}">
+                    Chi tiết
                 </button>
             </td>
         </tr>
     `).join('') : '<tr><td colspan="8" class="text-center">Không có hóa đơn nào</td></tr>';
+
+    // Tạo modal cho từng hóa đơn để hiển thị chi tiết hóa đơn
+    bills.forEach(bill => {
+        const modalContent = `
+            <div class="modal fade" id="invoice-detail-modal-${bill.billId}" tabindex="-1" aria-labelledby="invoice-detail-modal-label-${bill.billId}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="invoice-detail-modal-label-${bill.billId}">Chi tiết hóa đơn #${bill.billId}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Tên sản phẩm</th>
+                                        <th>Số lượng</th>
+                                        <th>Giá</th>
+                                        <th>Thành tiền</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${bill.detailBill.map(detail => `
+                                        <tr>
+                                            <td>${detail.productName}</td>
+                                            <td>${detail.quantity}</td>
+                                            <td>${detail.price.toLocaleString()} VND</td>
+                                            <td>${(detail.quantity * detail.price).toLocaleString()} VND</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalContent);
+    });
 }
 
 // Hàm hiển thị chi tiết hóa đơn
-async function fetchBillDetails(billId) {
-    try {
-        const url = `http://localhost:8085/api_bill/details/${billId}`;
-        const response = await fetch(url, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-                "Accept": "application/json"
-            }
-        });
 
-        if (!response.ok) throw new Error("Failed to fetch bill details");
-
-        const details = await response.json();
-        renderBillDetails(details);
-    } catch (error) {
-        console.error("Error fetching bill details:", error);
-        toastrError("Lỗi", "Không thể tải chi tiết hóa đơn. Vui lòng thử lại.");
-    }
-}
 
 function renderBillDetails(details) {
     const billDetailList = document.getElementById('billDetailList');
@@ -161,33 +150,10 @@ function renderBillDetails(details) {
         </tr>
     `).join('');
 }
-document.addEventListener('DOMContentLoaded', () => {
-    loadStores(); // Tải danh sách cửa hàng khi trang được tải
 
-    // Thêm sự kiện thay đổi cửa hàng
-    const storeDropdown = document.getElementById('storeDropdown');
-    storeDropdown.addEventListener('change', () => {
-        const selectedStoreId = storeDropdown.value;
-        if (selectedStoreId === "all") {
-            fetchBills(0, null); // Gọi API mà không truyền storeId
-        } else {
-            fetchBills(0, selectedStoreId); // Gọi API với storeId đã chọn
-        }
-    });
-
-    document.getElementById('refreshBillButton').addEventListener('click', () => {
-        const selectedStoreId = storeDropdown.value;
-        if (selectedStoreId === "all") {
-            fetchBills(0, null); // Làm mới hóa đơn mà không truyền storeId
-        } else {
-            fetchBills(0, selectedStoreId); // Làm mới hóa đơn với storeId đã chọn
-        }
-    });
-});
 
 // Gọi fetchBills khi trang được tải
 document.addEventListener('DOMContentLoaded', () => {
     fetchBills(0);
-    document.getElementById('refreshBillButton').addEventListener('click', () => fetchBills(0));
 });
 

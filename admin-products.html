@@ -57,9 +57,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="admin-categories.html">Quản lý danh mục</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="admin-stores.html">Quản lý cửa hàng</a>
-                    </li>
+
                 </ul>
             </div>
 
@@ -71,13 +69,7 @@
                 </div>
                 <!-- Dropdown chọn danh mục và cửa hàng -->
                 <div class="row mb-3">
-                    <div class="col-md-6">
-                        <label for="storeDropdown">Chọn cửa hàng</label>
-                        <select id="storeDropdown" class="form-control">
-                            <option value="">Tất cả cửa hàng</option>
-                            <!-- Các cửa hàng sẽ được tải động ở đây -->
-                        </select>
-                    </div>
+                
                     <div class="col-md-6">
                         <label for="categoryDropdown">Chọn danh mục</label>
                         <select id="categoryDropdown" class="form-control">
@@ -94,7 +86,6 @@
                             <th>Tên sản phẩm</th>
                             <th>Danh mục</th>
                             <th>Giá bán</th>
-                            <th>Cửa hàng</th>
                             <th>Trạng thái</th>
                             <th>Thao tác</th>
                         </tr>
@@ -163,12 +154,6 @@
                         <div class="mb-3">
                             <label for="productSellPriceAdd" class="form-label">Giá bán</label>
                             <input type="number" class="form-control" id="productSellPriceAdd" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="storeSelect" class="form-label">Cửa hàng</label>
-                            <select class="form-control" id="storeSelect" required>
-                                <!-- Các cửa hàng sẽ được điền vào đây -->
-                            </select>
                         </div>
                         <div class="mb-3">
                             <label for="categorySelect" class="form-label">Danh mục</label>
