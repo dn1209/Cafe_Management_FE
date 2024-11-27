@@ -88,7 +88,7 @@ function registerAdmin() {
     };
 
     const body = JSON.stringify({
-        username: username,
+        userName: username,
         password: password
     });
 
