@@ -123,8 +123,8 @@ function renderBills(bills) {
                                         <tr>
                                             <td>${detail.productName}</td>
                                             <td>${detail.quantity}</td>
-                                            <td>${detail.price.toLocaleString()} VND</td>
-                                            <td>${(detail.quantity * detail.price).toLocaleString()} VND</td>
+                                            <td>${(detail.price / detail.quantity).toLocaleString()} VND</td>
+                                            <td>${(detail.price).toLocaleString()} VND</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -177,8 +177,8 @@ function renderBillForDemo(bill) {
                                         <tr>
                                             <td>${detail.productName}</td>
                                             <td>${detail.quantity}</td>
-                                            <td>${detail.price.toLocaleString()} VND</td>
-                                            <td>${(detail.quantity * detail.price).toLocaleString()} VND</td>
+                                            <td>${( detail.price / detail.quantity).toLocaleString()} VND</td>
+                                            <td>${( detail.price).toLocaleString()} VND</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
