@@ -86,9 +86,7 @@ function renderBills(bills) {
             <td>${bill.totalPrice.toLocaleString()} VND</td>
             <td>${bill.notes || 'Không có ghi chú'}</td>
             <td>
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#invoice-detail-modal-${bill.billId}">
-                    Chi tiết
-                </button>
+                <i class="fa-solid fa-circle-info" data-bs-toggle="modal" data-bs-target="#invoice_detail_modal_${bill.billId}"></i>
             </td>
         </tr>
     `).join('') : '<tr><td colspan="8" class="text-center">Không có hóa đơn nào</td></tr>';
@@ -96,11 +94,11 @@ function renderBills(bills) {
     // Tạo modal cho từng hóa đơn để hiển thị chi tiết hóa đơn
     bills.forEach(bill => {
         const modalContent = `
-            <div class="modal fade" id="invoice-detail-modal-${bill.billId}" tabindex="-1" aria-labelledby="invoice-detail-modal-label-${bill.billId}" aria-hidden="true">
+            <div class="modal fade" id="invoice_detail_modal_${bill.billId}" tabindex="-1" aria-labelledby="invoice_detail_modal_label-${bill.billId}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="invoice-detail-modal-label-${bill.billId}">Chi tiết hóa đơn #${bill.billId}</h5>
+                            <h5 class="modal-title" id="invoice_detail_modal_label-${bill.billId}">Chi tiết hóa đơn #${bill.billId}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -132,7 +130,7 @@ function renderBills(bills) {
                 </div>
             </div>
         `;
-        document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalContent);
+        document.getElementById('modal_container').insertAdjacentHTML('beforeend', modalContent);
     });
 }
 
@@ -145,8 +143,8 @@ function renderBillDetails(details) {
         <tr>
             <td>${detail.productName}</td>
             <td>${detail.quantity}</td>
-            <td>${( detail.price / detail.quantity).toLocaleString()} VND</td>
             <td>${( detail.price).toLocaleString()} VND</td>
+            <td>${( detail.price * detail.quantity).toLocaleString()} VND</td>
         </tr>
     `).join('');
 }

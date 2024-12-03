@@ -17,12 +17,8 @@ body {
     text-align: center;
 }
 
-.modal-content {
-    border-radius: 10px;
-}
-
 .table th {
-    background-color: #A6AEBF;
+    background-color: #0176fc;
     color: white;
 }
 
@@ -32,14 +28,6 @@ body {
 
 .table tbody tr:hover {
     background-color: #e9ecef;
-}
-
-.modal-header {
-    background-color: #A6AEBF;
-    color: white;
-}
-.modal.fade .modal-dialog {
-    transition: none !important;
 }
 /* Tắt hiệu ứng hover khi rê chuột lên các hàng của bảng */
 .table tbody tr:hover {
@@ -51,26 +39,11 @@ body {
     transition: none !important;
 }
 
-/* Tắt tất cả các hiệu ứng animation và transition cho modal */
-.modal.fade .modal-dialog {
-    transition: none !important;
-}
-
 /* Tắt hiệu ứng hover cho các dòng trong bảng */
 .table tbody tr {
     transition: none !important;
 }
 
-.btn-custom {
-    background-color: #789DBC; /* Màu nền đỏ cam */
-    color: white; /* Màu chữ trắng */
-    border: none; /* Không có viền */
-}
-
-.btn-custom:hover {
-    background-color: #789DBC; /* Màu nền khi hover */
-    color: #FFF; /* Giữ màu chữ trắng khi hover */
-}
 /* Phân trang */
 .pagination-controls {
     display: flex;

@@ -20,10 +20,23 @@
     border: none;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .card-title {
-    font-size: 0.9rem;
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 16px;
+}
+
+.card:hover {
+    /* Nổi lên và phóng to một chút */
+    transform: translateY(-5px) scale(1.05);
+    /* Thêm bóng đổ */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .table thead th {
@@ -34,47 +47,17 @@
     font-size: 0.9rem;
 }
 
-.btn-primary {
-    background-color: #ff6b6b;
-    border: none;
-}
-
-.btn-success {
-    background-color: #A6AEBF;
-    border: none;
-}
-
-.btn-success:hover {  /* Thêm phần này để thay đổi khi di chuột vào */
-    background-color: #8A92A5;  /* Màu sắc khi hover (có thể thay đổi màu này theo ý bạn) */
-    border: none;
-}
-
-.card-title {
-    font-size: 24px;
-    margin-bottom: 10px;
-}
-
-.card-text {
-    font-size: 16px;
-}
-
-.card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.card:hover {
-    transform: translateY(-5px) scale(1.05); /* Nổi lên và phóng to một chút */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Thêm bóng đổ */
-}
-
-#product-list {
+#product_list {
     display: grid;
-    grid-template-columns: repeat(4, 1fr); /* Mỗi hàng 4 sản phẩm */
-    gap: 15px; /* Khoảng cách giữa các sản phẩm */
+    /* Mỗi hàng 4 sản phẩm */
+    grid-template-columns: repeat(4, 1fr);
+    /* Khoảng cách giữa các sản phẩm */
+    gap: 15px;
 }
 
 .product-card {
-    width: 100%; /* Đảm bảo card chiếm toàn bộ cột */
+    /* Đảm bảo card chiếm toàn bộ cột */
+    width: 100%;
     height: 120px;
     display: flex;
     flex-direction: column;
@@ -85,18 +68,22 @@
 }
 
 .product-card:hover {
+    /* Phóng to một chút khi hover */
     transform: scale(1.05);
+    /* Biến đổi con trỏ */
+    cursor: pointer;
 }
 
 .product-card .card {
     width: 100%;
-    height: 80%; /* Fit cứng chiều cao của thẻ card bên trong */
+    /* Fit cứng chiều cao của thẻ card bên trong */
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    
+
 }
 
 /* style1.css */
@@ -108,68 +95,90 @@
 }
 
 .nav-link:hover {
-    background-color: #e0f7fa;
+    background-color: #ccc;
 }
 
 .active-category {
-    background-color: #A6AEBF !important; /* Màu xanh đậm */
+    background-color: #ff6b6b !important;
     color: white !important;
 }
 
 /* Thêm viền cho các mục danh mục */
 .sidebar .nav-item {
-    border: 1px solid #ccc; /* Viền mỏng màu xám */
-    margin-bottom: 10px;     /* Khoảng cách giữa các mục */
-    border-radius: 5px;      /* Bo góc viền */
-    transition: background-color 0.3s ease, border-color 0.3s ease; /* Hiệu ứng chuyển màu */
+    /* Viền mỏng màu xám */
+    border: 1px solid #ccc;
+    /* Khoảng cách giữa các mục */
+    margin-bottom: 10px;
+    /* Bo góc viền */
+    border-radius: 5px;
+    /* Hiệu ứng chuyển màu */
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Màu nền khi hover lên danh mục */
 .sidebar .nav-item:hover {
-    background-color: #f8f9fa; /* Màu nền khi hover (màu xám nhạt) */
-    border-color: #A6AEBF;     /* Màu viền khi hover (màu xanh dương) */
+    background-color: #f8f9fa;
+    /* Màu nền khi hover (màu xám nhạt) */
+    border-color: #A6AEBF;
+    /* Màu viền khi hover (màu xanh dương) */
 }
 
 /* Màu nền cho mục danh mục đang được chọn (active) */
 .sidebar .nav-item .nav-link.active-category {
-    background-color: #A6AEBF; /* Màu nền khi active (xanh dương) */
-    color: white;               /* Màu chữ khi active (trắng) */
+    background-color: #A6AEBF;
+    /* Màu nền khi active (xanh dương) */
+    color: white;
+    /* Màu chữ khi active (trắng) */
 }
 
 /* Màu chữ cho các mục danh mục chưa được chọn */
 .sidebar .nav-item .nav-link {
-    color: #333;  /* Màu chữ mặc định (đen) */
-    font-weight: 600; /* Đậm chữ */
-    padding: 10px 15px; /* Khoảng cách trong của các mục */
-    display: block;    /* Hiển thị các mục danh mục thành dạng block */
-    text-decoration: none; /* Loại bỏ gạch dưới */
+    color: #333;
+    /* Màu chữ mặc định (đen) */
+    font-weight: 600;
+    /* Đậm chữ */
+    padding: 10px 15px;
+    /* Khoảng cách trong của các mục */
+    display: block;
+    /* Hiển thị các mục danh mục thành dạng block */
+    text-decoration: none;
+    /* Loại bỏ gạch dưới */
 }
 
 /* Khi hover lên một mục category */
 .sidebar .nav-item .nav-link:hover {
-    color: #A6AEBF;   /* Màu chữ khi hover lên (xanh dương) */
+    color: #000;
+    /* Màu chữ khi hover lên (xanh dương) */
+    background-color: #ffd700;
 }
 
 /* Tăng chiều cao của header */
 header nav {
-    padding-top: 15px; /* Tăng không gian phía trên */
-    padding-bottom: 15px; /* Tăng không gian phía dưới */
+    padding-top: 15px;
+    /* Tăng không gian phía trên */
+    padding-bottom: 15px;
+    /* Tăng không gian phía dưới */
 }
 
 /* Điều chỉnh kích thước logo */
 header .navbar-brand img {
-    height: 80px;  /* Điều chỉnh chiều cao của logo */
-    width: auto;   /* Đảm bảo tỷ lệ khung hình của logo không bị biến dạng */
+    height: 80px;
+    /* Điều chỉnh chiều cao của logo */
+    width: auto;
+    /* Đảm bảo tỷ lệ khung hình của logo không bị biến dạng */
 }
 
 /* Nếu bạn muốn toàn bộ thanh điều hướng có chiều cao lớn hơn */
 header nav .navbar-nav .nav-item {
-    padding-top: 10px; /* Thêm khoảng cách trên cho các mục trong navbar */
-    padding-bottom: 10px; /* Thêm khoảng cách dưới cho các mục trong navbar */
+    padding-top: 10px;
+    /* Thêm khoảng cách trên cho các mục trong navbar */
+    padding-bottom: 10px;
+    /* Thêm khoảng cách dưới cho các mục trong navbar */
 }
 
 .modal-dialog {
-    max-width: 600px; /* Điều chỉnh chiều rộng của modal */
+    max-width: 600px;
+    /* Điều chỉnh chiều rộng của modal */
     margin: auto;
 }
 
@@ -183,9 +192,11 @@ header nav .navbar-nav .nav-item {
 }
 
 .pagination-controls button {
-    padding: 4px 8px; /* Giảm kích thước nút */
+    padding: 4px 8px;
+    /* Giảm kích thước nút */
     border: 1px solid #8A92A5;
-    border-radius: 25px; /* Bo viền tròn hơn */
+    border-radius: 25px;
+    /* Bo viền tròn hơn */
     background-color: white;
     color: #8A92A5;
     font-size: 14px;
@@ -233,23 +244,31 @@ footer {
 }
 
 .header {
-    margin: 0; /* Loại bỏ margin mặc định */
-    padding: 0; /* Loại bỏ padding mặc định */
+    margin: 0;
+    /* Loại bỏ margin mặc định */
+    padding: 0;
+    /* Loại bỏ padding mặc định */
 }
 
 .header .navbar-nav .nav-link {
-    font-size: 1.25rem; /* Tăng kích thước chữ */
-    font-weight: bold; /* Đậm hơn để nổi bật */
-    color: #333; /* Đặt màu chữ nếu cần */
-    text-transform: uppercase; /* Viết hoa tất cả chữ */
+    font-size: 1.25rem;
+    /* Tăng kích thước chữ */
+    font-weight: bold;
+    /* Đậm hơn để nổi bật */
+    color: #333;
+    /* Đặt màu chữ nếu cần */
+    text-transform: uppercase;
+    /* Viết hoa tất cả chữ */
 }
 
 .header .navbar-nav .nav-link:hover {
-    color: #8A92A5; /* Màu khi di chuột vào */
+    color: #8A92A5;
+    /* Màu khi di chuột vào */
 }
 
 .header header {
-    margin-top: 0; /* Đảm bảo header không có khoảng cách với phía trên */
+    margin-top: 0;
+    /* Đảm bảo header không có khoảng cách với phía trên */
     padding-top: 0;
 }
 
@@ -263,95 +282,138 @@ body {
 
 /* Đặt các thuộc tính cho header */
 .pos-header {
-    margin-top: 0; /* Đảm bảo header không có khoảng cách với phía trên */
+    margin-top: 0;
+    /* Đảm bảo header không có khoảng cách với phía trên */
     padding-top: 0;
 }
 
 /* Đặt các thuộc tính cho navbar */
 .pos-navbar .navbar-nav .pos-nav-link {
-    font-size: 1.25rem; /* Tăng kích thước chữ */
-    font-weight: bold; /* Đậm hơn để nổi bật */
-    color: #333; /* Đặt màu chữ nếu cần */
-    text-transform: uppercase; /* Viết hoa tất cả chữ */
+    /* Tăng kích thước chữ */
+    font-size: 1.25rem;
+    /* Đậm hơn để nổi bật */
+    font-weight: bold;
+    /* Đặt màu chữ nếu cần */
+    color: #fff;
+    /* Viết hoa tất cả chữ */
+    text-transform: uppercase;
+    border-radius: 5px;
 }
 
 /* Đặt màu khi hover vào các liên kết */
 .pos-navbar .navbar-nav .pos-nav-link:hover {
-    color: #8A92A5; /* Màu khi di chuột vào */
+    color: #333;
+    /* Màu khi di chuột vào */
+    background-color: #ffd700;
 }
 
 
 /* Tùy chỉnh select box */
 #categoryDropdown {
-    width: 20%; /* Chiếm full chiều rộng */
-    padding: 6px 12px; /* Cải thiện khoảng cách bên trong */
-    font-size: 14px; /* Kích thước font nhỏ hơn */
-    border: 1px solid #ccc; /* Viền nhẹ nhàng */
-    border-radius: 6px; /* Bo góc */
-    background-color: #f9f9f9; /* Màu nền sáng */
-    transition: border-color 0.3s ease, background-color 0.3s ease; /* Hiệu ứng chuyển đổi */
+    /* Chiếm full chiều rộng */
+    width: 20%;
+    /* Cải thiện khoảng cách bên trong */
+    padding: 6px 12px;
+    /* Kích thước font nhỏ hơn */
+    font-size: 14px;
+    /* Viền nhẹ nhàng */
+    border: 1px solid #ccc;
+    /* Bo góc */
+    border-radius: 6px;
+    /* Màu nền sáng */
+    background-color: #f9f9f9;
+    /* Hiệu ứng chuyển đổi */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    /* Đổi hiệu ứng trỏ chuột */
+    cursor: pointer;
 }
 
 /* Tạo hiệu ứng khi hover hoặc focus */
 #categoryDropdown:hover,
 #categoryDropdown:focus {
-    border-color: #8A92A5; /* Viền đổi màu khi hover hoặc focus */
-    background-color: #e9f2fe; /* Màu nền khi focus */
+    /* Viền đổi màu khi hover hoặc focus */
+    border-color: #8A92A5;
+    /* Màu nền khi focus */
+    background-color: #e9f2fe;
 }
 
 /* Tùy chỉnh option trong dropdown */
 #categoryDropdown option {
-    font-size: 14px; /* Kích thước font nhỏ */
-    padding: 8px 10px; /* Khoảng cách padding cho các option */
+    /* Kích thước font nhỏ */
+    font-size: 14px;
+    /* Khoảng cách padding cho các option */
+    padding: 8px 10px;
 }
 
 /* Tùy chỉnh label */
 label[for="categoryDropdown"] {
-    font-size: 16px; /* Kích thước chữ của label */
-    font-weight: bold; /* Đậm chữ */
-    color: #333; /* Màu chữ label */
-    margin-bottom: 8px; /* Khoảng cách dưới label */
+    font-size: 16px;
+    /* Kích thước chữ của label */
+    font-weight: bold;
+    /* Đậm chữ */
+    color: #333;
+    /* Màu chữ label */
+    margin-bottom: 8px;
+    /* Khoảng cách dưới label */
     display: block;
 }
 
 #storeDropdown {
-    width: 20%; /* Chiếm full chiều rộng */
-    padding: 6px 12px; /* Cải thiện khoảng cách bên trong */
-    font-size: 14px; /* Kích thước font nhỏ hơn */
-    border: 1px solid #ccc; /* Viền nhẹ nhàng */
-    border-radius: 6px; /* Bo góc */
-    background-color: #f9f9f9; /* Màu nền sáng */
-    transition: border-color 0.3s ease, background-color 0.3s ease; /* Hiệu ứng chuyển đổi */
+    width: 20%;
+    /* Chiếm full chiều rộng */
+    padding: 6px 12px;
+    /* Cải thiện khoảng cách bên trong */
+    font-size: 14px;
+    /* Kích thước font nhỏ hơn */
+    border: 1px solid #ccc;
+    /* Viền nhẹ nhàng */
+    border-radius: 6px;
+    /* Bo góc */
+    background-color: #f9f9f9;
+    /* Màu nền sáng */
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+    /* Hiệu ứng chuyển đổi */
 }
 
 /* Tạo hiệu ứng khi hover hoặc focus */
 #storeDropdown:hover,
 #storeDropdown:focus {
-    border-color: #8A92A5; /* Viền đổi màu khi hover hoặc focus */
-    background-color: #e9f2fe; /* Màu nền khi focus */
+    border-color: #8A92A5;
+    /* Viền đổi màu khi hover hoặc focus */
+    background-color: #e9f2fe;
+    /* Màu nền khi focus */
 }
 
 /* Tùy chỉnh option trong dropdown */
 #storeDropdown option {
-    font-size: 14px; /* Kích thước font nhỏ */
-    padding: 8px 10px; /* Khoảng cách padding cho các option */
+    font-size: 14px;
+    /* Kích thước font nhỏ */
+    padding: 8px 10px;
+    /* Khoảng cách padding cho các option */
 }
 
 /* Tùy chỉnh label */
 label[for="storeDropdown"] {
-    font-size: 16px; /* Kích thước chữ của label */
-    font-weight: bold; /* Đậm chữ */
-    color: #333; /* Màu chữ label */
-    margin-bottom: 8px; /* Khoảng cách dưới label */
+    font-size: 16px;
+    /* Kích thước chữ của label */
+    font-weight: bold;
+    /* Đậm chữ */
+    color: #333;
+    /* Màu chữ label */
+    margin-bottom: 8px;
+    /* Khoảng cách dưới label */
     display: block;
 }
 
 .form-row {
     display: flex;
-    gap: 10px; /* Khoảng cách giữa các dropdown */
+    gap: 10px;
+    /* Khoảng cách giữa các dropdown */
 }
+
 .form-group {
-    flex: 1; /* Chia đều chiều rộng */
+    flex: 1;
+    /* Chia đều chiều rộng */
 }
 
 /* Định dạng cho label */
@@ -405,4 +467,45 @@ button {
 /* Hiệu ứng khi hover lên button */
 button:hover {
     background-color: #0056b3;
+}
+
+i.fa-solid {
+    cursor: pointer;
+}
+
+/* Chỉnh sửa bootstrap css */
+.btn-info {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: #17a2b8;
+    --bs-btn-border-color: #17a2b8;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #10788d;
+    --bs-btn-hover-border-color: #10788d;
+    --bs-btn-focus-shadow-rgb: 11, 172, 204;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #0f6a78;
+    --bs-btn-active-border-color: #17a3ba;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: #17a2b8;
+    --bs-btn-disabled-border-color: #17a2b8;
+}
+
+.btn-warning {
+    color: #fff;
+    /* background-color: var(--bs-warning-500);
+    border-color: var(--bs-warning-500); */
+    background-color: #f0ad4e;
+    border-color: #eea236;
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: #d39e00;
+    --bs-btn-hover-border-color: #d39e00;
+    --bs-btn-focus-shadow-rgb: 60, 153, 110;
+    --bs-btn-active-color: #fff;
+    --bs-btn-active-bg: #d39e00;
+    --bs-btn-active-border-color: #c69500;
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+    --bs-btn-disabled-color: #fff;
+    --bs-btn-disabled-bg: var(--bs-warning-500);
+    --bs-btn-disabled-border-color: var(--bs-warning-500);
 }

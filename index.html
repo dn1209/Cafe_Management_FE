@@ -37,7 +37,7 @@
 </head>
 
 <body>
-    <div id="header-placeholder"></div>
+    <div id="header_placeholder"></div>
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Categories -->
@@ -54,7 +54,7 @@
                     <input type="text" id="search-input" class="form-control" placeholder="Search"
                         oninput="onSearchInputChange()">
                 </div>
-                <div class="row g-3" id="product-list">
+                <div class="row g-3" id="product_list">
                     <!-- Products will be loaded here dynamically -->
                 </div>
                 <div id="pagination" class="pagination-controls"></div>
@@ -81,10 +81,10 @@
                 <!-- Thêm phần tổng tiền và số lượng ở dưới cùng -->
                 <div class="d-flex justify-content-between pt-3">
                     <div>
-                        <strong>Số lượng:</strong> <span id="total-quantity">0</span> cốc
+                        <strong>Số lượng:</strong> <span id="total_quantity">0</span> cốc
                     </div>
                     <div>
-                        <strong>Tổng tiền:</strong> <span id="total-amount">0 VND</span>
+                        <strong>Tổng tiền:</strong> <span id="total_amount">0 VND</span>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between" style="margin-top: 10px;">
@@ -110,8 +110,8 @@
 
                     <!-- Tổng số lượng và tổng tiền -->
                     <div class="d-flex justify-content-between">
-                        <div><strong>Số lượng:</strong> <span id="total-quantity-checkout">0</span></div>
-                        <div><strong>Tổng tiền:</strong> <span id="total-amount-checkout">0</span></div>
+                        <div><strong>Số lượng:</strong> <span id="total_quantity_checkout">0</span></div>
+                        <div><strong>Tổng tiền:</strong> <span id="total_amount_checkout">0</span></div>
                     </div>
 
                     <!-- Thêm trường ghi chú (note) và số tiền khách hàng đưa -->
@@ -136,7 +136,7 @@
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
+                document.getElementById('header_placeholder').innerHTML = data;
                 // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
                 const script = document.createElement("script");
                 script.src = "js/header.js";

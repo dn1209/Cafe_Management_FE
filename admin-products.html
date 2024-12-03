@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý Sản phẩm - Admin</title>
-    <link rel="stylesheet" href="css/style1.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -22,11 +21,22 @@
         crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.1/dist/sweetalert2.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+
+    <script type="text/javascript">
+        (() => {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v6.5.2/css/all.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
+    <link rel="stylesheet" href="css/style1.css">
 </head>
 
 <body>
     <!-- Header Placeholder -->
-    <div id="header-placeholder"></div>
+    <div id="header_placeholder"></div>
 
     <div class="container-fluid">
         <div class="row">
@@ -69,10 +79,10 @@
                 </div>
                 <!-- Dropdown chọn danh mục và cửa hàng -->
                 <div class="row mb-3">
-                
+
                     <div class="col-md-6">
                         <label for="categoryDropdown">Chọn danh mục</label>
-                        <select id="categoryDropdown" class="form-control">
+                        <select id="categoryDropdown" class="form-select">
                             <option value="">Tất cả danh mục</option>
                             <!-- Các danh mục sẽ được tải động ở đây -->
                         </select>
@@ -183,7 +193,7 @@
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
+                document.getElementById('header_placeholder').innerHTML = data;
                 const script = document.createElement("script");
                 script.src = "js/header.js";
                 script.onload = () => {

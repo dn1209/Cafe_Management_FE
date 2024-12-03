@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Quản lý Doanh thu - Admin</title>
-    <link rel="stylesheet" href="css/style1.css">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
@@ -25,11 +24,22 @@
     
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script type="text/javascript">
+        (() => {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v6.5.2/css/all.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
+    <link rel="stylesheet" href="css/style1.css">
 </head>
 
 <body>
     <!-- Header Placeholder -->
-    <div id="header-placeholder"></div>
+    <div id="header_placeholder"></div>
 
     <div class="container-fluid">
         <div class="row">
@@ -109,7 +119,7 @@
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
+                document.getElementById('header_placeholder').innerHTML = data;
                 const script = document.createElement("script");
                 script.src = "js/header.js";
                 script.onload = () => {

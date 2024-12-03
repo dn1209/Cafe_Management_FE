@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // }
 
     // Lưu trạng thái khi người dùng nhấn vào menu
-    revenueLink.addEventListener('click', () => {
+    if (revenueLink) revenueLink.addEventListener('click', () => {
         const isOpen = revenueDropdown.classList.contains('collapsing');
         console.log(isOpen);
         // localStorage.setItem('revenueDropdownOpen', !isOpen);

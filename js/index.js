@@ -57,15 +57,21 @@ async function fetchProducts(page = 0, size = 12) {
                 "Accept": "application/json"
             }
         });
-        
+
         await checkJwtError(response);
 
 
         if (!response.ok) throw new Error("Network response was not ok");
 
         const products = await response.json();
+        const categories = JSON.parse(sessionStorage.getItem('categories')); // Lấy danh sách categories từ sessionStorage
 
-        const productList = document.getElementById('product-list');
+        // Hiện các sản phẩm có categoryId chưa bị vô hiệu hóa
+        products.content = products.content.filter(product => 
+            categories.some(category => category.categoryId === product.categoryId)
+        );
+
+        const productList = document.getElementById('product_list');
         productList.innerHTML = products.content.length ? products.content.map(product => `
             <div class="col-md-3 product-card">
                 <div class="card" data-id="${product.productId}" onclick="addToOrderSummary(${product.productId})">
@@ -91,7 +97,7 @@ function renderPagination(productsPage) {
         <span>Page ${productsPage.number + 1} of ${productsPage.totalPages}</span>
         ${productsPage.last ? '' : `<button onclick="fetchProducts(${productsPage.number + 1})">Next</button>`}
     `;
-    
+
     // Thêm class "active" cho trang hiện tại
     const buttons = paginationContainer.querySelectorAll('button');
     buttons.forEach(button => {
@@ -119,10 +125,10 @@ async function fetchCategories() {
         }
 
         const categories = await response.json();
+        sessionStorage.setItem('categories', JSON.stringify(categories)); // Lưu danh sách categories vào sessionStorage
         const categoryList = document.querySelector(".sidebar .nav");
 
-        // Xóa các mục cũ và thêm mục "Tất cả sản phẩm" ở đầu
-        // Xóa các mục cũ và thêm mục "Tất cả sản phẩm" ở đầu
+        // Xóa các mục cũ và thêm mục "Tất cả sản phẩm" ở đầu danh sách
         categoryList.innerHTML = '';
         const allCategoryItem = document.createElement("li");
         allCategoryItem.className = "nav-item";
@@ -162,8 +168,8 @@ function updateOrderSummary() {
     });
 
     // Cập nhật tổng số lượng và tổng tiền
-    document.getElementById('total-quantity').textContent = totalQuantity;
-    document.getElementById('total-amount').textContent = totalAmount.toLocaleString('vi-VN') + " VND"; // Hiển thị VND
+    document.getElementById('total_quantity').textContent = totalQuantity;
+    document.getElementById('total_amount').textContent = totalAmount.toLocaleString('vi-VN') + " VND"; // Hiển thị VND
 }
 
 // Hàm thêm sản phẩm vào giỏ hàng
@@ -190,7 +196,7 @@ async function addToOrderSummary(productId) {
         const product = await response.json();
 
         const orderSummaryTable = document.querySelector('.table tbody');
-        let existingRow = Array.from(orderSummaryTable.rows).find(row => 
+        let existingRow = Array.from(orderSummaryTable.rows).find(row =>
             row.cells[1].textContent === product.productName
         );
 
@@ -227,7 +233,7 @@ async function addToOrderSummary(productId) {
 
         // Cập nhật tổng tiền và số lượng sau khi thêm sản phẩm
         updateOrderSummary();
-        
+
     } catch (error) {
         console.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ:", error);
         toastrError("Lỗi", "Có lỗi xảy ra khi thêm sản phẩm vào giỏ.");
@@ -277,7 +283,7 @@ document.querySelector('.btn-success').addEventListener('click', function () {
     Array.from(orderSummaryTable.rows).forEach(row => {
         const productId = row.getAttribute('data-id'); // Lấy productId từ data-id của hàng
         const quantity = parseInt(row.cells[2].textContent);
-        
+
         // Thêm đối tượng sản phẩm vào mảng
         products.push({
             productId: productId,
@@ -332,8 +338,8 @@ document.getElementById('search-input').addEventListener('input', function (e) {
 document.getElementById('checkout-btn').addEventListener('click', function () {
     const orderSummaryTable = document.querySelector('.table tbody');
     const checkoutSummaryTable = document.querySelector('#checkout-summary tbody');
-    const totalQuantityCheckout = document.getElementById('total-quantity-checkout');
-    const totalAmountCheckout = document.getElementById('total-amount-checkout');
+    const totalQuantityCheckout = document.getElementById('total_quantity_checkout');
+    const totalAmountCheckout = document.getElementById('total_amount_checkout');
 
     let totalQuantity = 0;
     let totalAmount = 0;
@@ -401,7 +407,7 @@ document.getElementById('confirm-checkout').addEventListener('click', async func
     // Lấy giá trị thực của tiền thu từ khách (không có dấu phân cách nghìn)
 
     // Kiểm tra xem tiền thu có đủ không
-    const totalAmount = parseInt(document.getElementById('total-amount').textContent.replace(" VND", "").replace(/,/g, "")) || 0;
+    const totalAmount = parseInt(document.getElementById('total_amount').textContent.replace(" VND", "").replace(/,/g, "")) || 0;
 
     // Tạo đối tượng đơn hàng
     const order = {
@@ -441,8 +447,8 @@ document.getElementById('confirm-checkout').addEventListener('click', async func
             orderSummaryTable.innerHTML = ''; // Xóa tất cả các hàng
 
             // Đặt lại tổng số lượng và tổng tiền về 0
-            document.getElementById('total-quantity').textContent = 0;
-            document.getElementById('total-amount').textContent = '0 VND';
+            document.getElementById('total_quantity').textContent = 0;
+            document.getElementById('total_amount').textContent = '0 VND';
         } else {
             toastrError("Lỗi", "Lỗi khi tạo hóa đơn. Vui lòng thử lại.");
         }

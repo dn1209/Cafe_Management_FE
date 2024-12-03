@@ -4,7 +4,7 @@ const userName = localStorage.getItem('userName');
 // Hàm fetchBills để lấy và hiển thị danh sách hóa đơn
 function renderPagination(pageResponse) {
     const paginationContainer = document.getElementById('pagination');
-    
+
     // Xóa nội dung phân trang cũ
     paginationContainer.innerHTML = '';
 
@@ -56,22 +56,24 @@ async function fetchBills(pageNumber = 0) {
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
-        
+        console.log(data);
+
         // Render hóa đơn (dữ liệu được trả về từ API)
         renderBills(data.content);
-        
+
         // Render phân trang
         renderPagination(data);
 
     } catch (error) {
-        console.error("Có lỗi xảy ra:", error);
+        console.error(`Có lỗi xảy ra: ${error}`);
         toastrError("Lỗi", "Lỗi khi tải hóa đơn, vui lòng thử lại.");
     }
 }
 
 // Hàm hiển thị danh sách hóa đơn
 function renderBills(bills) {
-    const billList = document.getElementById('invoice-table-body');
+    console.log(bills);
+    const billList = document.getElementById('invoice_table_body');
     billList.innerHTML = bills.length ? bills.map((bill, index) => `
         <tr>
             <td>${bill.billId}</td>
@@ -82,11 +84,11 @@ function renderBills(bills) {
             <td>${bill.totalPrice.toLocaleString()} VND</td>
             <td>${bill.notes || 'Không có ghi chú'}</td>
             <td>
-                <button class="btn btn-custom" data-bs-toggle="modal" data-bs-target="#invoice-detail-modal-${bill.billId}">
+                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invoice_detail_modal_${bill.billId}">
                     Chi tiết
                 </button>
-                <button class="btn btn-custom btn-demo" data-index="${index}">
-                     Hóa đơn
+                <button class="btn btn-info btn-demo" data-index="${index}">
+                    Hóa đơn
                 </button>
             </td>
         </tr>
@@ -101,11 +103,11 @@ function renderBills(bills) {
     // Tạo modal cho từng hóa đơn để hiển thị chi tiết hóa đơn
     bills.forEach(bill => {
         const modalContent = `
-            <div class="modal fade" id="invoice-detail-modal-${bill.billId}" tabindex="-1" aria-labelledby="invoice-detail-modal-label-${bill.billId}" aria-hidden="true">
+            <div class="modal fade" id="invoice_detail_modal_${bill.billId}" tabindex="-1" aria-labelledby="invoice_detail_modal_label_${bill.billId}" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="invoice-detail-modal-label-${bill.billId}">Chi tiết hóa đơn #${bill.billId}</h5>
+                            <h5 class="modal-title" id="invoice_detail_modal_label_${bill.billId}">Chi tiết hóa đơn #${bill.billId}</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
@@ -123,8 +125,8 @@ function renderBills(bills) {
                                         <tr>
                                             <td>${detail.productName}</td>
                                             <td>${detail.quantity}</td>
-                                            <td>${(detail.price / detail.quantity).toLocaleString()} VND</td>
                                             <td>${(detail.price).toLocaleString()} VND</td>
+                                            <td>${(detail.price * detail.quantity).toLocaleString()} VND</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -137,7 +139,7 @@ function renderBills(bills) {
                 </div>
             </div>
         `;
-        document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalContent);
+        document.getElementById('modal_container').insertAdjacentHTML('beforeend', modalContent);
     });
 }
 
@@ -145,11 +147,11 @@ function renderBills(bills) {
 function renderBillForDemo(bill) {
     // Tạo modal nội dung hóa đơn demo
     const modalContent = `
-        <div class="modal fade" id="demo-bill-modal-${bill.billId}" tabindex="-1" aria-labelledby="demo-bill-modal-label-${bill.billId}" aria-hidden="true">
+        <div class="modal fade" id="demo_bill_modal_${bill.billId}" tabindex="-1" aria-labelledby="demo_bill_modal_label_${bill.billId}" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="demo-bill-modal-label-${bill.billId}">Hóa đơn #${bill.billId}</h5>
+                        <h5 class="modal-title" id="demo_bill_modal_label_${bill.billId}">Hóa đơn #${bill.billId}</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -157,13 +159,13 @@ function renderBillForDemo(bill) {
                             <h1 style="text-align: center;">CAFE POS</h1>
                             <h2 style="text-align: center;">HÓA ĐƠN #${bill.billId}</h2>
                             <p><strong>Ngày bán:</strong> ${bill.sellDate}</p>
-                            <p><strong>Người bán:</strong> ${bill.saleName}</p>
+                            <p><strong>Người tạo:</strong> ${bill.saleName}</p>
                             <p><strong>Tổng số lượng:</strong> ${bill.totalQuantity}</p>
                             <p><strong>Tổng tiền:</strong> ${bill.totalPrice.toLocaleString()} VND</p>
                             <p><strong>Ghi chú:</strong> ${bill.notes || 'Không có ghi chú'}</p>
                             
-                            <h3>Chi tiết hóa đơn:</h3>
-                            <table border="1" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+                            <h5><b>Chi tiết hóa đơn:</b></h5>
+                            <table class="table table-bordered" cellpadding="10" style="width: 100%; border-collapse: collapse;">
                                 <thead>
                                     <tr>
                                         <th>Tên sản phẩm</th>
@@ -177,8 +179,8 @@ function renderBillForDemo(bill) {
                                         <tr>
                                             <td>${detail.productName}</td>
                                             <td>${detail.quantity}</td>
-                                            <td>${( detail.price / detail.quantity).toLocaleString()} VND</td>
-                                            <td>${( detail.price).toLocaleString()} VND</td>
+                                            <td>${(detail.price).toLocaleString()} VND</td>
+                                            <td>${(detail.price * detail.quantity).toLocaleString()} VND</td>
                                         </tr>
                                     `).join('')}
                                 </tbody>
@@ -193,16 +195,16 @@ function renderBillForDemo(bill) {
         </div>
     `;
 
-    // Chèn modal vào #modal-container thay vì body
-    document.getElementById('modal-container').insertAdjacentHTML('beforeend', modalContent);
+    // Chèn modal vào #modal_container thay vì body
+    document.getElementById('modal_container').insertAdjacentHTML('beforeend', modalContent);
 
     // Hiển thị modal
-    const demoBillModal = new bootstrap.Modal(document.getElementById(`demo-bill-modal-${bill.billId}`));
+    const demoBillModal = new bootstrap.Modal(document.getElementById(`demo_bill_modal_${bill.billId}`));
     demoBillModal.show();
 }
 
 // Gọi hàm fetchBills khi trang được tải
-document.addEventListener('DOMContentLoaded', () => fetchBills(0)); 
+document.addEventListener('DOMContentLoaded', () => fetchBills(0));
 
 
 

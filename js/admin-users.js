@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 async function loadUsers() {
     try {
         let url = `http://localhost:8085/api/list`;
-        
+
 
         const response = await fetch(url, {
             method: "GET",
@@ -28,7 +28,7 @@ async function loadUsers() {
                 "Content-Type": "application/json",
             }
         });
-        
+
         await checkJwtError(response);
 
         if (!response.ok) throw new Error("Không thể tải danh sách người dùng");
@@ -89,7 +89,7 @@ async function editUser(userId) {
         document.getElementById('displayNameEdit').value = user.displayName;
         document.getElementById('userPhoneEdit').value = user.userPhone;
 
-        
+
 
         const roleDropdownEdit = document.getElementById('roleDropdownEdit');
         roleDropdownEdit.innerHTML = '';
@@ -153,7 +153,7 @@ async function saveUserChanges() {
     const userRole = parseInt(document.getElementById('roleDropdownEdit').value);
     const userPhone = document.getElementById('userPhoneEdit').value;
 
-    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || !userPhone ) {
+    if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || !userPhone) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
@@ -192,7 +192,7 @@ async function saveUserPassword() {
     const oldPassword = document.getElementById('oldPassword').value;
     const newPassword = document.getElementById('newPassword').value;
 
-    if (!oldPassword || !newPassword ) {
+    if (!oldPassword || !newPassword) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
@@ -232,7 +232,7 @@ function openAddUserModal() {
 
     const roleDropdownAdd = document.getElementById('roleDropdownAdd');
 
-    
+
 
     roleDropdownAdd.innerHTML = '';
     const roles = { 0: "ADMIN", 1: "USER" };
@@ -251,14 +251,14 @@ function openAddUserModal() {
 }
 
 async function addUser(event) {
-    event.preventDefault(); 
+    event.preventDefault();
     const userName = document.getElementById('username').value;
     const password = document.getElementById('password').value;
     const displayName = document.getElementById('displayName').value;
     const userRole = parseInt(document.getElementById('roleDropdownAdd').value);
     const userPhone = document.getElementById('userPhone').value;
 
-    if (!username || !password || !displayName || isNaN(userRole)  || !userPhone ) {
+    if (!username || !password || !displayName || isNaN(userRole) || !userPhone) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }

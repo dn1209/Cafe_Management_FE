@@ -5,13 +5,13 @@ function checkRegisterStatus() {
     fetch(apiUrl)
         .then(response => response.json())
         .then(data => {
-            const registerButton = document.getElementById('register-button');
+            const registerButton = document.getElementById('register_button');
             if (data === true) {
                 // Hiển thị nút đăng ký nếu chưa có tài khoản
                 registerButton.style.display = 'block';
             } else {
                 // Ẩn nút đăng ký nếu đã có tài khoản
-                registerButton.style.display = 'none';
+                // registerButton.style.display = 'none';
             }
         })
         .catch(error => {
@@ -67,20 +67,10 @@ function login() {
     });
 }
 
-// Hàm mở modal đăng ký
-function openRegisterModal() {
-    document.getElementById('register-modal').style.display = 'block';
-}
-
-// Hàm đóng modal đăng ký
-function closeRegisterModal() {
-    document.getElementById('register-modal').style.display = 'none';
-}
-
 // Hàm đăng ký
 function registerAdmin() {
-    const username = document.getElementById('register-username').value;
-    const password = document.getElementById('register-password').value;
+    const username = document.getElementById('reg_username').value;
+    const password = document.getElementById('reg_password').value;
 
     const apiUrl = 'http://localhost:8085/api/registerHidden'; // Thay URL API của bạn
     const headers = {
@@ -108,7 +98,6 @@ function registerAdmin() {
         // Kiểm tra nếu phản hồi có userId
         if (data.userId) {
             toastrSuccess("Thành công", "Đăng ký thành công!");
-            closeRegisterModal();
             checkRegisterStatus(); // Cập nhật trạng thái sau khi đăng ký
         } else {
             toastrError("Lỗi", "Đăng ký thất bại. Vui lòng thử lại.");

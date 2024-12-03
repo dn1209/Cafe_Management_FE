@@ -27,12 +27,22 @@
     <link rel="stylesheet" href="css/styleBill.css">
     <link rel="stylesheet" href="css/style1.css">
 
+
+    <script type="text/javascript">
+        (() => {
+            var css = document.createElement('link');
+            css.href = 'https://use.fontawesome.com/releases/v6.5.2/css/all.css';
+            css.rel = 'stylesheet';
+            css.type = 'text/css';
+            document.getElementsByTagName('head')[0].appendChild(css);
+        })();
+    </script>
 </head>
 
 <body>
-    <div id="header-placeholder"></div>
+    <div id="header_placeholder" class="mb-3"></div>
     <div class="container">
-        <div id="modal-container"></div>
+        <div id="modal_container"></div>
 
         <div class="row justify-content-center">
             <div class="col-12">
@@ -45,13 +55,13 @@
                                 <th>Mã hóa đơn</th>
                                 <th>Ngày bán</th>
                                 <th>Số lượng</th>
-                                <th>Người bán</th>
+                                <th>Người tạo</th>
                                 <th>Tổng tiền</th>
                                 <th>Ghi chú</th>
                                 <th>Chi tiết</th>
                             </tr>
                         </thead>
-                        <tbody id="invoice-table-body">
+                        <tbody id="invoice_table_body">
                             <!-- Các hóa đơn sẽ được thêm động tại đây bằng JavaScript -->
                         </tbody>
                     </table>
@@ -67,7 +77,7 @@
         fetch('header.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('header-placeholder').innerHTML = data;
+                document.getElementById('header_placeholder').innerHTML = data;
                 // Tải header.js và thực hiện kiểm tra vai trò người dùng và trạng thái đăng nhập
                 const script = document.createElement("script");
                 script.src = "js/header.js";
