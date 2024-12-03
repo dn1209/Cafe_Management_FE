@@ -16,28 +16,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.getElementById('saveUserPasswordButton').addEventListener('click', saveUserPassword);
 });
 
-async function fetchStores() {
-    try {
-        const response = await fetch('http://localhost:8085/api_store/list', {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json",
-            }
-        });
-        
-        await checkJwtError(response);
-
-        if (!response.ok) throw new Error("Không thể tải danh sách cửa hàng");
-
-        const data = await response.json();
-
-       
-    } catch (error) {
-        console.error("Có lỗi khi tải danh sách cửa hàng:", error);
-    }
-}
-
 async function loadUsers() {
     try {
         let url = `http://localhost:8085/api/list`;

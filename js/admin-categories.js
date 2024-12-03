@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadCategories() {
     try {
-        let url = 'http://localhost:8085/api_category/list';
+        let url = 'http://localhost:8085/api-category/list';
 
         const response = await fetch(url, {
             method: 'GET',
@@ -68,7 +68,7 @@ async function addCategory(event) {
     const categoryData = { categoryName };
 
     try {
-        const response = await fetch('http://localhost:8085/api_category/add_new', {
+        const response = await fetch('http://localhost:8085/api-category/add-new', {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -105,7 +105,7 @@ async function submitEditCategory(event) {
     const categoryName = document.getElementById('editCategoryName').value;
     const categoryData = { categoryName };
     try {
-        const response = await fetch(`http://localhost:8085/api_category/update/${currentEditCategoryId}`, {
+        const response = await fetch(`http://localhost:8085/api-category/update/${currentEditCategoryId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,
@@ -132,7 +132,7 @@ async function toggleCategoryStatus(categoryId) {
     if (!confirmAction) return;
 
     try {
-        const response = await fetch(`http://localhost:8085/api_category/toggle_status/${categoryId}`, {
+        const response = await fetch(`http://localhost:8085/api-category/toggle-status/${categoryId}`, {
             method: 'PUT',
             headers: {
                 'Authorization': `Bearer ${token}`,

@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Hàm lấy doanh thu hàng ngày từ API
     async function fetchDailyRevenue(dateParam) {
         try {
-            let url = 'http://localhost:8085/api_bill/revenue';
+            let url = 'http://localhost:8085/api-bill/revenue';
             if (dateParam) {
                 url += `?date=${encodeURIComponent(dateParam)}`;  // Thêm tham số ngày vào URL nếu có
             }
@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Hàm lấy doanh thu hàng tháng từ API
     async function fetchMonthlyRevenue() {
         try {
-            const response = await fetch('http://localhost:8085/api_bill/all-stores', {
+            const response = await fetch('http://localhost:8085/api-bill/all-stores', {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,  // Thêm Bearer token vào header

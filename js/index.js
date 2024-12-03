@@ -36,7 +36,7 @@ async function fetchProducts(page = 0, size = 12) {
     }
 
     try {
-        let url = `http://localhost:8085/api_products/list-for-user?page=${page}&size=${size}`;
+        let url = `http://localhost:8085/api-products/list-for-user?page=${page}&size=${size}`;
         const queryParams = [];
         // Thêm categoryId và keyword vào URL nếu có giá trị
         if (selectedCategoryId) {
@@ -105,7 +105,7 @@ function renderPagination(productsPage) {
 async function fetchCategories() {
 
     try {
-        const response = await fetch("http://localhost:8085/api_category/list-for-user", {
+        const response = await fetch("http://localhost:8085/api-category/list-for-user", {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -175,7 +175,7 @@ async function addToOrderSummary(productId) {
     }
 
     try {
-        const response = await fetch(`http://localhost:8085/api_products/detail/${productId}`, {
+        const response = await fetch(`http://localhost:8085/api-products/detail/${productId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -422,7 +422,7 @@ document.getElementById('confirm-checkout').addEventListener('click', async func
     console.log("Đơn hàng:", JSON.stringify(order, null, 2));
 
     try {
-        const response = await fetch(`http://localhost:8085/api_bill/add_new`, {
+        const response = await fetch(`http://localhost:8085/api-bill/add-new`, {
             method: "POST",
             headers: {
                 "Authorization": `Bearer ${token}`,

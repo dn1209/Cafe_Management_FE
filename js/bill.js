@@ -42,7 +42,7 @@ async function fetchBills(pageNumber = 0) {
     }
 
     try {
-        const url = `http://localhost:8085/api_bill/list?page=${pageNumber}&size=10`;
+        const url = `http://localhost:8085/api-bill/list-for-user?page=${pageNumber}&size=10`;
 
         const response = await fetch(url, {
             method: "GET",

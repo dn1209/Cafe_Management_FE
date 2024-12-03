@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Hàm lấy sản phẩm từ API
     async function fetchProducts(page = 0, size = 10) {
         try {
-            let url = `http://localhost:8085/api_products/list?page=${page}&size=${size}`;
+            let url = `http://localhost:8085/api-products/list?page=${page}&size=${size}`;
             const queryParams = [];
 
             if (selectedCategoryId) {
@@ -144,7 +144,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function fetchCategories() {
         try {
-            const response = await fetch('http://localhost:8085/api_category/list', {
+            const response = await fetch('http://localhost:8085/api-category/list', {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8085/api_products/add_new', {
+            const response = await fetch('http://localhost:8085/api-products/add-new', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -287,7 +287,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         };
 
         try {
-            const response = await fetch(`http://localhost:8085/api_products/update/${currentProductId}`, {
+            const response = await fetch(`http://localhost:8085/api-products/update/${currentProductId}`, {
                 method: 'PUT',
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -313,7 +313,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     async function toggleProductStatus(productId) {
         try {
-            const response = await fetch(`http://localhost:8085/api_products/toggle_status/${productId}`, {
+            const response = await fetch(`http://localhost:8085/api-products/toggle-status/${productId}`, {
                 method: 'PUT',
                 headers: {
                     "Authorization": `Bearer ${token}`,
@@ -336,7 +336,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     async function fetchProductDetails(productId) {
-        const response = await fetch(`http://localhost:8085/api_products/detail/${productId}`, {
+        const response = await fetch(`http://localhost:8085/api-products/detail/${productId}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,

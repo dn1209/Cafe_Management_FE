@@ -4,7 +4,7 @@ const token = localStorage.getItem('tokenLogin');
 // Hàm fetch hóa đơn
 async function fetchBills(pageNumber = 0, storeId = null) {
     try {
-        let url = `http://localhost:8085/api_bill/list?page=${pageNumber}&size=10`;
+        let url = `http://localhost:8085/api-bill/list?page=${pageNumber}&size=10`;
         if (storeId) url += `&storeId=${storeId}`;
 
         const response = await fetch(url, {

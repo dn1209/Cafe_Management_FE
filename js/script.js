@@ -1,6 +1,6 @@
 // Hàm kiểm tra trạng thái đăng ký
 function checkRegisterStatus() {
-    const apiUrl = 'http://localhost:8085/api/checking_register'; // Thay URL API của bạn
+    const apiUrl = 'http://localhost:8085/api/checking-register'; // Thay URL API của bạn
 
     fetch(apiUrl)
         .then(response => response.json())
