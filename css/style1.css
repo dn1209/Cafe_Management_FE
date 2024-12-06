@@ -187,15 +187,15 @@ header nav .navbar-nav .nav-item {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 50px;
-    margin-bottom: 20px;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
 }
 
 .pagination-controls button {
     padding: 4px 8px;
     /* Giảm kích thước nút */
     border: 1px solid #8A92A5;
-    border-radius: 25px;
+    border-radius: 5px;
     /* Bo viền tròn hơn */
     background-color: white;
     color: #8A92A5;
@@ -309,7 +309,7 @@ body {
 
 
 /* Tùy chỉnh select box */
-#categoryDropdown {
+#category_dropdown {
     /* Chiếm full chiều rộng */
     width: 20%;
     /* Cải thiện khoảng cách bên trong */
@@ -329,8 +329,8 @@ body {
 }
 
 /* Tạo hiệu ứng khi hover hoặc focus */
-#categoryDropdown:hover,
-#categoryDropdown:focus {
+#category_dropdown:hover,
+#category_dropdown:focus {
     /* Viền đổi màu khi hover hoặc focus */
     border-color: #8A92A5;
     /* Màu nền khi focus */
@@ -338,7 +338,7 @@ body {
 }
 
 /* Tùy chỉnh option trong dropdown */
-#categoryDropdown option {
+#category_dropdown option {
     /* Kích thước font nhỏ */
     font-size: 14px;
     /* Khoảng cách padding cho các option */
@@ -346,7 +346,7 @@ body {
 }
 
 /* Tùy chỉnh label */
-label[for="categoryDropdown"] {
+label[for="category_dropdown"] {
     font-size: 16px;
     /* Kích thước chữ của label */
     font-weight: bold;
@@ -417,7 +417,7 @@ label[for="storeDropdown"] {
 }
 
 /* Định dạng cho label */
-label[for="datePicker"] {
+label[for="date_picker"] {
     font-size: 1rem;
     font-weight: 600;
     margin-right: 10px;
@@ -425,7 +425,7 @@ label[for="datePicker"] {
 }
 
 /* Định dạng cho input date */
-#datePicker {
+#date_picker {
     padding: 10px;
     font-size: 1rem;
     margin-right: 800px;
@@ -436,7 +436,7 @@ label[for="datePicker"] {
 }
 
 /* Hiệu ứng khi người dùng focus vào input */
-#datePicker:focus {
+#date_picker:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.3);
 }
@@ -471,6 +471,10 @@ button:hover {
 
 i.fa-solid {
     cursor: pointer;
+}
+
+.user-select-none {
+    user-select: none;
 }
 
 /* Chỉnh sửa bootstrap css */

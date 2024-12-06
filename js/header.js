@@ -16,18 +16,16 @@ function checkUserRole() {
 function checkLoginStatus() {
     const loginStatus = localStorage.getItem('loginStatus');
     if (loginStatus === 'true') {
-        document.getElementById('logoutBtn').style.display = 'block';
+        document.getElementById('logout_btn').style.display = 'block';
     }
 }
 
 // Hàm logout để xóa thông tin đăng nhập và chuyển hướng về trang đăng nhập
 function logout() {
-    localStorage.removeItem('tokenLogin');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('email');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('loginStatus');
+    const x = ["tokenLogin", "userId", "userName", "email", "userRole", "loginStatus"];
+    for (let i = 0; i < x.length; i++) {
+        localStorage.removeItem(x[i]);
+    }
     window.location.href = 'login.html'; // Chuyển hướng về trang đăng nhập
 }
 

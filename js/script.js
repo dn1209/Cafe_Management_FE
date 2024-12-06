@@ -7,15 +7,16 @@ function checkRegisterStatus() {
         .then(data => {
             const registerButton = document.getElementById('register_button');
             if (data === true) {
-                // Hiển thị nút đăng ký nếu chưa có tài khoản
+                // Hiển thị nút đăng ký nếu chưa có tài khoản admin
                 registerButton.style.display = 'block';
             } else {
-                // Ẩn nút đăng ký nếu đã có tài khoản
-                // registerButton.style.display = 'none';
+                // Ẩn nút đăng ký nếu đã có tài khoản admin
+                registerButton.style.display = 'none';
             }
         })
         .catch(error => {
-            console.error('Lỗi khi gọi API:', error);
+            console.error('Không thể kiểm tra trạng thái đăng ký admin:', error);
+            toastrError("Lỗi", `Không thể kiểm tra trạng thái đăng ký admin. Vui lòng thử lại.`);
         });
 }
 
@@ -63,7 +64,7 @@ function login() {
     })
     .catch(error => {
         console.error('Có lỗi xảy ra:', error);
-        toastrError("Lỗi", "Có lỗi khi kết nối đến API.");
+        toastrError("Lỗi", "Không thể đăng nhập. Vui lòng kiểm tra lại thông tin.");
     });
 }
 
@@ -105,7 +106,7 @@ function registerAdmin() {
     })
     .catch(error => {
         console.error('Lỗi khi đăng ký:', error);
-        toastrError("Lỗi", "Có lỗi khi kết nối đến API.");
+        toastrError("Lỗi", "Đăng ký thất bại. Vui lòng thử lại.");
     });
 }
 

@@ -45,11 +45,11 @@
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#revenueDropdown" role="button"
-                            aria-expanded="false" aria-controls="revenueDropdown">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#revenue_dropdown" role="button"
+                            aria-expanded="false" aria-controls="revenue_dropdown">
                             Quản lý doanh thu
                         </a>
-                        <ul class="collapse list-unstyled ps-3 pe-3" id="revenueDropdown">
+                        <ul class="collapse list-unstyled ps-3 pe-3" id="revenue_dropdown">
                             <li class="nav-item">
                                 <a class="nav-link" href="admin-bill.html">Quản lý hóa đơn</a>
                             </li>
@@ -75,14 +75,14 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Sản phẩm</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addProductButton" class="btn btn-primary">Thêm sản phẩm</button>
+                    <button id="add_product_btn" class="btn btn-primary">Thêm sản phẩm</button>
                 </div>
                 <!-- Dropdown chọn danh mục và cửa hàng -->
                 <div class="row mb-3">
 
                     <div class="col-md-6">
-                        <label for="categoryDropdown">Chọn danh mục</label>
-                        <select id="categoryDropdown" class="form-select">
+                        <label for="category_dropdown">Chọn danh mục</label>
+                        <select id="category_dropdown" class="form-select">
                             <option value="">Tất cả danh mục</option>
                             <!-- Các danh mục sẽ được tải động ở đây -->
                         </select>
@@ -100,7 +100,7 @@
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody id="productList">
+                    <tbody id="product_list_admin">
                         <!-- Các sản phẩm sẽ được tải vào đây động -->
                     </tbody>
                 </table>
@@ -112,34 +112,34 @@
     </div>
 
     <!-- Modal Sửa Sản phẩm -->
-    <div class="modal fade" id="editProductModal" tabindex="-1" aria-labelledby="editProductModalLabel"
+    <div class="modal fade" id="edit_product_modal" tabindex="-1" aria-labelledby="edit_product_modal_label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="editProductModalLabel" class="modal-title">Sửa Sản Phẩm</h5>
+                    <h5 id="edit_product_modal_label" class="modal-title">Sửa Sản Phẩm</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editProductForm">
+                <form id="edit_product_form">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="productNameEdit" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productNameEdit" required>
+                            <label for="product_name_edit" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="product_name_edit" required>
                         </div>
                         <div class="mb-3">
-                            <label for="productSellPriceEdit" class="form-label">Giá bán</label>
-                            <input type="number" class="form-control" id="productSellPriceEdit" required>
+                            <label for="product_price_edit" class="form-label">Giá bán</label>
+                            <input type="number" class="form-control" id="product_price_edit" required>
                         </div>
                         <div class="mb-3">
-                            <label for="categoryDropdownEdit" class="form-label">Danh mục</label>
-                            <select class="form-control" id="categoryDropdownEdit" required>
+                            <label for="category_dropdown_edit" class="form-label">Danh mục</label>
+                            <select class="form-control" id="category_dropdown_edit" required>
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                        <button type="button" class="btn btn-primary" id="saveProductButton">Lưu thay đổi</button>
+                        <button type="button" class="btn btn-primary" id="save_product_btn">Lưu thay đổi</button>
                     </div>
                 </form>
             </div>
@@ -147,27 +147,27 @@
     </div>
 
     <!-- Modal Thêm Sản phẩm -->
-    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+    <div class="modal fade" id="add_product_modal" tabindex="-1" aria-labelledby="add_product_modal_label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="addProductModalLabel" class="modal-title">Thêm Sản Phẩm Mới</h5>
+                    <h5 id="add_product_modal_label" class="modal-title">Thêm Sản Phẩm Mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="addProductForm">
+                <form id="add_product_form">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="productNameAdd" class="form-label">Tên sản phẩm</label>
-                            <input type="text" class="form-control" id="productNameAdd" required>
+                            <label for="product_name_add" class="form-label">Tên sản phẩm</label>
+                            <input type="text" class="form-control" id="product_name_add" required>
                         </div>
                         <div class="mb-3">
-                            <label for="productSellPriceAdd" class="form-label">Giá bán</label>
-                            <input type="number" class="form-control" id="productSellPriceAdd" required>
+                            <label for="product_price_add" class="form-label">Giá bán</label>
+                            <input type="number" class="form-control" id="product_price_add" required>
                         </div>
                         <div class="mb-3">
-                            <label for="categorySelect" class="form-label">Danh mục</label>
-                            <select class="form-control" id="categorySelect" required>
+                            <label for="category_select" class="form-label">Danh mục</label>
+                            <select class="form-control" id="category_select" required>
                                 <!-- Các danh mục sẽ được điền vào đây -->
                             </select>
                         </div>

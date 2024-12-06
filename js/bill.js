@@ -10,7 +10,8 @@ function renderPagination(pageResponse) {
 
     // Tạo nút "Previous"
     const prevButton = document.createElement('button');
-    prevButton.textContent = "Previous";
+    // prevButton.textContent = "Previous";
+    prevButton.innerHTML = `<i class="fa-solid fa-circle-chevron-left"></i>`;
     prevButton.disabled = pageResponse.first; // Nếu là trang đầu tiên, vô hiệu hóa nút
     if (!pageResponse.first) {
         prevButton.onclick = () => fetchBills(pageResponse.number - 1); // Lấy trang trước
@@ -24,7 +25,8 @@ function renderPagination(pageResponse) {
 
     // Tạo nút "Next"
     const nextButton = document.createElement('button');
-    nextButton.textContent = "Next";
+    // nextButton.textContent = "Next";
+    nextButton.innerHTML = `<i class="fa-solid fa-circle-chevron-right"></i>`;
     nextButton.disabled = pageResponse.last; // Nếu là trang cuối cùng, vô hiệu hóa nút
     if (!pageResponse.last) {
         nextButton.onclick = () => fetchBills(pageResponse.number + 1); // Lấy trang tiếp theo
@@ -34,13 +36,6 @@ function renderPagination(pageResponse) {
 
 // Hàm fetch hóa đơn với phân trang
 async function fetchBills(pageNumber = 0) {
-    const token = localStorage.getItem('tokenLogin');
-    if (!token) {
-        toastrError("Lỗi", "Vui lòng đăng nhập trước khi truy cập trang này.");
-        window.location.href = "login.html";
-        return;
-    }
-
     try {
         const url = `http://localhost:8085/api-bill/list-for-user?page=${pageNumber}&size=10`;
 
@@ -52,31 +47,38 @@ async function fetchBills(pageNumber = 0) {
                 "Accept": "application/json"
             }
         });
+        console.log(response);
 
-        if (!response.ok) throw new Error("Network response was not ok");
+        await checkJwtError(response);
 
-        const data = await response.json();
-        console.log(data);
+        await response.json().then(data => {
+            console.log(data);
+            if (data.message === "USER_NOT_FOUND") {
+                throw new Error("Không tìm thấy người dùng, vui lòng đăng nhập lại.");
+            } else if (data.message === "No bills found") {
+                const billList = document.getElementById('invoice_table_body');
+                billList.innerHTML = '<tr><td colspan="9" class="text-center">Không có hóa đơn nào</td></tr>';
+                throw new Error("Không tìm thấy hóa đơn nào.");
+            }
 
-        // Render hóa đơn (dữ liệu được trả về từ API)
-        renderBills(data.content);
+            // Render hóa đơn (dữ liệu được trả về từ API)
+            renderBills(data.content);
 
-        // Render phân trang
-        renderPagination(data);
-
+            // Render phân trang
+            renderPagination(data);
+        });
     } catch (error) {
         console.error(`Có lỗi xảy ra: ${error}`);
-        toastrError("Lỗi", "Lỗi khi tải hóa đơn, vui lòng thử lại.");
+        toastrError("Lỗi", error);
     }
 }
 
 // Hàm hiển thị danh sách hóa đơn
 function renderBills(bills) {
-    console.log(bills);
     const billList = document.getElementById('invoice_table_body');
-    billList.innerHTML = bills.length ? bills.map((bill, index) => `
+    billList.innerHTML = bills.map((bill, index) => `
         <tr>
-            <td>${bill.billId}</td>
+            <th scope="row">${index + 1}</th>
             <td>#${bill.billId}</td>
             <td>${bill.sellDate}</td>
             <td>${bill.totalQuantity}</td>
@@ -84,15 +86,15 @@ function renderBills(bills) {
             <td>${bill.totalPrice.toLocaleString()} VND</td>
             <td>${bill.notes || 'Không có ghi chú'}</td>
             <td>
-                <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#invoice_detail_modal_${bill.billId}">
+                <button class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#invoice_detail_modal_${bill.billId}">
                     Chi tiết
                 </button>
-                <button class="btn btn-info btn-demo" data-index="${index}">
+                <button class="btn btn-info btn-sm btn-demo" data-index="${index}">
                     Hóa đơn
                 </button>
             </td>
         </tr>
-    `).join('') : '<tr><td colspan="9" class="text-center">Không có hóa đơn nào</td></tr>';
+    `).join("");
 
     // Thêm event listener cho từng nút "Xem hóa đơn demo"
     document.querySelectorAll('.btn-demo').forEach((button) => {

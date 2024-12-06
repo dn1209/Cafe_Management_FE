@@ -34,15 +34,24 @@
             document.getElementsByTagName('head')[0].appendChild(css);
         })();
     </script>
+
+    <style>
+        .table th {
+            background-color: #0176fc;
+            color: white;
+        }
+    </style>
 </head>
 
 <body>
     <div id="header_placeholder"></div>
+    
     <div class="container-fluid">
         <div class="row">
             <!-- Sidebar Categories -->
             <div class="col-md-2 bg-light p-3 sidebar vh-100">
                 <h5 class="text-center">Tất cả danh mục</h5>
+
                 <ul class="nav flex-column">
                     <!-- Các danh mục sẽ được thêm vào đây bởi JavaScript -->
                 </ul>
@@ -50,13 +59,15 @@
 
             <!-- Main Menu and Items -->
             <div class="col-md-7">
-                <div class="d-flex justify-content-between align-items-center p-3">
-                    <input type="text" id="search-input" class="form-control" placeholder="Search"
+                <div class="d-flex justify-content-between align-items-center pt-4">
+                    <input type="text" id="search_input" class="form-control" placeholder="Search"
                         oninput="onSearchInputChange()">
                 </div>
-                <div class="row g-3" id="product_list">
+
+                <div class="row gx-3" id="product_list">
                     <!-- Products will be loaded here dynamically -->
                 </div>
+
                 <div id="pagination" class="pagination-controls"></div>
             </div>
 
@@ -67,42 +78,53 @@
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng</th>
+                            <th>Tên</th>
+                            <th>SL</th>
                             <th>Giá bán</th>
                             <th>Thành tiền</th>
-                            <th>Thao tác</th> <!-- Cột cho nút Xóa -->
+                            <th>Xóa</th> <!-- Cột cho nút Xóa -->
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Các hàng sẽ được thêm động tại đây -->
+                        <!-- Các hàng sẽ được thêm tự động tại đây -->
                     </tbody>
                 </table>
+
                 <!-- Thêm phần tổng tiền và số lượng ở dưới cùng -->
                 <div class="d-flex justify-content-between pt-3">
                     <div>
-                        <strong>Số lượng:</strong> <span id="total_quantity">0</span> cốc
+                        <strong>Số lượng:</strong> <span id="total_quantity">0</span>
                     </div>
+
                     <div>
                         <strong>Tổng tiền:</strong> <span id="total_amount">0 VND</span>
                     </div>
                 </div>
+
                 <div class="d-flex justify-content-between" style="margin-top: 10px;">
-                    <button id="checkout-btn" class="btn btn-success">Checkout</button>
+                    <button id="checkout_btn" class="btn btn-success">Checkout</button>
                 </div>
             </div>
         </div>
     </div>
-    <div id="checkout-modal" class="modal fade" tabindex="-1" aria-labelledby="checkoutModalLabel" aria-hidden="true">
+    
+    <div id="checkout_modal" class="modal fade" tabindex="-1" aria-labelledby="checkout_modal_label" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="checkoutModalLabel">Thông tin đơn hàng</h5>
+                    <h5 class="modal-title" id="checkout_modal_label">Thông tin đơn hàng</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <!-- Bảng thông tin sản phẩm -->
-                    <table id="checkout-summary">
+                    <table id="checkout_summary" class="table table-bordered table-striped">
+                        <thead style="background-color: #0176fc; color: white;">
+                            <th>#</th>
+                            <th>Tên sản phẩm</th>
+                            <th>Số lượng</th>
+                            <th>Giá bán</th>
+                            <th>Thành tiền</th>
+                        </thead>
                         <tbody>
                             <!-- Các sản phẩm sẽ được thêm vào đây khi checkout -->
                         </tbody>
@@ -123,12 +145,12 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="confirm-checkout">Xác nhận thanh toán</button>
+                    <button type="button" class="btn btn-primary" id="confirm_checkout">Xác nhận thanh toán</button>
                 </div>
             </div>
         </div>
     </div>
-    <div id="footer-placeholder"></div>
+    <div id="footer_placeholder"></div>
 
     <script>
         // Load header
@@ -152,7 +174,7 @@
         fetch('footer.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
+                document.getElementById('footer_placeholder').innerHTML = data;
             });
     </script>
     <script src="js/utils.js"></script>

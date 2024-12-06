@@ -71,7 +71,7 @@
             </div>
         </div>
     </div>
-    <div id="footer-placeholder"></div>
+    <div id="footer_placeholder"></div>
     <script>
         // Load header
         fetch('header.html')
@@ -92,7 +92,7 @@
         fetch('footer.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
+                document.getElementById('footer_placeholder').innerHTML = data;
             });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

@@ -18,15 +18,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     await fetchProducts(0);
 
     // Gắn sự kiện
-    document.getElementById('categoryDropdown').addEventListener('change', function () {
+    document.getElementById('category_dropdown').addEventListener('change', function () {
         selectedCategoryId = this.value;
         fetchProducts(0);
     });
 
 
-    document.getElementById('addProductButton').addEventListener('click', openAddProductModal);
-    document.getElementById('addProductForm').addEventListener('submit', addProduct);
-    document.getElementById('saveProductButton').addEventListener('click', saveProductChanges);
+    document.getElementById('add_product_btn').addEventListener('click', openAddProductModal);
+    document.getElementById('add_product_form').addEventListener('submit', addProduct);
+    document.getElementById('save_product_btn').addEventListener('click', saveProductChanges);
 
     // Hàm lấy sản phẩm từ API
     async function fetchProducts(page = 0, size = 10) {
@@ -55,20 +55,27 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             await checkJwtError(response);
 
-            if (!response.ok) throw new Error("Không thể tải danh sách sản phẩm");
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
+            }
 
-            const products = await response.json();
-            renderProductList(products);
-            renderPagination(products);
+            if (!response.ok) throw new Error("Không thể tải danh sách sản phẩm. Vui lòng thử lại sau.");
+
+            await response.json().then(data => {
+                renderProductList(data);
+                renderPagination(data);
+            });
         } catch (error) {
             console.error("Có lỗi xảy ra:", error);
+            catchForbidden(error);
+            toastrError("Lỗi", error);
         }
     }
 
     function renderProductList(products) {
-        const productList = document.getElementById('productList');
+        const productList = document.getElementById('product_list_admin');
         if (products.content.length) {
-            productList.innerHTML = products.content.map(product => {
+            productList.innerHTML = products.content.map((product, index) => {
                 const category = categories[product.categoryId];
                 const categoryName = category ? category.categoryName : 'Không xác định';
                 const statusButton = product.prdStatus === 1
@@ -76,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     : `<button class="btn btn-success me-2" data-action="toggleStatus" data-product-id="${product.productId}">Kích hoạt</button>`;
                 return `
                     <tr>
-                        <td>${product.productId}</td>
+                        <td>${index + 1}</td>
                         <td>${product.productCd}</td>
                         <td>${product.productName}</td>
                         <td>${categoryName}</td>
@@ -99,14 +106,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     function addEventListenersToProductButtons() {
         document.querySelectorAll('button[data-action="edit"]').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const productId = this.getAttribute('data-product-id');
                 editProduct(productId);
             });
         });
 
         document.querySelectorAll('button[data-action="toggleStatus"]').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const productId = this.getAttribute('data-product-id');
                 toggleProductStatus(productId);
             });
@@ -119,7 +126,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!productsPage.first) {
             const prevButton = document.createElement('button');
-            prevButton.textContent = 'Trước';
+            // prevButton.textContent = 'Trước';
+            prevButton.innerHTML = `<i class="fa-solid fa-circle-chevron-left"></i>`;
             prevButton.classList.add('btn', 'btn-secondary', 'me-2');
             prevButton.addEventListener('click', () => {
                 fetchProducts(productsPage.number - 1);
@@ -133,7 +141,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         if (!productsPage.last) {
             const nextButton = document.createElement('button');
-            nextButton.textContent = 'Tiếp';
+            // nextButton.textContent = 'Tiếp';
+            nextButton.innerHTML = `<i class="fa-solid fa-circle-chevron-right"></i>`;
             nextButton.classList.add('btn', 'btn-secondary', 'ms-2');
             nextButton.addEventListener('click', () => {
                 fetchProducts(productsPage.number + 1);
@@ -154,7 +163,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             await checkJwtError(response);
 
-            if (!response.ok) throw new Error("Không thể tải danh sách danh mục");
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
+            }
+
+            if (!response.ok) throw new Error("Không thể tải danh sách danh mục. Vui lòng thử lại sau.");
 
             const data = await response.json();
             categories = data.reduce((acc, category) => {
@@ -166,11 +179,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, {});
         } catch (error) {
             console.error("Có lỗi khi tải danh mục:", error);
+            catchForbidden(error);
+            toastrError("Lỗi", error);
         }
     }
 
     function updateCategoryDropdownDisplay() {
-        const categoryDropdown = document.getElementById('categoryDropdown');
+        const categoryDropdown = document.getElementById('category_dropdown');
         categoryDropdown.innerHTML = `<option value="">Tất cả danh mục</option>`;
 
         for (let categoryId in categories) {
@@ -182,9 +197,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     function openAddProductModal() {
-        document.getElementById('productNameAdd').value = '';
-        document.getElementById('productSellPriceAdd').value = '';
-        const categoryDropdownAdd = document.getElementById('categorySelect');
+        document.getElementById('product_name_add').value = '';
+        document.getElementById('product_price_add').value = '';
+        const categoryDropdownAdd = document.getElementById('category_select');
 
         categoryDropdownAdd.innerHTML = '<option value="">Chọn danh mục...</option>';
         for (let categoryId in categories) {
@@ -193,18 +208,18 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.textContent = categories[categoryId].categoryName;
             categoryDropdownAdd.appendChild(option);
         }
-        const modal = new bootstrap.Modal(document.getElementById('addProductModal'));
+        const modal = new bootstrap.Modal(document.getElementById('add_product_modal'));
         modal.show();
     }
 
     async function addProduct(event) {
         event.preventDefault();
 
-        const productName = document.getElementById('productNameAdd').value;
-        const categoryId = parseInt(document.getElementById('categorySelect').value);
-        const productSellPrice = parseFloat(document.getElementById('productSellPriceAdd').value.replace(/\./g, ""));
+        const productName = document.getElementById('product_name_add').value;
+        const categoryId = parseInt(document.getElementById('category_select').value);
+        const productSellPrice = parseFloat(document.getElementById('product_price_add').value.replace(/\./g, ""));
 
-        if (!productName || isNaN(categoryId) || isNaN(productSellPrice) ) {
+        if (!productName || isNaN(categoryId) || isNaN(productSellPrice)) {
             toastrError("Lỗi", "Vui lòng điền đầy đủ thông tin!");
             return;
         }
@@ -224,18 +239,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                 },
                 body: JSON.stringify(productData)
             });
+
             await checkJwtError(response);
 
-            if (response.ok) {
-                toastrSuccess('Thành công', 'Sản phẩm đã được thêm thành công!');
-                bootstrap.Modal.getInstance(document.getElementById('addProductModal')).hide();
-                await fetchProducts(0);
-            } else {
-                toastrError('Lỗi', 'Lỗi khi thêm sản phẩm.');
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
             }
+
+            await response.json().then(async data => {
+                if (data.message === "PRODUCT_NAME_EXISTED") {
+                    toastrError('Lỗi', "Sản phẩm đã tồn tại. Vui lòng chọn tên khác!");
+                } else if (data.message === "CATEGORY_NOT_FOUND") {
+                    toastrError('Lỗi', "Danh mục không tồn tại. Vui lòng chọn danh mục khác!");
+                }
+                toastrSuccess('Thành công', 'Sản phẩm đã được thêm thành công!');
+                bootstrap.Modal.getInstance(document.getElementById('add_product_modal')).hide();
+                await fetchProducts(0);
+            });
         } catch (error) {
             console.error('Có lỗi xảy ra:', error);
-            toastrError('Lỗi', 'Đã xảy ra lỗi. Vui lòng thử lại!');
+            catchForbidden(error);
+            toastrError('Lỗi', error);
         }
     }
 
@@ -245,10 +269,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         try {
             const product = await fetchProductDetails(productId);
 
-            document.getElementById('productNameEdit').value = product.productName;
-            document.getElementById('productSellPriceEdit').value = product.prdSellPrice;
+            document.getElementById('product_name_edit').value = product.productName;
+            document.getElementById('product_price_edit').value = product.prdSellPrice;
 
-            const categoryDropdownEdit = document.getElementById('categoryDropdownEdit');
+            const categoryDropdownEdit = document.getElementById('category_dropdown_edit');
             categoryDropdownEdit.innerHTML = '';
 
             const filteredCategories = Object.keys(categories).filter(categoryId => categories[categoryId].storeId === product.storeId);
@@ -263,17 +287,18 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             categoryDropdownEdit.value = product.categoryId;
 
-            const modal = new bootstrap.Modal(document.getElementById('editProductModal'));
+            const modal = new bootstrap.Modal(document.getElementById('edit_product_modal'));
             modal.show();
         } catch (error) {
             console.error('Có lỗi khi lấy thông tin sản phẩm:', error);
+            toastrError('Lỗi', 'Có lỗi khi lấy thông tin sản phẩm. Vui lòng thử lại sau.');
         }
     }
 
     async function saveProductChanges() {
-        const productName = document.getElementById('productNameEdit').value;
-        const categoryId = parseInt(document.getElementById('categoryDropdownEdit').value);
-        const productSellPrice = parseFloat(document.getElementById('productSellPriceEdit').value.replace(/\./g, ""));
+        const productName = document.getElementById('product_name_edit').value;
+        const categoryId = parseInt(document.getElementById('category_dropdown_edit').value);
+        const productSellPrice = parseFloat(document.getElementById('product_price_edit').value.replace(/\./g, ""));
 
         if (!productName || isNaN(categoryId) || isNaN(productSellPrice)) {
             toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin sản phẩm.");
@@ -298,16 +323,26 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             await checkJwtError(response);
 
-            if (response.ok) {
-                toastrSuccess("Thành công", "Cập nhật sản phẩm thành công");
-                bootstrap.Modal.getInstance(document.getElementById('editProductModal')).hide();
-                await fetchProducts(0);
-            } else {
-                toastrError("Lỗi", "Lỗi khi cập nhật sản phẩm.");
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
             }
+
+            await response.json().then(async data => {
+                if (data.message === "PRODUCT_NOT_FOUND") {
+                    toastrError('Lỗi', "Sản phẩm không tồn tại. Vui lòng chọn tên khác!");
+                } else if (data.message === "PRODUCT_NAME_EXISTED") {
+                    toastrError('Lỗi', "Sản phẩm đã tồn tại. Vui lòng chọn tên khác!");
+                } else if (data.message === "CATEGORY_NOT_FOUND") {
+                    toastrError('Lỗi', "Danh mục không tồn tại. Vui lòng chọn danh mục khác!");
+                }
+                toastrSuccess("Thành công", "Cập nhật sản phẩm thành công");
+                bootstrap.Modal.getInstance(document.getElementById('edit_product_modal')).hide();
+                await fetchProducts(0);
+            });
         } catch (error) {
             console.error("Có lỗi xảy ra khi lưu thay đổi:", error);
-            toastrError("Lỗi", "Có lỗi xảy ra khi lưu thay đổi.");
+            catchForbidden(error);
+            toastrError("Lỗi", error);
         }
     }
 
@@ -323,31 +358,47 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             await checkJwtError(response);
 
-            if (response.ok) {
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
+            }
+
+            await response.json().then(async data => {
+                if (data.message === "PRODUCT_NOT_FOUND") {
+                    toastrError('Lỗi', "Sản phẩm không tồn tại. Vui lòng chọn tên khác!");
+                }
                 toastrSuccess("Thành công", "Cập nhật trạng thái sản phẩm thành công");
                 await fetchProducts(0);
-            } else {
-                toastrError("Lỗi", "Lỗi khi cập nhật trạng thái sản phẩm.");
-            }
+            });
         } catch (error) {
             console.error("Có lỗi xảy ra khi cập nhật trạng thái sản phẩm:", error);
-            toastrError("Lỗi", "Có lỗi xảy ra khi cập nhật trạng thái sản phẩm.");
+            catchForbidden(error);
+            toastrError("Lỗi", error);
         }
     }
 
     async function fetchProductDetails(productId) {
-        const response = await fetch(`http://localhost:8085/api-products/detail/${productId}`, {
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
+        try {
+            const response = await fetch(`http://localhost:8085/api-products/detail/${productId}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            await checkJwtError(response);
+
+            if (response.status === 403) {
+                throw new Error('Bạn không có quyền truy cập vào trang này');
             }
-        });
 
-        await checkJwtError(response);
+            if (!response.ok) throw new Error("Không thể lấy thông tin sản phẩm");
 
-        if (!response.ok) throw new Error("Không thể lấy thông tin sản phẩm");
-
-        return await response.json();
+            return await response.json();
+        } catch (error) {
+            console.error("Có lỗi khi lấy thông tin sản phẩm:", error);
+            catchForbidden(error);
+            toastrError("Lỗi", error);
+        }
     }
 });

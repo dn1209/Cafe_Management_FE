@@ -10,10 +10,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await loadUsers();
 
-    document.getElementById('addUserButton').addEventListener('click', openAddUserModal);
-    document.getElementById('addUserForm').addEventListener('submit', addUser);
-    document.getElementById('saveUserButton').addEventListener('click', saveUserChanges);
-    document.getElementById('saveUserPasswordButton').addEventListener('click', saveUserPassword);
+    document.getElementById('add_user_btn').addEventListener('click', openAddUserModal);
+    document.getElementById('add_user_form').addEventListener('submit', addUser);
+    document.getElementById('save_user_btn').addEventListener('click', saveUserChanges);
+    document.getElementById('save_user_password_btn').addEventListener('click', saveUserPassword);
 });
 
 async function loadUsers() {
@@ -31,14 +31,18 @@ async function loadUsers() {
 
         await checkJwtError(response);
 
-        if (!response.ok) throw new Error("Không thể tải danh sách người dùng");
+        if (response.status === 403) {
+            throw Error('Bạn không có quyền truy cập vào trang này');
+        }
 
-        const users = await response.json();
-        const userList = document.getElementById('userList');
+        if (!response.ok) throw Error("Không thể tải danh sách người dùng");
 
-        if (users.length) {
-            userList.innerHTML = users.map(user => {
-                return `
+        await response.json().then(users => {
+            const userList = document.getElementById('user_list');
+
+            if (users.length) {
+                userList.innerHTML = users.map(user => {
+                    return `
                     <tr>
                         <td>${user.userId}</td>
                         <td>${user.displayName}</td>
@@ -54,10 +58,11 @@ async function loadUsers() {
                         </td>
                     </tr>
                 `;
-            }).join('');
-        } else {
-            userList.innerHTML = '<tr><td colspan="10" class="text-center">Không có người dùng nào</td></tr>';
-        }
+                }).join('');
+            } else {
+                userList.innerHTML = '<tr><td colspan="10" class="text-center">Không có người dùng nào</td></tr>';
+            }
+        });
 
         // Thêm sự kiện cho các nút hành động
         document.querySelectorAll('button[data-action="edit"]').forEach(button => {
@@ -76,22 +81,20 @@ async function loadUsers() {
 
     } catch (error) {
         console.error("Có lỗi xảy ra khi tải danh sách người dùng:", error);
+        catchForbidden(error);
+        toastrError("Lỗi", error);
     }
 }
 
 async function editUser(userId) {
-    currentUserId = userId;
-
     try {
         const user = await fetchUserDetails(userId);
 
-        document.getElementById('userNameEdit').value = user.userName;
-        document.getElementById('displayNameEdit').value = user.displayName;
-        document.getElementById('userPhoneEdit').value = user.userPhone;
+        document.getElementById('user_name_edit').value = user.userName;
+        document.getElementById('display_name_edit').value = user.displayName;
+        document.getElementById('user_phone_edit').value = user.userPhone;
 
-
-
-        const roleDropdownEdit = document.getElementById('roleDropdownEdit');
+        const roleDropdownEdit = document.getElementById('role_dropdown_edit');
         roleDropdownEdit.innerHTML = '';
         const roles = { 0: "ADMIN", 1: "USER" };
 
@@ -104,7 +107,7 @@ async function editUser(userId) {
 
         roleDropdownEdit.value = user.userRole;
 
-        const statusDropdownEdit = document.getElementById('statusDropdownEdit');
+        const statusDropdownEdit = document.getElementById('status_dropdown_edit');
         statusDropdownEdit.innerHTML = '';
         const statuses = { 1: "HOẠT ĐỘNG", 0: "DỪNG HOẠT ĐỘNG" };
 
@@ -117,7 +120,7 @@ async function editUser(userId) {
 
         statusDropdownEdit.value = user.userStatus;
 
-        const modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+        const modal = new bootstrap.Modal(document.getElementById('edit_user_modal'));
         modal.show();
     } catch (error) {
         console.error('Có lỗi khi tải thông tin người dùng:', error);
@@ -126,32 +129,46 @@ async function editUser(userId) {
 
 async function editPasswordUser(userId) {
     currentUserId = userId;
-    const modal = new bootstrap.Modal(document.getElementById('editUserPasswordModal'));
+    const modal = new bootstrap.Modal(document.getElementById('edit_user_password_modal'));
     modal.show();
 }
 
 async function fetchUserDetails(userId) {
-    const response = await fetch(`http://localhost:8085/api/detail/${userId}`, {
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json",
+    currentUserId = userId;
+
+    try {
+        const response = await fetch(`http://localhost:8085/api/detail/${userId}`, {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json",
+            }
+        });
+
+        await checkJwtError(response);
+
+        if (response.status === 403) {
+            throw Error('Bạn không có quyền truy cập vào trang này');
+        } else if (response.status === 404) {
+            throw Error('Người dùng không tồn tại');
         }
-    });
 
-    await checkJwtError(response);
+        if (!response.ok) throw Error("Không thể lấy thông tin người dùng");
 
-    if (!response.ok) throw new Error("Không thể lấy thông tin người dùng");
-
-    return await response.json();
+        return await response.json();
+    } catch (error) {
+        console.error("Có lỗi xảy ra khi tải thông tin người dùng:", error);
+        catchForbidden(error);
+        toastrError("Lỗi", error);
+    }
 }
 
 async function saveUserChanges() {
-    const userName = document.getElementById('userNameEdit').value;
-    const displayName = document.getElementById('displayNameEdit').value;
-    const userStatus = parseInt(document.getElementById('statusDropdownEdit').value);
-    const userRole = parseInt(document.getElementById('roleDropdownEdit').value);
-    const userPhone = document.getElementById('userPhoneEdit').value;
+    const userName = document.getElementById('user_name_edit').value;
+    const displayName = document.getElementById('display_name_edit').value;
+    const userStatus = parseInt(document.getElementById('status_dropdown_edit').value);
+    const userRole = parseInt(document.getElementById('role_dropdown_edit').value);
+    const userPhone = document.getElementById('user_phone_edit').value;
 
     if (!userName || !displayName || isNaN(userStatus) || isNaN(userRole) || !userPhone) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
@@ -178,19 +195,27 @@ async function saveUserChanges() {
 
         await checkJwtError(response);
 
-        if (!response.ok) throw new Error("Lỗi khi cập nhật người dùng");
-        toastrSuccess("Thành công", "Cập nhật người dùng thành công");
+        if (response.status === 403) {
+            throw new Error('Bạn không có quyền truy cập vào trang này');
+        } else if (response.status === 404) {
+            throw new Error('Người dùng không tồn tại');
+        }
 
-        bootstrap.Modal.getInstance(document.getElementById('editUserModal')).hide();
-        await loadUsers();
+        await response.json().then(async () => {
+            toastrSuccess("Thành công", "Cập nhật người dùng thành công");
+            bootstrap.Modal.getInstance(document.getElementById('edit_user_modal')).hide();
+            await loadUsers();
+        });
     } catch (error) {
         console.error("Có lỗi xảy ra khi lưu thay đổi:", error);
+        catchForbidden(error);
+        toastrError("Lỗi", error);
     }
 }
 
 async function saveUserPassword() {
-    const oldPassword = document.getElementById('oldPassword').value;
-    const newPassword = document.getElementById('newPassword').value;
+    const oldPassword = document.getElementById('old_password').value;
+    const newPassword = document.getElementById('new_password').value;
 
     if (!oldPassword || !newPassword) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
@@ -203,7 +228,7 @@ async function saveUserPassword() {
     };
 
     try {
-        const response = await fetch(`http://localhost:8085/api/change_password/${currentUserId}`, {
+        const response = await fetch(`http://localhost:8085/api/change-password/${currentUserId}`, {
             method: 'PUT',
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -214,25 +239,34 @@ async function saveUserPassword() {
 
         await checkJwtError(response);
 
-        if (!response.ok) throw new Error("Lỗi khi cập nhật mật khẩu");
-        toastrSuccess("Thành công", "Cập nhật mật khẩu thành công");
+        if (response.status === 403) {
+            throw new Error('Bạn không có quyền truy cập vào trang này');
+        } else if (response.status === 404) {
+            throw new Error('Người dùng không tồn tại');
+        }
 
-        bootstrap.Modal.getInstance(document.getElementById('editUserPasswordModal')).hide();
-        await loadUsers();
+        await response.json().then(async data => {
+            if (data.message === "INVALID_PASSWORD") {
+                throw new Error('Mật khẩu cũ không đúng. Vui lòng thử lại');
+            }
+            toastrSuccess("Thành công", "Cập nhật mật khẩu thành công");
+            bootstrap.Modal.getInstance(document.getElementById('edit_user_password_modal')).hide();
+            await loadUsers();
+        });
     } catch (error) {
         console.error("Có lỗi xảy ra khi cập nhật mật khẩu:", error);
+        catchForbidden(error);
+        toastrError("Lỗi", error);
     }
 }
 
 function openAddUserModal() {
     document.getElementById('username').value = '';
     document.getElementById('password').value = '';
-    document.getElementById('displayName').value = '';
-    document.getElementById('userPhone').value = '';
+    document.getElementById('display_name').value = '';
+    document.getElementById('user_phone').value = '';
 
-    const roleDropdownAdd = document.getElementById('roleDropdownAdd');
-
-
+    const roleDropdownAdd = document.getElementById('role_dropdown_add');
 
     roleDropdownAdd.innerHTML = '';
     const roles = { 0: "ADMIN", 1: "USER" };
@@ -246,7 +280,7 @@ function openAddUserModal() {
 
     roleDropdownAdd.value = "1";
 
-    const modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+    const modal = new bootstrap.Modal(document.getElementById('add_user_modal'));
     modal.show();
 }
 
@@ -254,11 +288,11 @@ async function addUser(event) {
     event.preventDefault();
     const userName = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-    const displayName = document.getElementById('displayName').value;
-    const userRole = parseInt(document.getElementById('roleDropdownAdd').value);
-    const userPhone = document.getElementById('userPhone').value;
+    const displayName = document.getElementById('display_name').value;
+    const userRole = parseInt(document.getElementById('role_dropdown_add').value);
+    const userPhone = document.getElementById('user_phone').value;
 
-    if (!username || !password || !displayName || isNaN(userRole) || !userPhone) {
+    if (!userName || !password || !displayName || isNaN(userRole) || !userPhone) {
         toastrError("Lỗi", "Vui lòng nhập đầy đủ thông tin");
         return;
     }
@@ -283,16 +317,22 @@ async function addUser(event) {
 
         await checkJwtError(response);
 
-        if (response.ok) {
-            toastrSuccess("Thành công", "Người dùng đã được thêm mới.");
-            document.getElementById('addUserForm').reset();
-            bootstrap.Modal.getInstance(document.getElementById('addUserModal')).hide();
-            await loadUsers();
-        } else {
-            toastrError("Lỗi", "Có lỗi vui lòng thử lại.");
+        if (response.status === 403) {
+            throw new Error('Bạn không có quyền truy cập vào trang này');
         }
+
+        await response.json().then(async data => {
+            if (data.message === "USER_ALREADY_EXISTS") {
+                throw new Error('Người dùng đã tồn tại. Vui lòng thử lại!');
+            }
+            toastrSuccess("Thành công", "Người dùng đã được thêm mới.");
+            document.getElementById('add_user_form').reset();
+            bootstrap.Modal.getInstance(document.getElementById('add_user_modal')).hide();
+            await loadUsers();
+        });
     } catch (err) {
         console.error('Có lỗi khi thêm người dùng:', err);
-        Swal.fire('Lỗi', 'Đã xảy ra lỗi khi thêm người dùng.', 'error');
+        catchForbidden(err);
+        toastrError('Lỗi', err);
     }
 }

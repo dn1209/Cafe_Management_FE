@@ -15,43 +15,52 @@ async function fetchBills(pageNumber = 0, storeId = null) {
                 "Accept": "application/json"
             }
         });
+
+        console.log(response);
+
         await checkJwtError(response);
 
-        if (!response.ok) throw new Error("Failed to fetch bills");
-
-        // Xử lý phản hồi
-        const responseText = await response.text();
-
-        // Kiểm tra nếu phản hồi là "No bills found"
-        if (responseText === "No bills found") {
-            const billList = document.getElementById('billList');
-            const pagination = document.getElementById('pagination');
-
-            // Hiển thị thông báo không có hóa đơn
-            billList.innerHTML = '<tr><td colspan="8" class="text-center">Không có hóa đơn nào</td></tr>';
-            pagination.innerHTML = ''; // Xóa phân trang
-            return;
+        if (response.status === 403) {
+            throw new Error('Bạn không có quyền truy cập vào trang này');
         }
 
-        // Nếu không phải "No bills found", parse JSON và xử lý
-        const data = JSON.parse(responseText);
-        renderBills(data.content);
-        renderPagination(data);
+        if (!response.ok) throw new Error("Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
+
+        // Xử lý phản hồi
+        await response.json().then(data => {
+            // Kiểm tra nếu phản hồi là "No bills found"
+            if (data.message === "No bills found") {
+                toastrError("Lỗi", "Không tìm thấy hóa đơn nào");
+                const billList = document.getElementById('bill_list');
+                const pagination = document.getElementById('pagination');
+
+                // Hiển thị thông báo không có hóa đơn
+                billList.innerHTML = '<tr><td colspan="8" class="text-center">Không có hóa đơn nào</td></tr>';
+                pagination.innerHTML = ''; // Xóa phân trang
+                return;
+            }
+
+            // Nếu không phải "No bills found", parse JSON và xử lý
+            renderBills(data.content);
+            renderPagination(data);
+        });
     } catch (error) {
         console.error("Error fetching bills:", error);
-        toastrError("Lỗi", "Không thể tải danh sách hóa đơn. Vui lòng thử lại.");
+        catchForbidden(error);
+        toastrError("Lỗi", error);
     }
 }
 
 function renderPagination(pageResponse) {
     const paginationContainer = document.getElementById('pagination');
-    
+
     // Xóa nội dung phân trang cũ
     paginationContainer.innerHTML = '';
 
     // Tạo nút "Previous"
     const prevButton = document.createElement('button');
-    prevButton.textContent = "Previous";
+    // prevButton.textContent = "Previous";
+    prevButton.innerHTML = `<i class="fa-solid fa-circle-chevron-left"></i>`;
     prevButton.disabled = pageResponse.first; // Nếu là trang đầu tiên, vô hiệu hóa nút
     if (!pageResponse.first) {
         prevButton.onclick = () => fetchBills(pageResponse.number - 1); // Lấy trang trước
@@ -65,7 +74,8 @@ function renderPagination(pageResponse) {
 
     // Tạo nút "Next"
     const nextButton = document.createElement('button');
-    nextButton.textContent = "Next";
+    // nextButton.textContent = "Next";
+    nextButton.innerHTML = `<i class="fa-solid fa-circle-chevron-right"></i>`;
     nextButton.disabled = pageResponse.last; // Nếu là trang cuối cùng, vô hiệu hóa nút
     if (!pageResponse.last) {
         nextButton.onclick = () => fetchBills(pageResponse.number + 1); // Lấy trang tiếp theo
@@ -75,7 +85,7 @@ function renderPagination(pageResponse) {
 
 // Hàm hiển thị danh sách hóa đơn
 function renderBills(bills) {
-    const billList = document.getElementById('billList');
+    const billList = document.getElementById('bill_list');
     billList.innerHTML = bills.length ? bills.map((bill, index) => `
         <tr>
             <td>${index + 1}</td>
@@ -138,13 +148,13 @@ function renderBills(bills) {
 
 
 function renderBillDetails(details) {
-    const billDetailList = document.getElementById('billDetailList');
+    const billDetailList = document.getElementById('bill_detail_list');
     billDetailList.innerHTML = details.map(detail => `
         <tr>
             <td>${detail.productName}</td>
             <td>${detail.quantity}</td>
-            <td>${( detail.price).toLocaleString()} VND</td>
-            <td>${( detail.price * detail.quantity).toLocaleString()} VND</td>
+            <td>${(detail.price).toLocaleString()} VND</td>
+            <td>${(detail.price * detail.quantity).toLocaleString()} VND</td>
         </tr>
     `).join('');
 }

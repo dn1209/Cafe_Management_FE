@@ -45,11 +45,11 @@
                 <h5 class="text-center">Admin Dashboard</h5>
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#revenueDropdown" role="button"
-                            aria-expanded="false" aria-controls="revenueDropdown">
+                        <a class="nav-link" data-bs-toggle="collapse" href="#revenue_dropdown" role="button"
+                            aria-expanded="false" aria-controls="revenue_dropdown">
                             Quản lý doanh thu
                         </a>
-                        <ul class="collapse list-unstyled ps-3 pe-3" id="revenueDropdown">
+                        <ul class="collapse list-unstyled ps-3 pe-3" id="revenue_dropdown">
                             <li class="nav-item">
                                 <a class="nav-link" href="admin-bill.html">Quản lý hóa đơn</a>
                             </li>
@@ -75,7 +75,7 @@
             <div class="col-md-10 p-3">
                 <h3>Quản lý Danh mục</h3>
                 <div class="d-flex justify-content-between mb-3">
-                    <button id="addCategoryButton" class="btn btn-primary">Thêm danh mục</button>
+                    <button id="add_category_btn" class="btn btn-primary">Thêm danh mục</button>
                 </div>
                 <table class="table table-bordered">
                     <thead>
@@ -86,7 +86,7 @@
                             <th>Thao tác</th>
                         </tr>
                     </thead>
-                    <tbody id="categoryList">
+                    <tbody id="category_list">
                         <!-- Danh sách danh mục sẽ được tải động -->
                     </tbody>
                 </table>
@@ -95,19 +95,19 @@
     </div>
 
     <!-- Modal Thêm Danh mục -->
-    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+    <div class="modal fade" id="add_category_modal" tabindex="-1" aria-labelledby="add_category_modal_label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="addCategoryModalLabel" class="modal-title">Thêm Danh Mục Mới</h5>
+                    <h5 id="add_category_modal_label" class="modal-title">Thêm Danh Mục Mới</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="addCategoryForm">
+                <form id="add_category_form">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="categoryName" class="form-label">Tên danh mục</label>
-                            <input type="text" class="form-control" id="categoryName" required>
+                            <label for="category_name" class="form-label">Tên danh mục</label>
+                            <input type="text" class="form-control" id="category_name" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -120,19 +120,19 @@
     </div>
 
     <!-- Modal Sửa Danh mục -->
-    <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+    <div class="modal fade" id="edit_category_modal" tabindex="-1" aria-labelledby="edit_category_modal_label"
         aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 id="editCategoryModalLabel" class="modal-title">Sửa Danh Mục</h5>
+                    <h5 id="edit_category_modal_label" class="modal-title">Sửa Danh Mục</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form id="editCategoryForm">
+                <form id="edit_category_form">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="editCategoryName" class="form-label">Tên danh mục</label>
-                            <input type="text" class="form-control" id="editCategoryName" required>
+                            <label for="edit_category_name" class="form-label">Tên danh mục</label>
+                            <input type="text" class="form-control" id="edit_category_name" required>
                         </div>
                         
                     </div>
@@ -146,7 +146,7 @@
     </div>
 
     <!-- Footer Placeholder -->
-    <div id="footer-placeholder"></div>
+    <div id="footer_placeholder"></div>
 
     <!-- Các script của bạn -->
     <script src="js/utils.js"></script>
@@ -170,7 +170,7 @@
         fetch('footer.html')
             .then(response => response.text())
             .then(data => {
-                document.getElementById('footer-placeholder').innerHTML = data;
+                document.getElementById('footer_placeholder').innerHTML = data;
             });
     </script>
 </body>
